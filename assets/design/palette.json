@@ -1,0 +1,17 @@
+{
+  "primary": "#262626",
+  "secondary": "#E2DDD1",
+  "warning": "#F03A53",
+  "info": "7a6c56",
+  "greyish": "#525050",
+  "light": "#F3F1ED",
+  "dark": "#AAAFB1",
+  "black": "#000000",
+  "white": "#ffffff",
+  "active": "#9bd40f",
+  "placeholder": "#AAAFB1",
+  "transparent": "#ffffff00",
+  "gradient-start": "#262626",
+  "gradient-mid": "#454543",
+  "gradient-end": "#121211"
+}

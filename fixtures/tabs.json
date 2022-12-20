@@ -1,0 +1,19 @@
+{
+  "tabs": [
+    {
+      "id": 0,
+      "route": "favorites",
+      "icon": "heart"
+    },
+    {
+      "id": 1,
+      "route": "home",
+      "icon": "home"
+    },
+    {
+      "id": 2,
+      "route": "search",
+      "icon": "search"
+    }
+  ]
+}

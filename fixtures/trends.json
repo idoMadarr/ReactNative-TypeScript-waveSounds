@@ -1,0 +1,36 @@
+{
+  "trends": [
+    {
+      "id": 1,
+      "title": "Bob Marley, Cardi B, Stas Mihailov",
+      "subtitle": "Bob marley ganja gun 320kbps, Aveng mining rustenburg,",
+      "likes": "15,652",
+      "release": "25 Agu 2008",
+      "imageUri": "https://m.media-amazon.com/images/I/41anC9M6WBL._AC_SY780_.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Journey, Escape, Avicii",
+      "subtitle": "Avicii is unquestionably one of the entire dance music scenes biggest legends",
+      "likes": "15,652",
+      "release": "25 Agu 2008",
+      "imageUri": "https://i.ytimg.com/vi/119msSY-Nuo/maxresdefault.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Post Malone, Drake, Eminem",
+      "subtitle": "Never Ever (Letras y canción para escuchar) - My last made me feel like I would never try again",
+      "likes": "15,652",
+      "release": "25 Agu 2008",
+      "imageUri": "https://pyxis.nymag.com/v1/imgs/8be/54f/8b6d431d1e0bc14022d87f0123a05e0d76-04-eminem-2.rsocial.w1200.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Taylor Swift, Kygo Objective C, Avicii",
+      "subtitle": "Stream Taylor Swift x Avicii x Mave - Anti-Hero vs. Levels (2022) mashup by Kiley",
+      "likes": "15,652",
+      "release": "25 Agu 2008",
+      "imageUri": "https://variety.com/wp-content/uploads/2020/01/taylor-swift-variety-cover-5-16x9-1000.jpg?w=1000"
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "categories": [
+    {
+      "categoryId": 1,
+      "name": "Electronic/Dance:",
+      "tracks": [
+        {
+          "id": 1,
+          "title": "Miss Monique",
+          "subtitle": "Got it all",
+          "imageUri": "https://geo-media.beatport.com/image_size/590x404/6b1a8139-5f1f-4421-8810-67b1d12fff48.jpg"
+        },
+        {
+          "id": 2,
+          "title": "Fred again.., RUFUS",
+          "subtitle": "DU SOL, ODESZA",
+          "imageUri": "https://static.ra.co/images/profiles/square/fredagain.jpg?dateUpdated=1662210299000"
+        },
+        {
+          "id": 3,
+          "title": "Lucky Daye, SG Lewis",
+          "subtitle": "Ben Bohmer, STRTW",
+          "imageUri": "https://i.scdn.co/image/ab67616d0000b27364276038ca819ac78f7d0d8a"
+        },
+        {
+          "id": 4,
+          "title": "Dua Lip, Elton",
+          "subtitle": "Jhon, Calvin Harris",
+          "imageUri": "https://i.scdn.co/image/ab67616d0000b273b4d0d46e3a2e317576648b12"
+        }
+      ]
+    },
+    {
+      "categoryId": 2,
+      "name": "Deep House:",
+      "tracks": [
+        {
+          "id": 1,
+          "title": "Let Go",
+          "subtitle": "Vesin",
+          "imageUri": "https://f4.bcbits.com/img/a1398440857_65"
+        },
+        {
+          "id": 2,
+          "title": "Unfolding",
+          "subtitle": "Ron Trent (Momentum)",
+          "imageUri": "https://geo-media.beatport.com/image_size/590x405/5ac88f1f-a3ad-4e0d-beef-9207671cd874.jpg"
+        },
+        {
+          "id": 3,
+          "title": "Strange Movement",
+          "subtitle": "Leroy Styles, MC Roga",
+          "imageUri": "https://geo-media.beatport.com/image_size/1400x1400/b6c149d2-0eed-44f7-ad66-c27f785cd41f.jpg"
+        },
+        {
+          "id": 4,
+          "title": "Another Day",
+          "subtitle": "Etur Usheo",
+          "imageUri": "https://geo-media.beatport.com/image_size/1400x1400/3e0dc882-0bcf-421a-bfab-9cdf2df52c5f.jpg"
+        }
+      ]
+    },
+    {
+      "categoryId": 3,
+      "name": "Trance:",
+      "tracks": [
+        {
+          "id": 1,
+          "title": "Fred again.., RUFUS",
+          "subtitle": "DU SOL, ODESZA",
+          "imageUri": "https://static.ra.co/images/profiles/square/fredagain.jpg?dateUpdated=1662210299000"
+        },
+        {
+          "id": 2,
+          "title": "Lucky Daye, SG Lewis",
+          "subtitle": "Ben Bohmer, STRTW",
+          "imageUri": "https://i.scdn.co/image/ab67616d0000b27364276038ca819ac78f7d0d8a"
+        },
+        {
+          "id": 3,
+          "title": "Dua Lip, Elton",
+          "subtitle": "Jhon, Calvin Harris",
+          "imageUri": "https://i.scdn.co/image/ab67616d0000b273b4d0d46e3a2e317576648b12"
+        },
+        {
+          "id": 4,
+          "title": "Miss Monique",
+          "subtitle": "Got it all",
+          "imageUri": "https://geo-media.beatport.com/image_size/590x404/6b1a8139-5f1f-4421-8810-67b1d12fff48.jpg"
+        }
+      ]
+    },
+    {
+      "categoryId": 4,
+      "name": "Pop:",
+      "tracks": [
+        {
+          "id": 1,
+          "title": "Fred again.., RUFUS",
+          "subtitle": "DU SOL, ODESZA",
+          "imageUri": "https://static.ra.co/images/profiles/square/fredagain.jpg?dateUpdated=1662210299000"
+        },
+        {
+          "id": 2,
+          "title": "Lucky Daye, SG Lewis",
+          "subtitle": "Ben Bohmer, STRTW",
+          "imageUri": "https://i.scdn.co/image/ab67616d0000b27364276038ca819ac78f7d0d8a"
+        },
+        {
+          "id": 3,
+          "title": "Dua Lip, Elton",
+          "subtitle": "Jhon, Calvin Harris",
+          "imageUri": "https://i.scdn.co/image/ab67616d0000b273b4d0d46e3a2e317576648b12"
+        },
+        {
+          "id": 4,
+          "title": "Miss Monique",
+          "subtitle": "Got it all",
+          "imageUri": "https://geo-media.beatport.com/image_size/590x404/6b1a8139-5f1f-4421-8810-67b1d12fff48.jpg"
+        }
+      ]
+    }
+  ]
+}
