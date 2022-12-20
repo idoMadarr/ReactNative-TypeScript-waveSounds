@@ -19,6 +19,9 @@ const HomeScreen = () => {
   const tracks = useAppSelector(state => state.deezerSlice.tracks!);
   const translateX = useSharedValue(0);
 
+  // Creating an 'array mock length' cuase We cant interpolate directly from redux state
+  const InterpolationMock = tracks.map(() => ({}));
+
   const onHorizontalScroll = useAnimatedScrollHandler({
     onScroll: event => {
       translateX.value = event.contentOffset.x;
@@ -28,8 +31,10 @@ const HomeScreen = () => {
   const style = useAnimatedStyle(() => {
     const backgroundColor = interpolateColor(
       translateX.value,
-      tracks.map((_, i) => PropDimensions.fullWidth * i),
-      tracks.map((_, i) => (i % 2 === 0 ? Colors.secondary : Colors.primary)),
+      InterpolationMock.map((_, i) => PropDimensions.fullWidth * i),
+      InterpolationMock.map((_, i) =>
+        i % 2 === 0 ? Colors.secondary : Colors.primary,
+      ),
     ) as string;
     return {backgroundColor};
   });

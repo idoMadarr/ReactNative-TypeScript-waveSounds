@@ -2,14 +2,14 @@ import {createSlice} from '@reduxjs/toolkit';
 import {TrackType} from '../../types/tracks';
 
 interface RootStateApp {
-  tracks: TrackType[] | null;
+  tracks: TrackType[];
   // albums: any
   // artists: any
   // playlists: any
 }
 
 const initialState: RootStateApp = {
-  tracks: null,
+  tracks: [],
   // albums: null,
   // artists: null,
   // playlists: null,
