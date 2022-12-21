@@ -7,34 +7,26 @@ import {
   StyleSheet,
 } from 'react-native';
 import Colors from '../assets/design/palette.json';
+import {SequenceType} from '../types/sequence';
 
 // Components
 import TextElement from './resuable/TextElement';
 
-interface Track {
-  id: number;
-  title: string;
-  subtitle: string;
-  imageUri: string;
-}
-
-interface SequenceType {
-  tracks: Track[];
-}
-
-const Sequence: React.FC<SequenceType> = ({tracks}) => {
+const Sequence: React.FC<SequenceType> = ({albums}) => {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      {tracks.map(({id, title, subtitle, imageUri}) => (
+      {albums.map(({id, title, artist, image}) => (
         <TouchableOpacity key={id} activeOpacity={0.8}>
-          <Image source={{uri: imageUri}} style={styles.image} />
+          <Image source={{uri: image}} style={styles.image} />
           <View style={{marginHorizontal: 8}}>
-            <TextElement cStyle={styles.text}>{title}</TextElement>
+            <TextElement numberOfLines={1} cStyle={styles.text}>
+              {title}
+            </TextElement>
             <TextElement
               fontWeight={'light'}
               cStyle={styles.text}
               fontSize={'sm'}>
-              {subtitle}
+              {artist}
             </TextElement>
           </View>
         </TouchableOpacity>
@@ -51,6 +43,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   text: {
+    width: 150,
     color: Colors.white,
   },
 });

@@ -1,6 +1,6 @@
 import {View, StyleSheet} from 'react-native';
+import {useAppSelector} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
-import {categories} from '../fixtures/sections.json';
 import {PropDimensions} from '../dimensions/dimensions';
 import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -10,6 +10,8 @@ import TextElement from './resuable/TextElement';
 import Sequence from './Sequence';
 
 const SectionList = () => {
+  const sequenceTree = useAppSelector(state => state.deezerSlice.sequenceTree);
+
   return (
     <LinearGradient
       colors={[
@@ -17,15 +19,15 @@ const SectionList = () => {
         Colors['gradient-mid'],
         Colors['gradient-end'],
       ]}>
-      {categories.map(({categoryId, name, tracks}) => (
-        <View key={categoryId} style={styles.sequenceContainer}>
+      {sequenceTree.map(({name, albums}) => (
+        <View key={name} style={styles.sequenceContainer}>
           <View style={styles.sectionContainer}>
             <Icon name={'caret-right'} size={28} color={Colors.secondary} />
             <TextElement fontSize={'lg'} cStyle={styles.categoryTitle}>
               {name}
             </TextElement>
           </View>
-          <Sequence tracks={tracks} />
+          <Sequence albums={albums} />
         </View>
       ))}
     </LinearGradient>

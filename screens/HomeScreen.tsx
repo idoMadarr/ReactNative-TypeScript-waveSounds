@@ -16,11 +16,11 @@ import Colors from '../assets/design/palette.json';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 
 const HomeScreen = () => {
-  const tracks = useAppSelector(state => state.deezerSlice.tracks!);
+  const trends = useAppSelector(state => state.deezerSlice.trends!);
   const translateX = useSharedValue(0);
 
   // Creating an 'array mock length' cuase We cant interpolate directly from redux state
-  const InterpolationMock = tracks.map(() => ({}));
+  const InterpolationMock = trends.map(() => ({}));
 
   const onHorizontalScroll = useAnimatedScrollHandler({
     onScroll: event => {
@@ -61,7 +61,7 @@ const HomeScreen = () => {
             contentContainerStyle={styles.center}
             snapToInterval={PropDimensions.fullWidth}
             decelerationRate={'fast'}>
-            <TrendsList tracks={tracks} />
+            <TrendsList trends={trends} />
           </Animated.ScrollView>
         </Animated.View>
         <SectionList />

@@ -1,18 +1,18 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {TrackType} from '../../types/tracks';
+import {TrendType} from '../../types/trend';
+import {CategoryType} from '../../types/category';
+import {SequencesType} from '../../types/sequence';
 
 interface RootStateApp {
-  tracks: TrackType[];
-  // albums: any
-  // artists: any
-  // playlists: any
+  trends: TrendType[];
+  categories: CategoryType[];
+  sequenceTree: SequencesType[];
 }
 
 const initialState: RootStateApp = {
-  tracks: [],
-  // albums: null,
-  // artists: null,
-  // playlists: null,
+  trends: [],
+  categories: [],
+  sequenceTree: [],
 };
 
 export const deezerSlice = createSlice({
@@ -20,23 +20,17 @@ export const deezerSlice = createSlice({
   initialState,
   reducers: {
     setDeezerChart: (state, action) => {
-      const {tracks, albums, artists, playlists} = action.payload;
-      state.tracks = tracks.data.map((track: any) => ({
-        id: track.id,
-        artist: track.artist.name,
-        title: track.title,
-        rank: track.rank,
-        image: track.album.cover_medium,
-        album: track.album.title,
-      }));
-      // state.tracks = tracks;
-      // state.albums = albums;
-      // state.artists = artists;
-      // state.playlists = playlists;
+      state.trends = action.payload;
+    },
+    setCategories: (state, action) => {
+      state.categories = action.payload.data;
+    },
+    setSequence: (state, action) => {
+      state.sequenceTree.push(action.payload);
     },
   },
 });
 
-export const {setDeezerChart} = deezerSlice.actions;
+export const {setDeezerChart, setCategories, setSequence} = deezerSlice.actions;
 
 export default deezerSlice.reducer;

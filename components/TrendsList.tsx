@@ -2,16 +2,16 @@ import React from 'react';
 import {Fragment} from 'react';
 import TrendCard from './TrendCard';
 import {randomDate} from '../utils/randomDate';
-import {TrackType} from '../types/tracks';
+import {TrendType} from '../types/trend';
 
 interface TrendsListType {
-  tracks: TrackType[];
+  trends: TrendType[];
 }
 
-const TrendsList: React.FC<TrendsListType> = ({tracks}) => {
+const TrendsList: React.FC<TrendsListType> = ({trends}) => {
   return (
     <Fragment>
-      {tracks.map(({id, artist, title, rank, image}, index) => (
+      {trends.map(({id, artist, title, rank, image}, index) => (
         <TrendCard
           key={id}
           artist={artist}

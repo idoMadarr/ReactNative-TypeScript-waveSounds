@@ -1,0 +1,24 @@
+{
+  "sequenceMap": [
+    {
+      "id": 132,
+      "name": "Pop"
+    },
+    {
+      "id": 106,
+      "name": "Electro"
+    },
+    {
+      "id": 116,
+      "name": "Rap"
+    },
+    {
+      "id": 133,
+      "name": "Dance"
+    },
+    {
+      "id": 464,
+      "name": "Metal"
+    }
+  ]
+}

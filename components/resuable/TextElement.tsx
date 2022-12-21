@@ -6,6 +6,7 @@ interface TextElementType {
   fontSize?: string;
   fontWeight?: string;
   cStyle?: object;
+  numberOfLines?: number;
 }
 
 const TextElement: React.FC<TextElementType> = ({
@@ -13,6 +14,7 @@ const TextElement: React.FC<TextElementType> = ({
   fontSize,
   fontWeight,
   cStyle = {},
+  numberOfLines,
 }) => {
   const setFontSize = (size: string = 'm') =>
     size === 'sm' ? 10 : size === 'm' ? 14 : size === 'lg' ? 20 : 34;
@@ -30,7 +32,11 @@ const TextElement: React.FC<TextElementType> = ({
     fontFamily: setFontFamily(fontWeight),
   };
 
-  return <Text style={styles}>{children}</Text>;
+  return (
+    <Text numberOfLines={numberOfLines} style={styles}>
+      {children}
+    </Text>
+  );
 };
 
 export default TextElement;
