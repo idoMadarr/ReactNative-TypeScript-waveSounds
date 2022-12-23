@@ -1,16 +1,16 @@
 {
   "sequenceMap": [
     {
+      "id": 116,
+      "name": "Rap"
+    },
+    {
       "id": 132,
       "name": "Pop"
     },
     {
       "id": 106,
       "name": "Electro"
-    },
-    {
-      "id": 116,
-      "name": "Rap"
     },
     {
       "id": 133,

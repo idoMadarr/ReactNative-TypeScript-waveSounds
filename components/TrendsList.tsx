@@ -1,5 +1,4 @@
-import React from 'react';
-import {Fragment} from 'react';
+import React, {Fragment} from 'react';
 import TrendCard from './TrendCard';
 import {randomDate} from '../utils/randomDate';
 import {TrendType} from '../types/trend';
@@ -19,6 +18,9 @@ const TrendsList: React.FC<TrendsListType> = ({trends}) => {
           release={randomDate()}
           rank={rank}
           imageUri={image}
+          onPlay={() => {
+            console.log(1);
+          }}
           darkMode={index % 2 !== 0}
         />
       ))}

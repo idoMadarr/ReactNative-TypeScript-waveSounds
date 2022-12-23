@@ -11,18 +11,10 @@ const AppNavigation: React.FC = () => {
 
   return (
     <NavigationContainer>
-      <AppNavigator.Navigator>
-        <AppNavigator.Screen
-          name={'init'}
-          component={LoadingScreen}
-          options={{headerShown: false}}
-        />
+      <AppNavigator.Navigator screenOptions={{headerShown: false}}>
+        <AppNavigator.Screen name={'init'} component={LoadingScreen} />
         <AppNavigator.Group>
-          <AppNavigator.Screen
-            name={'tabs'}
-            component={TabNavigation}
-            options={{headerShown: false}}
-          />
+          <AppNavigator.Screen name={'tabs'} component={TabNavigation} />
         </AppNavigator.Group>
       </AppNavigator.Navigator>
     </NavigationContainer>

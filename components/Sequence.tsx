@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import Colors from '../assets/design/palette.json';
 import {SequenceType} from '../types/sequence';
 
@@ -13,10 +14,20 @@ import {SequenceType} from '../types/sequence';
 import TextElement from './resuable/TextElement';
 
 const Sequence: React.FC<SequenceType> = ({albums}) => {
+  const navigation = useNavigation();
+
+  const onPress = (albumId: number) => {
+    // @ts-ignore: Unsupported navigate type
+    navigation.navigate('album', {albumId});
+  };
+
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       {albums.map(({id, title, artist, image}) => (
-        <TouchableOpacity key={id} activeOpacity={0.8}>
+        <TouchableOpacity
+          key={id}
+          activeOpacity={0.8}
+          onPress={onPress.bind(this, id)}>
           <Image source={{uri: image}} style={styles.image} />
           <View style={{marginHorizontal: 8}}>
             <TextElement numberOfLines={1} cStyle={styles.text}>

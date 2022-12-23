@@ -1,6 +1,6 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import {TouchableOpacity, View, StyleSheet} from 'react-native';
+import {TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Animated, {
   useAnimatedStyle,
@@ -8,6 +8,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
+import LinearGradient from 'react-native-linear-gradient';
 import {PropDimensions} from '../dimensions/dimensions';
 import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -35,7 +36,7 @@ const TabBar: React.FC = () => {
   };
 
   const setTranslateX = (index: number) => {
-    return (PropDimensions.tabWidth / 3) * index;
+    return (PropDimensions.fullWidth / 3) * index;
   };
 
   const offsetAnimation = useAnimatedStyle(() => {
@@ -45,7 +46,13 @@ const TabBar: React.FC = () => {
   });
 
   return (
-    <View style={styles.tabContainer}>
+    <LinearGradient
+      style={styles.tabContainer}
+      colors={[
+        Colors['gradient-mid'],
+        Colors['gradient-start'],
+        Colors['gradient-end'],
+      ]}>
       {tabs.map(({id, route, icon}) => (
         <Tab
           key={id}
@@ -57,7 +64,7 @@ const TabBar: React.FC = () => {
         />
       ))}
       <Animated.View style={[offsetAnimation, styles.indicator]} />
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -95,21 +102,12 @@ const Tab: React.FC<TabType> = ({id, route, icon, focus, setFocus}) => {
 
 const styles = StyleSheet.create({
   tabContainer: {
-    position: 'absolute',
-    bottom: '1.5%',
     height: 50,
     alignSelf: 'center',
-    borderRadius: 25,
-    elevation: 5,
-    borderWidth: 1,
-    borderColor: Colors.primary,
-    backgroundColor: Colors.primary,
-    width: PropDimensions.tabWidth,
+    width: PropDimensions.fullWidth,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    shadowColor: Colors.black,
-    overflow: 'hidden',
   },
   indicator: {
     position: 'absolute',

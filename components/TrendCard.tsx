@@ -15,6 +15,7 @@ interface TrendCardType {
   release: string;
   imageUri: string;
   darkMode: boolean;
+  onPlay(): void;
 }
 
 const TrendCard: React.FC<TrendCardType> = ({
@@ -24,6 +25,7 @@ const TrendCard: React.FC<TrendCardType> = ({
   release,
   imageUri,
   darkMode,
+  onPlay,
 }) => {
   const textColor = darkMode ? Colors.white : Colors.black;
   const cardColor = darkMode ? Colors.greyish : Colors.light;
@@ -56,6 +58,7 @@ const TrendCard: React.FC<TrendCardType> = ({
         <Icon name={'star'} size={42} color={buttonColor} style={styles.icon} />
         <TextElement cStyle={{color: textColor}}>{`Rank: ${rank}`}</TextElement>
         <TouchableOpacity
+          onPress={onPlay}
           activeOpacity={0.8}
           style={[styles.button, {backgroundColor: buttonColor}]}>
           <TextElement fontWeight={'bold'} cStyle={{color: buttonTextColor}}>

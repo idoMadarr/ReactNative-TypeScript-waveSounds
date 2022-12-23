@@ -1,5 +1,5 @@
 {
-  "primary": "#262626",
+  "primary": "#242424",
   "secondary": "#E2DDD1",
   "warning": "#F03A53",
   "info": "7a6c56",
@@ -11,7 +11,7 @@
   "active": "#9bd40f",
   "placeholder": "#AAAFB1",
   "transparent": "#ffffff00",
-  "gradient-start": "#262626",
-  "gradient-mid": "#454543",
-  "gradient-end": "#121211"
+  "gradient-start": "#1f1f1f",
+  "gradient-mid": "#464645",
+  "gradient-end": "#1f1f1e"
 }

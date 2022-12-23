@@ -44,3 +44,8 @@ export const fetchSequences = () => async (dispatch: Dispatch) => {
     );
   });
 };
+
+export const fetchAlbum = (albumId: number) => async (dispatch: Dispatch) => {
+  const {data} = await axios.get(`https://api.deezer.com/album/${albumId}`);
+  return data;
+};
