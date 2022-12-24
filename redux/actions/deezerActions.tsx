@@ -1,10 +1,6 @@
 import {Dispatch} from '@reduxjs/toolkit';
 import axios from 'axios';
-import {
-  setDeezerChart,
-  // setCategories,
-  setSequence,
-} from '../slices/deezerSlice';
+import {setDeezerChart, setSequence} from '../slices/deezerSlice';
 import {sequenceMap} from '../../fixtures/sequence-map.json';
 
 export const fetchDeezerChart = () => async (dispatch: Dispatch) => {
@@ -20,11 +16,6 @@ export const fetchDeezerChart = () => async (dispatch: Dispatch) => {
 
   dispatch(setDeezerChart(trends));
 };
-
-// export const fetchCategories = () => async (dispatch: Dispatch) => {
-//   const {data} = await axios.get('https://api.deezer.com/editorial');
-//   dispatch(setCategories(data));
-// };
 
 export const fetchSequences = () => async (dispatch: Dispatch) => {
   sequenceMap.forEach(async sequence => {

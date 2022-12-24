@@ -7,12 +7,13 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
-import {useAppDispatch} from '../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {fetchAlbum} from '../redux/actions/deezerActions';
 import Colors from '../assets/design/palette.json';
 import {AlbumType} from '../types/album';
 import Sound from 'react-native-sound';
-// import { playTrack } from '../utils/playTrack';
+import soundTracker from '../utils/soundTracker';
+import {setCurrentTrack, setMiniPlayer} from '../redux/slices/deezerSlice';
 
 // Components
 import AlbumHeader from '../components/AlbumPartials/AlbumHeader';
@@ -28,7 +29,8 @@ const AlbumScreen = ({navigation, route}) => {
   const {albumId} = route.params;
 
   const [currentAlbum, setCurrentAlbum] = useState<AlbumType | null>(null);
-  const [track, setTrack] = useState<{} | null>(null);
+  const [indexIndicator, setIndexIndicator] = useState(0);
+  const track = useAppSelector(state => state.deezerSlice.currentTrack);
   const dispatch = useAppDispatch();
   const progress = useSharedValue(0);
 
@@ -43,24 +45,17 @@ const AlbumScreen = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    //   @ts-ignore:
-    if (track && track.play) {
-      //   @ts-ignore:
-      track.stop(() => {
-        //   @ts-ignore:
-        track.play();
-      });
-      // track.play(() => {
-      //   console.log('?');
-
-      //   track.release();
-      // });
-    }
+    soundTracker(track);
   }, [track]);
 
-  const initSoundTrack = (url: string) => {
+  const initSoundTrack = (url: string, index: number) => {
+    if (track) {
+      track.stop();
+    }
+    setIndexIndicator(index);
     const loadTrack = new Sound(url, '', async () => {
-      setTrack(loadTrack);
+      dispatch(setCurrentTrack(loadTrack));
+      dispatch(setMiniPlayer(currentAlbum?.tracks.data[index]));
     });
   };
 
@@ -107,6 +102,7 @@ const AlbumScreen = ({navigation, route}) => {
             <AlbumTracks
               tracks={currentAlbum.tracks.data}
               initSoundTrack={initSoundTrack}
+              indexIndicator={indexIndicator}
             />
           </Fragment>
         )}

@@ -1,5 +1,6 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {Modalize} from 'react-native-modalize';
+import Colors from '../../assets/design/palette.json';
 
 interface ModalElementType {
   children: JSX.Element | JSX.Element[] | string;
@@ -9,13 +10,15 @@ interface ModalElementType {
 const ModalElement: React.FC<ModalElementType> = ({children, modalizeRef}) => {
   return (
     <Modalize
-      // modalStyle={{  }}
+      modalStyle={{backgroundColor: Colors.primary}}
       ref={modalizeRef}
+      avoidKeyboardLikeIOS={true}
       snapPoint={250}
-      adjustToContentHeight={true}
-      panGestureEnabled={true}
+      closeSnapPointStraightEnabled={false}
       useNativeDriver={true}
-      closeOnOverlayTap={true}>
+      withOverlay={false}
+      /* closeOnOverlayTap={true} */
+    >
       {children}
     </Modalize>
   );

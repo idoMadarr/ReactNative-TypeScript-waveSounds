@@ -1,4 +1,6 @@
 export interface TrackType {
-  play: (cb: () => void) => {};
+  play(): void;
   release(): void;
+  stop(): void;
+  pause(): void;
 }

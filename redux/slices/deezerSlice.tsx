@@ -1,18 +1,24 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {TrendType} from '../../types/trend';
-import {CategoryType} from '../../types/category';
 import {SequencesType} from '../../types/sequence';
+import {MiniPlayerType} from '../../types/miniPlayer';
+import {TrackType} from '../../types/track';
 
 interface RootStateApp {
   trends: TrendType[];
-  categories: CategoryType[];
   sequenceTree: SequencesType[];
+  miniPlayer: MiniPlayerType;
+  currentTrack: TrackType | null;
 }
 
 const initialState: RootStateApp = {
   trends: [],
-  categories: [],
   sequenceTree: [],
+  miniPlayer: {
+    active: false,
+    track: {},
+  },
+  currentTrack: null,
 };
 
 export const deezerSlice = createSlice({
@@ -22,15 +28,20 @@ export const deezerSlice = createSlice({
     setDeezerChart: (state, action) => {
       state.trends = action.payload;
     },
-    setCategories: (state, action) => {
-      state.categories = action.payload.data;
-    },
     setSequence: (state, action) => {
       state.sequenceTree.push(action.payload);
+    },
+    setMiniPlayer: (state, action) => {
+      state.miniPlayer.track = action.payload;
+      state.miniPlayer.active = true;
+    },
+    setCurrentTrack: (state, action) => {
+      state.currentTrack = action.payload;
     },
   },
 });
 
-export const {setDeezerChart, setCategories, setSequence} = deezerSlice.actions;
+export const {setDeezerChart, setSequence, setMiniPlayer, setCurrentTrack} =
+  deezerSlice.actions;
 
 export default deezerSlice.reducer;
