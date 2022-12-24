@@ -15,6 +15,7 @@ import {
 import Colors from '../assets/design/palette.json';
 
 // Components
+import StatusBarElement from '../components/resuable/StatusBarElement';
 import ClockLoader from '../components/ClockLoader';
 import TextElement from '../components/resuable/TextElement';
 
@@ -48,6 +49,10 @@ const LoadingScreen = ({navigation}: any) => {
 
   return (
     <SafeAreaView style={styles.screen}>
+      <StatusBarElement
+        barStyle={'light-content'}
+        backgroundColor={Colors.primary}
+      />
       <TextElement cStyle={styles.title} fontSize={'xl'}>
         waveSounds
       </TextElement>

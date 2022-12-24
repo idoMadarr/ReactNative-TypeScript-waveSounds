@@ -4,4 +4,5 @@ export interface TrendType {
   artist: string;
   rank: number;
   image: string;
+  preview: string;
 }

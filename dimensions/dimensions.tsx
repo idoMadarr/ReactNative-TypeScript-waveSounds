@@ -7,4 +7,5 @@ export enum PropDimensions {
   fullHight = Dimensions.get('window').height,
   cardHeight = Dimensions.get('window').height * 0.7,
   trendsHeight = Dimensions.get('window').height * 0.8,
+  maxModalHeight = Dimensions.get('window').height * 0.7,
 }

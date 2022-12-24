@@ -1,6 +1,6 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import {TouchableOpacity, StyleSheet} from 'react-native';
+import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Animated, {
   useAnimatedStyle,
@@ -8,7 +8,6 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import LinearGradient from 'react-native-linear-gradient';
 import {PropDimensions} from '../dimensions/dimensions';
 import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -46,13 +45,7 @@ const TabBar: React.FC = () => {
   });
 
   return (
-    <LinearGradient
-      style={styles.tabContainer}
-      colors={[
-        Colors['gradient-mid'],
-        Colors['gradient-start'],
-        Colors['gradient-end'],
-      ]}>
+    <View style={styles.tabContainer}>
       {tabs.map(({id, route, icon}) => (
         <Tab
           key={id}
@@ -64,7 +57,7 @@ const TabBar: React.FC = () => {
         />
       ))}
       <Animated.View style={[offsetAnimation, styles.indicator]} />
-    </LinearGradient>
+    </View>
   );
 };
 
@@ -108,6 +101,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    backgroundColor: Colors.primary,
+    elevation: 5,
   },
   indicator: {
     position: 'absolute',

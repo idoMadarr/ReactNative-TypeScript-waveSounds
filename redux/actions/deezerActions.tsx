@@ -12,6 +12,7 @@ export const fetchDeezerChart = () => async (dispatch: Dispatch) => {
     rank: trend.rank,
     image: trend.album.cover_medium,
     album: trend.album.title,
+    preview: trend.preview,
   }));
 
   dispatch(setDeezerChart(trends));

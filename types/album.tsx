@@ -15,7 +15,7 @@ export interface AlbumTrack {
   id: number;
   preview: string;
   album: {
-    cover_small: string;
+    cover_medium: string;
   };
   title: string;
 }

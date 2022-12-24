@@ -12,15 +12,14 @@ import {fetchAlbum} from '../redux/actions/deezerActions';
 import Colors from '../assets/design/palette.json';
 import {AlbumType} from '../types/album';
 import Sound from 'react-native-sound';
-import soundTracker from '../utils/soundTracker';
-import {setCurrentTrack, setMiniPlayer} from '../redux/slices/deezerSlice';
+import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
 
 // Components
 import AlbumHeader from '../components/AlbumPartials/AlbumHeader';
-import AlbumController from '../components/AlbumPartials/AlbumController';
 import AlbumTracks from '../components/AlbumPartials/AlbumTracks';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import ClockLoader from '../components/ClockLoader';
+import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 
 Sound.setCategory('Playback', true);
 
@@ -44,18 +43,20 @@ const AlbumScreen = ({navigation, route}) => {
     setCurrentAlbum(albumData);
   };
 
-  useEffect(() => {
-    soundTracker(track);
-  }, [track]);
-
   const initSoundTrack = (url: string, index: number) => {
     if (track) {
       track.stop();
     }
     setIndexIndicator(index);
+    const {title, artist, album} = currentAlbum?.tracks.data[index] as any;
+    const createFloatingTrack = new FloatingPlayerInstance(
+      title,
+      artist.name,
+      album.cover_medium,
+    );
     const loadTrack = new Sound(url, '', async () => {
+      dispatch(setFloatingPlayer(createFloatingTrack));
       dispatch(setCurrentTrack(loadTrack));
-      dispatch(setMiniPlayer(currentAlbum?.tracks.data[index]));
     });
   };
 
@@ -98,7 +99,6 @@ const AlbumScreen = ({navigation, route}) => {
               releaseDate={currentAlbum.release_date}
               pressBack={pressBack}
             />
-            <AlbumController onPlay={() => {}} />
             <AlbumTracks
               tracks={currentAlbum.tracks.data}
               initSoundTrack={initSoundTrack}

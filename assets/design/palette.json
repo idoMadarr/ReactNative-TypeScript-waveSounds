@@ -9,6 +9,7 @@
   "black": "#000000",
   "white": "#ffffff",
   "active": "#9bd40f",
+  "gesture": "#666565",
   "placeholder": "#AAAFB1",
   "transparent": "#ffffff00",
   "gradient-start": "#1f1f1f",

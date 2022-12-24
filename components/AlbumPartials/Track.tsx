@@ -2,7 +2,8 @@ import React from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import TextElement from '../resuable/TextElement';
 import Colors from '../../assets/design/palette.json';
-import Icon from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {PropDimensions} from '../../dimensions/dimensions';
 
 interface TrackType {
   preview: string;
@@ -30,13 +31,15 @@ const Track: React.FC<TrackType> = ({
         },
       ]}>
       <View style={{flexDirection: 'row'}}>
-        <TextElement cStyle={index % 2 === 0 ? styles.active : styles.passive}>
+        <TextElement
+          numberOfLines={1}
+          cStyle={index % 2 === 0 ? styles.active : styles.passive}>
           {title}
         </TextElement>
       </View>
       <View>
         <Icon
-          name={'dots-three-horizontal'}
+          name={'heart-o'}
           size={18}
           color={indexIndicator == index ? Colors.primary : Colors.greyish}
         />
@@ -57,9 +60,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   active: {
+    maxWidth: PropDimensions.cardWidth,
     color: Colors.active,
   },
   passive: {
+    maxWidth: PropDimensions.cardWidth,
     color: Colors.white,
   },
 });

@@ -3,4 +3,7 @@ export interface TrackType {
   release(): void;
   stop(): void;
   pause(): void;
+  getVolume(): void;
+  getPan(): void;
+  getCurrentTime(): void;
 }
