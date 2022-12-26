@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors['gradient-start'],
     elevation: 5,
   },
   indicator: {

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useAppSelector} from '../redux/hooks';
@@ -13,6 +13,7 @@ import ModalElement from '../components/resuable/ModalElement';
 import ModalPlayer from '../components/ModalPlayer';
 
 const AppNavigation: React.FC = () => {
+  const [playerStatus, setPlayerStatus] = useState(false);
   const AppNavigator = createNativeStackNavigator();
 
   const modalizeRef = useRef<Modalize>();
@@ -29,11 +30,6 @@ const AppNavigation: React.FC = () => {
 
   const closeModal = () => modalizeRef.current?.close();
 
-  let setFloatingPlayer = null;
-  if (floatingPlayer) {
-    setFloatingPlayer = <FloatingPlayer openModal={openModal} />;
-  }
-
   return (
     <NavigationContainer>
       <AppNavigator.Navigator screenOptions={{headerShown: false}}>
@@ -42,9 +38,19 @@ const AppNavigation: React.FC = () => {
           <AppNavigator.Screen name={'tabs'} component={TabNavigation} />
         </AppNavigator.Group>
       </AppNavigator.Navigator>
-      {setFloatingPlayer}
+      {floatingPlayer && (
+        <FloatingPlayer
+          playerStatus={playerStatus}
+          setPlayerStatus={setPlayerStatus}
+          openModal={openModal}
+        />
+      )}
       <ModalElement modalizeRef={modalizeRef}>
-        <ModalPlayer closeModal={closeModal} />
+        <ModalPlayer
+          playerStatus={playerStatus}
+          setPlayerStatus={setPlayerStatus}
+          closeModal={closeModal}
+        />
       </ModalElement>
     </NavigationContainer>
   );

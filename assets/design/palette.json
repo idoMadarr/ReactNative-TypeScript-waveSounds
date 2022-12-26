@@ -14,5 +14,7 @@
   "transparent": "#ffffff00",
   "gradient-start": "#1f1f1f",
   "gradient-mid": "#464645",
-  "gradient-end": "#1f1f1e"
+  "gradient-end": "#1f1f1e",
+  "gradient--modal-start": "#2c2c2c",
+  "gradient-modal-end": "#202020"
 }

@@ -1,12 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   FadeInDown,
-  FadeOutRight,
+  FadeOutUp,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {cleanFloatingPlayer} from '../redux/slices/deezerSlice';
@@ -17,14 +24,20 @@ import Colors from '../assets/design/palette.json';
 // Components
 import TextElement from './resuable/TextElement';
 
-const END_REACH = 270;
+const END_REACH = Dimensions.get('window').width * 0.7;
+const OUT_SCREEN = Dimensions.get('window').width * 1.15;
 
 interface FloatingPlayerType {
+  playerStatus: any;
+  setPlayerStatus: any;
   openModal(): void;
 }
 
-const FloatingPlayer: React.FC<FloatingPlayerType> = ({openModal}) => {
-  const [status, setStatus] = useState(true);
+const FloatingPlayer: React.FC<FloatingPlayerType> = ({
+  playerStatus,
+  setPlayerStatus,
+  openModal,
+}) => {
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
@@ -37,22 +50,24 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({openModal}) => {
   const isTocuhed = useSharedValue(false);
 
   useEffect(() => {
-    setStatus(true);
+    setPlayerStatus(true);
   }, [floatingPlayer]);
 
   const onPause = () => {
-    setStatus(false);
+    setPlayerStatus(false);
     currentTrack?.pause();
   };
 
   const onPlay = () => {
-    setStatus(true);
+    setPlayerStatus(true);
     currentTrack?.play();
   };
 
   const onGestureClose = () => {
     currentTrack?.stop();
-    dispatch(cleanFloatingPlayer());
+    setTimeout(() => {
+      dispatch(cleanFloatingPlayer());
+    }, 100);
   };
 
   const gesture = Gesture.Pan()
@@ -66,6 +81,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({openModal}) => {
     .onEnd(e => {
       isTocuhed.value = false;
       if (e.translationX > END_REACH) {
+        offset.value = withTiming(OUT_SCREEN);
         onGestureClose();
       } else {
         offset.value = withSpring(0);
@@ -83,8 +99,8 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({openModal}) => {
     <GestureDetector gesture={gesture}>
       <Animated.View
         entering={FadeInDown}
-        exiting={FadeOutRight}
-        style={[styles.miniContainer, animatedStyles]}>
+        exiting={FadeOutUp}
+        style={[styles.mainContainer, animatedStyles]}>
         <View style={styles.left}>
           <Image
             source={{uri: floatingPlayer.image}}
@@ -111,7 +127,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({openModal}) => {
               style={styles.details}
             />
           </TouchableOpacity>
-          {status ? (
+          {playerStatus ? (
             <TouchableOpacity onPress={onPause}>
               <Icon name={'pause'} size={28} color={Colors.secondary} />
             </TouchableOpacity>
@@ -127,12 +143,11 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({openModal}) => {
 };
 
 const styles = StyleSheet.create({
-  miniContainer: {
+  mainContainer: {
     height: 50,
     alignSelf: 'center',
-    borderRadius: 5,
     elevation: 5,
-    opacity: 0.93,
+    opacity: 0.85,
     width: PropDimensions.fullWidth,
     backgroundColor: Colors.greyish,
     position: 'absolute',
