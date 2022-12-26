@@ -41,3 +41,9 @@ export const fetchAlbum = (albumId: number) => async (dispatch: Dispatch) => {
   const {data} = await axios.get(`https://api.deezer.com/album/${albumId}`);
   return data;
 };
+
+export const fetchSerchResults =
+  (query: string) => async (dispatch: Dispatch) => {
+    const {data} = await axios.get(`https://api.deezer.com/search?q=${query}`);
+    if (data.data.length) return data.data;
+  };

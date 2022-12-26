@@ -28,7 +28,7 @@ const END_REACH = Dimensions.get('window').width * 0.7;
 const OUT_SCREEN = Dimensions.get('window').width * 1.15;
 
 interface FloatingPlayerType {
-  playerStatus: any;
+  playerStatus: boolean;
   setPlayerStatus: any;
   openModal(): void;
 }
@@ -101,7 +101,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
         entering={FadeInDown}
         exiting={FadeOutUp}
         style={[styles.mainContainer, animatedStyles]}>
-        <View style={styles.left}>
+        <View style={styles.side}>
           <Image
             source={{uri: floatingPlayer.image}}
             resizeMode={'cover'}
@@ -118,7 +118,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
             </TextElement>
           </View>
         </View>
-        <View style={styles.right}>
+        <View style={styles.side}>
           <TouchableOpacity onPress={openModal}>
             <Icon
               name={'expand'}
@@ -149,22 +149,19 @@ const styles = StyleSheet.create({
     elevation: 5,
     opacity: 0.85,
     width: PropDimensions.fullWidth,
-    backgroundColor: Colors.greyish,
     position: 'absolute',
     bottom: 50,
+    left: 0,
     zIndex: 100,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
   },
-  left: {
+  side: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  right: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    width: '75%',
   },
   details: {
     marginHorizontal: 16,

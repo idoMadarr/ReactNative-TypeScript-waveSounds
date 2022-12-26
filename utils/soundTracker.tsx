@@ -1,4 +1,6 @@
-const soundTracker = (track: any) => {
+import {TrackType} from '../types/track';
+
+const soundTracker = (track: TrackType) => {
   if (track?.play) {
     track.play();
   }

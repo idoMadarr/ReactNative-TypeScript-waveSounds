@@ -22,10 +22,10 @@ import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import Sound from 'react-native-sound';
 import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
 
-const END_REACH = 300;
+const END_REACH = 250;
 
 interface ModalPlayerType {
-  playerStatus: any;
+  playerStatus: boolean;
   setPlayerStatus: any;
   closeModal(): void;
 }
@@ -47,6 +47,7 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
   )!;
 
   const dispatch = useAppDispatch();
+
   const contextIndexRef = useRef(
     // @ts-ignore:
     trends.findIndex(trend => trend.preview === currentTrack._filename),
@@ -163,7 +164,7 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
           name={'music'}
           size={32}
           color={Colors.secondary}
-          style={{position: 'absolute', top: '-14%', left: '44%', zIndex: 10}}
+          style={{position: 'absolute', top: '-18%', left: '44%', zIndex: 10}}
         />
       </View>
       <View>
@@ -208,8 +209,8 @@ const styles = StyleSheet.create({
     paddingVertical: '10%',
   },
   imageContainer: {
-    width: 300,
-    height: 300,
+    width: 250,
+    height: 250,
   },
   image: {
     borderRadius: 150,
@@ -223,13 +224,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   controllerContainer: {
-    width: 300,
+    width: 250,
     justifyContent: 'space-evenly',
     flexDirection: 'row',
   },
   progressLine: {
     height: 1,
-    width: 300,
+    width: 250,
     backgroundColor: Colors.white,
   },
   progressDot: {
@@ -243,8 +244,8 @@ const styles = StyleSheet.create({
     color: Colors.active,
   },
   circle: {
-    width: 300,
-    height: 300,
+    width: 250,
+    height: 250,
     borderRadius: 150,
     backgroundColor: Colors.active,
   },

@@ -1,5 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   Easing,
   useSharedValue,
@@ -13,19 +14,24 @@ import Colors from '../assets/design/palette.json';
 import {AlbumType} from '../types/album';
 import Sound from 'react-native-sound';
 import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
+import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 
 // Components
 import AlbumHeader from '../components/AlbumPartials/AlbumHeader';
 import AlbumTracks from '../components/AlbumPartials/AlbumTracks';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import ClockLoader from '../components/ClockLoader';
-import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 
 Sound.setCategory('Playback', true);
 
-// @ts-ignore:
-const AlbumScreen = ({navigation, route}) => {
-  const {albumId} = route.params;
+type RootStackParamList = {
+  album: any;
+};
+
+type AlbumScreenType = NativeStackScreenProps<RootStackParamList, 'album'>;
+
+const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
+  const {albumId} = route.params as any;
 
   const [currentAlbum, setCurrentAlbum] = useState<AlbumType | null>(null);
   const [indexIndicator, setIndexIndicator] = useState(0);

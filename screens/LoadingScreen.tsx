@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {StyleSheet, SafeAreaView} from 'react-native';
 import {useAppDispatch} from '../redux/hooks';
 import {
@@ -19,7 +20,14 @@ import StatusBarElement from '../components/resuable/StatusBarElement';
 import ClockLoader from '../components/ClockLoader';
 import TextElement from '../components/resuable/TextElement';
 
-const LoadingScreen = ({navigation}: any) => {
+type RootStackParamList = {
+  loading: any;
+  tabs: undefined;
+};
+
+type LoadingScreenType = NativeStackScreenProps<RootStackParamList, 'loading'>;
+
+const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
   const dispatch = useAppDispatch();
   const progress = useSharedValue(0);
 
