@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, {FadeInLeft, FadeOutRight} from 'react-native-reanimated';
 import {PropDimensions} from '../dimensions/dimensions';
 import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,7 +13,7 @@ interface TrendCardType {
   title: string;
   rank: number;
   release: string;
-  imageUri: string;
+  image: string;
   darkMode: boolean;
   onPlay(): void;
 }
@@ -23,7 +23,7 @@ const TrendCard: React.FC<TrendCardType> = ({
   title,
   rank,
   release,
-  imageUri,
+  image,
   darkMode,
   onPlay,
 }) => {
@@ -34,7 +34,10 @@ const TrendCard: React.FC<TrendCardType> = ({
 
   return (
     <View style={styles.item}>
-      <Animated.View style={[styles.card, {backgroundColor: cardColor}]}>
+      <Animated.View
+        entering={FadeInLeft}
+        exiting={FadeOutRight}
+        style={[styles.card, {backgroundColor: cardColor}]}>
         <View style={styles.header}>
           <TextElement
             fontSize={'lg'}
@@ -50,7 +53,7 @@ const TrendCard: React.FC<TrendCardType> = ({
         </View>
         <View style={styles.imageContainer}>
           <Image
-            source={{uri: imageUri}}
+            source={{uri: image}}
             resizeMode={'cover'}
             style={styles.image}
           />

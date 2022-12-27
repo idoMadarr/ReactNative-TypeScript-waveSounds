@@ -1,14 +1,15 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {TrendType} from '../../types/trend';
 import {SequencesType} from '../../types/sequence';
-import {TrackType} from '../../types/track';
 import {FloatingPlayerType} from '../../types/floating-player';
+import {TrackType, SingleTrackType} from '../../types/TrackType';
 
 interface RootStateApp {
-  trends: TrendType[];
+  trends: TrackType[];
   sequenceTree: SequencesType[];
   floatingPlayer: FloatingPlayerType | null;
-  currentTrack: TrackType | null;
+  currentTrack: SingleTrackType | null;
+  searchResults: TrackType[];
+  modalContext: TrackType[];
 }
 
 const initialState: RootStateApp = {
@@ -16,6 +17,8 @@ const initialState: RootStateApp = {
   sequenceTree: [],
   floatingPlayer: null,
   currentTrack: null,
+  searchResults: [],
+  modalContext: [],
 };
 
 export const deezerSlice = createSlice({
@@ -37,6 +40,12 @@ export const deezerSlice = createSlice({
     cleanFloatingPlayer: state => {
       state.floatingPlayer = null;
     },
+    setModalPlayerContext: (state, action) => {
+      state.modalContext = action.payload;
+    },
+    setSearchResults: (state, action) => {
+      state.searchResults = action.payload;
+    },
   },
 });
 
@@ -46,6 +55,8 @@ export const {
   setFloatingPlayer,
   setCurrentTrack,
   cleanFloatingPlayer,
+  setModalPlayerContext,
+  setSearchResults,
 } = deezerSlice.actions;
 
 export default deezerSlice.reducer;

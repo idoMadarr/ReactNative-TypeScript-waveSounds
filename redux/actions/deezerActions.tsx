@@ -39,11 +39,29 @@ export const fetchSequences = () => async (dispatch: Dispatch) => {
 
 export const fetchAlbum = (albumId: number) => async (dispatch: Dispatch) => {
   const {data} = await axios.get(`https://api.deezer.com/album/${albumId}`);
-  return data;
+  const formattedData = {
+    title: data.title,
+    artist: data.artist.name,
+    image: data.cover_medium,
+    label: data.label,
+    releaseDate: data.release_date,
+    tracks: data.tracks.data,
+  };
+  return formattedData;
 };
 
 export const fetchSerchResults =
   (query: string) => async (dispatch: Dispatch) => {
     const {data} = await axios.get(`https://api.deezer.com/search?q=${query}`);
-    if (data.data.length) return data.data;
+    if (data.data.length) {
+      const formattedResults = data.data.map((result: any) => ({
+        id: result.id,
+        title: result.title,
+        artist: result.artist.name,
+        rank: result.rank,
+        image: result.album.cover_medium,
+        preview: result.preview,
+      }));
+      return formattedResults.slice(0, 15);
+    }
   };

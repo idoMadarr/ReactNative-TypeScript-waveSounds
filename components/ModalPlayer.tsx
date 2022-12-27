@@ -33,15 +33,13 @@ interface ModalPlayerType {
 const ModalPlayer: React.FC<ModalPlayerType> = ({
   playerStatus,
   setPlayerStatus,
-  closeModal,
 }) => {
-  // const [status, setStatus] = useState(true);
   const offset = useSharedValue(0);
   const start = useSharedValue(0);
   const isTocuhed = useSharedValue(false);
 
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
-  const trends = useAppSelector(state => state.deezerSlice.trends);
+  const modalContext = useAppSelector(state => state.deezerSlice.modalContext);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   )!;
@@ -50,13 +48,13 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
 
   const contextIndexRef = useRef(
     // @ts-ignore:
-    trends.findIndex(trend => trend.preview === currentTrack._filename),
+    modalContext.findIndex(item => item.preview === currentTrack._filename),
   );
 
   // @ts-ignore:
-  const totalTime = currentTrack.getCurrentTime(seconds =>
-    console.log('at ' + seconds),
-  );
+  // const totalTime = currentTrack.getCurrentTime(seconds =>
+  //   console.log('at ' + seconds),
+  // );
 
   const onPlay = () => {
     setPlayerStatus(true);
@@ -73,9 +71,9 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
       currentTrack.stop();
     }
 
-    let nextTrack = trends[contextIndexRef.current + action];
+    let nextTrack = modalContext[contextIndexRef.current + action] as any;
     if (!nextTrack) {
-      nextTrack = trends[0];
+      nextTrack = modalContext[0];
       contextIndexRef.current = 0;
     } else {
       contextIndexRef.current = contextIndexRef.current + action;

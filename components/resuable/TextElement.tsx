@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {Text, StyleSheet} from 'react-native';
 
 interface TextElementType {
   children: JSX.Element | JSX.Element[] | string;
@@ -26,14 +26,15 @@ const TextElement: React.FC<TextElementType> = ({
       ? 'Poppins-Light'
       : 'Poppins-Regular';
 
-  const styles = {
-    ...cStyle,
-    fontSize: setFontSize(fontSize),
-    fontFamily: setFontFamily(fontWeight),
-  };
+  const styles = StyleSheet.create({
+    constants: {
+      fontSize: setFontSize(fontSize),
+      fontFamily: setFontFamily(fontWeight),
+    },
+  });
 
   return (
-    <Text numberOfLines={numberOfLines} style={styles}>
+    <Text numberOfLines={numberOfLines} style={[styles.constants, {...cStyle}]}>
       {children}
     </Text>
   );

@@ -23,7 +23,9 @@ const AppNavigation: React.FC = () => {
   );
 
   useEffect(() => {
-    soundTracker(currentTrack);
+    if (currentTrack) {
+      soundTracker(currentTrack);
+    }
   }, [currentTrack]);
 
   const openModal = () => modalizeRef.current?.open();

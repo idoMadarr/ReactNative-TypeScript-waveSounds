@@ -35,7 +35,7 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
 
   const [currentAlbum, setCurrentAlbum] = useState<AlbumType | null>(null);
   const [indexIndicator, setIndexIndicator] = useState(0);
-  const track = useAppSelector(state => state.deezerSlice.currentTrack);
+  const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
   const dispatch = useAppDispatch();
   const progress = useSharedValue(0);
 
@@ -50,11 +50,11 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
   };
 
   const initSoundTrack = (url: string, index: number) => {
-    if (track) {
-      track.stop();
+    if (currentTrack) {
+      currentTrack.stop();
     }
     setIndexIndicator(index);
-    const {title, artist, album} = currentAlbum?.tracks.data[index] as any;
+    const {title, artist, album} = currentAlbum?.tracks[index] as any;
     const createFloatingTrack = new FloatingPlayerInstance(
       title,
       artist.name,
@@ -100,13 +100,13 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
             <AlbumHeader
               title={currentAlbum.title}
               label={currentAlbum.label}
-              imageCover={currentAlbum.cover_medium}
-              name={currentAlbum.artist.name}
-              releaseDate={currentAlbum.release_date}
+              imageCover={currentAlbum.image}
+              name={currentAlbum.artist}
+              releaseDate={currentAlbum.releaseDate}
               pressBack={pressBack}
             />
             <AlbumTracks
-              tracks={currentAlbum.tracks.data}
+              tracks={currentAlbum.tracks}
               initSoundTrack={initSoundTrack}
               indexIndicator={indexIndicator}
             />

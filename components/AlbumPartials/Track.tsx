@@ -5,7 +5,7 @@ import Colors from '../../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {PropDimensions} from '../../dimensions/dimensions';
 
-interface TrackType {
+interface AlbumTrackType {
   preview: string;
   title: string;
   initSoundTrack(url: string, index: number): void;
@@ -13,7 +13,7 @@ interface TrackType {
   index: number;
 }
 
-const Track: React.FC<TrackType> = ({
+const AlbumTrack: React.FC<AlbumTrackType> = ({
   preview,
   title,
   initSoundTrack,
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Track;
+export default AlbumTrack;

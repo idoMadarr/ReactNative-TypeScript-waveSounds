@@ -1,14 +1,10 @@
 export interface AlbumType {
-  artist: {
-    name: string;
-  };
-  cover_medium: string;
-  label: string;
   title: string;
-  tracks: {
-    data: AlbumTrack[];
-  };
-  release_date: string;
+  artist: string;
+  image: string;
+  label: string;
+  releaseDate: string;
+  tracks: AlbumTrack[];
 }
 
 export interface AlbumTrack {

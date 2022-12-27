@@ -1,14 +1,18 @@
 import React, {Fragment} from 'react';
 import TrendCard from './TrendCard';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
+import {
+  setCurrentTrack,
+  setFloatingPlayer,
+  setModalPlayerContext,
+} from '../redux/slices/deezerSlice';
 import {randomDate} from '../utils/randomDate';
-import {TrendType} from '../types/trend';
+import {TrackType} from '../types/TrackType';
 import Sound from 'react-native-sound';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 
 interface TrendsListType {
-  trends: TrendType[];
+  trends: TrackType[];
 }
 
 const TrendsList: React.FC<TrendsListType> = ({trends}) => {
@@ -32,6 +36,7 @@ const TrendsList: React.FC<TrendsListType> = ({trends}) => {
       image,
     );
     const loadTrack = new Sound(preview, '', async () => {
+      dispatch(setModalPlayerContext(trends));
       dispatch(setFloatingPlayer(createFloatingTrack));
       dispatch(setCurrentTrack(loadTrack));
     });
@@ -45,8 +50,8 @@ const TrendsList: React.FC<TrendsListType> = ({trends}) => {
           artist={artist}
           title={title}
           release={randomDate()}
-          rank={rank}
-          imageUri={image}
+          rank={rank || 1}
+          image={image}
           onPlay={onPlay.bind(this, image, title, artist, preview)}
           darkMode={index % 2 !== 0}
         />

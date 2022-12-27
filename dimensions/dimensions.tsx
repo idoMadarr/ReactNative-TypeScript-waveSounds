@@ -11,4 +11,6 @@ export enum PropDimensions {
   inputContainerHight = Dimensions.get('window').height * 0.1,
   inputHight = Dimensions.get('window').height * 0.06,
   inputWidth = Dimensions.get('window').width * 0.85,
+  searchWidth = Dimensions.get('window').width * 0.85,
+  searchHeight = Dimensions.get('window').height * 0.25,
 }

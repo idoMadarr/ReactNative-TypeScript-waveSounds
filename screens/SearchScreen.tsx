@@ -1,29 +1,46 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {FlatList, StyleSheet, SafeAreaView} from 'react-native';
-import Animated, {SlideInLeft, SlideInRight} from 'react-native-reanimated';
 import {useIsFocused} from '@react-navigation/native';
-import {useAppDispatch} from '../redux/hooks';
-import Colors from '../assets/design/palette.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {fetchSerchResults} from '../redux/actions/deezerActions';
-import {PropDimensions} from '../dimensions/dimensions';
+import {
+  setCurrentTrack,
+  setFloatingPlayer,
+  setModalPlayerContext,
+  setSearchResults,
+} from '../redux/slices/deezerSlice';
+import {useAppSelector, useAppDispatch} from '../redux/hooks';
+import Colors from '../assets/design/palette.json';
+import {TrackType} from '../types/TrackType';
+import Sound from 'react-native-sound';
+import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
-import InputElement from '../components/resuable/InputElement';
-import TextElement from '../components/resuable/TextElement';
+import SearchHeader from '../components/SearchPartials/SearchHeader';
+import SearchItem from '../components/SearchPartials/SearchItem';
+
+const DEFAULT_SEARCH = 'poets of the fall';
 
 const SearchScreen = () => {
-  const [searchResults, setSearchResults] = useState([]);
-  const [searchState, setSearchState] = useState('');
+  const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
+  const searchResults = useAppSelector(
+    state => state.deezerSlice.searchResults,
+  );
+  const [searchState, setSearchState] = useState(DEFAULT_SEARCH);
   const isFocused = useIsFocused();
 
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    optimizeSearchFunc(DEFAULT_SEARCH);
+  }, []);
+
   const updateSearch = async (value: string) => {
     if (value === '') return;
     const results = await dispatch(fetchSerchResults(value));
-    if (results) setSearchResults(results);
+    if (results) {
+      dispatch(setSearchResults(results));
+    }
   };
 
   const debounce = (func: any) => {
@@ -40,38 +57,49 @@ const SearchScreen = () => {
 
   const optimizeSearchFunc = useCallback(debounce(updateSearch), []);
 
+  const playSoundTrack = (item: TrackType) => {
+    if (currentTrack) {
+      currentTrack.stop();
+    }
+
+    const {title, artist, preview, image} = item;
+
+    const createFloatingTrack = new FloatingPlayerInstance(
+      title,
+      artist,
+      image,
+    );
+    const loadTrack = new Sound(preview, '', async () => {
+      dispatch(setModalPlayerContext(searchResults));
+      dispatch(setFloatingPlayer(createFloatingTrack));
+      dispatch(setCurrentTrack(loadTrack));
+    });
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBarElement
         barStyle={'light-content'}
         backgroundColor={Colors.primary}
       />
-      <TextElement
-        cStyle={{color: Colors.white, width: PropDimensions.inputWidth}}>
-        Exploer our music streaming app that gives you access to over 90 million
-        tracks worldwide and other audio content
-      </TextElement>
-      {isFocused && (
-        <Animated.View entering={SlideInLeft} exiting={SlideInRight}>
-          <InputElement
-            value={searchState}
-            onChange={optimizeSearchFunc}
-            placeholder={'Search'}>
-            <Icon
-              name={'search'}
-              size={28}
-              color={Colors.primary}
-              // style={styles.details}
-            />
-          </InputElement>
-        </Animated.View>
-      )}
-      {searchResults.length > 1 && (
+      <SearchHeader
+        optimizeSearchFunc={optimizeSearchFunc}
+        searchState={searchState}
+      />
+      {isFocused && searchResults.length > 1 && (
         <FlatList
-          keyExtractor={() => Math.random().toString()}
+          keyExtractor={itemData => itemData.id.toString()}
           data={searchResults}
           showsVerticalScrollIndicator={false}
-          renderItem={({item, index}) => <TextElement>asd</TextElement>}
+          renderItem={({item, index}) => (
+            <SearchItem
+              title={item.title}
+              artist={item.artist}
+              image={item.image}
+              index={index}
+              playSoundTrack={playSoundTrack.bind(this, item)}
+            />
+          )}
         />
       )}
     </SafeAreaView>

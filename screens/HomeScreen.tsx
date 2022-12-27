@@ -1,5 +1,6 @@
 import React from 'react';
 import {ScrollView, StyleSheet, SafeAreaView, Text} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import Animated, {
   interpolateColor,
   useAnimatedScrollHandler,
@@ -18,6 +19,7 @@ import StatusBarElement from '../components/resuable/StatusBarElement';
 const HomeScreen = () => {
   const trends = useAppSelector(state => state.deezerSlice.trends!);
   const translateX = useSharedValue(0);
+  const isFocused = useIsFocused();
 
   // Creating an 'array mock length' cuase We cant interpolate directly from redux state
   const InterpolationMock = trends.map(() => ({}));
@@ -61,7 +63,7 @@ const HomeScreen = () => {
             contentContainerStyle={styles.center}
             snapToInterval={PropDimensions.fullWidth}
             decelerationRate={'fast'}>
-            <TrendsList trends={trends} />
+            {isFocused && <TrendsList trends={trends} />}
           </Animated.ScrollView>
         </Animated.View>
         <SectionList />
