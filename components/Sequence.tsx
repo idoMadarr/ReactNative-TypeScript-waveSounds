@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  ScrollView,
-  TouchableOpacity,
-  View,
-  Image,
-  StyleSheet,
-} from 'react-native';
+import {ScrollView, TouchableOpacity, View, StyleSheet} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import Colors from '../assets/design/palette.json';
 import {SequenceType} from '../types/sequence';
@@ -28,7 +23,7 @@ const Sequence: React.FC<SequenceType> = ({albums}) => {
           key={id}
           activeOpacity={0.8}
           onPress={onPress.bind(this, id)}>
-          <Image source={{uri: image}} style={styles.image} />
+          <FastImage source={{uri: image}} style={styles.image} />
           <View style={{marginHorizontal: 8}}>
             <TextElement numberOfLines={1} cStyle={styles.text}>
               {title}

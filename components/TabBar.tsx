@@ -29,6 +29,7 @@ const TabBar: React.FC = () => {
   const navigation = useNavigation();
 
   const translateXAnimate = (route: string, index: number) => {
+    if (route === 'menu') return navigation.openDrawer();
     setFocus(route);
     offset.value = setTranslateX(index);
     navigation.navigate(route as never);
@@ -105,13 +106,13 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   indicator: {
+    width: 50,
     position: 'absolute',
     top: 0,
+    left: (PropDimensions.tabWidth * 0.33 - 50) / 2,
     borderRadius: 25,
     height: 2,
     backgroundColor: Colors.active,
-    left: PropDimensions.tabWidth * 0.1,
-    width: PropDimensions.tabWidth / 7.0,
   },
 });
 

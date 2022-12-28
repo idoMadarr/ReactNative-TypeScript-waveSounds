@@ -55,6 +55,12 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
   // const totalTime = currentTrack.getCurrentTime(seconds =>
   //   console.log('at ' + seconds),
   // );
+  // @ts-ignore:
+  //    const test2 = currentTrack._duration;
+  //  const test = currentTrack.getCurrentTime(seconds => {
+  // const dotPosition = (seconds / test2) * 250
+  // }
+  // );
 
   const onPlay = () => {
     setPlayerStatus(true);
@@ -153,7 +159,6 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
         {CirclesAnimation}
         <Animated.Image
           entering={SlideInDown}
-          exiting={SlideInRight}
           layout={Layout.duration(300).springify().stiffness(50)}
           source={{uri: floatingPlayer.image}}
           style={styles.image}

@@ -1,9 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {combineReducers} from 'redux';
 import deezerSlice from './slices/deezerSlice';
+import authSlice from './slices/authSlice';
 
 const rootReducer = combineReducers({
   deezerSlice,
+  authSlice,
 });
 
 const store = configureStore({

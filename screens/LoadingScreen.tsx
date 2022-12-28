@@ -8,11 +8,7 @@ import {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import {
-  // fetchCategories,
-  fetchDeezerChart,
-  fetchSequences,
-} from '../redux/actions/deezerActions';
+import {fetchDeezerChart, fetchSequences} from '../redux/actions/deezerActions';
 import Colors from '../assets/design/palette.json';
 
 // Components
@@ -40,9 +36,9 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
 
   const initApp = async () => {
     await dispatch(fetchDeezerChart());
-    // await dispatch(fetchCategories());
     await dispatch(fetchSequences());
-    navigation.navigate('tabs');
+    // @ts-ignore:
+    navigation.navigate('app');
   };
 
   const initClockLoader = () => {

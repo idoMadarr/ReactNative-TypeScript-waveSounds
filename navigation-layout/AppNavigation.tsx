@@ -6,7 +6,8 @@ import {Modalize} from 'react-native-modalize';
 import soundTracker from '../utils/soundTracker';
 
 // Screens
-import TabNavigation from './TabNavigation';
+import {AuthStack} from './StackNavigation';
+import DrawerNavigation from './DrawerNavigation';
 import LoadingScreen from '../screens/LoadingScreen';
 import FloatingPlayer from '../components/FloatingPlayer';
 import ModalElement from '../components/resuable/ModalElement';
@@ -18,6 +19,7 @@ const AppNavigation: React.FC = () => {
 
   const modalizeRef = useRef<Modalize>();
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
+  const isAuth = useAppSelector(state => state.authSlice.isAuth);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   );
@@ -35,10 +37,16 @@ const AppNavigation: React.FC = () => {
   return (
     <NavigationContainer>
       <AppNavigator.Navigator screenOptions={{headerShown: false}}>
-        <AppNavigator.Screen name={'init'} component={LoadingScreen} />
-        <AppNavigator.Group>
-          <AppNavigator.Screen name={'tabs'} component={TabNavigation} />
-        </AppNavigator.Group>
+        <AppNavigator.Screen name={'loading'} component={LoadingScreen} />
+        {isAuth ? (
+          <AppNavigator.Group>
+            <AppNavigator.Screen name={'app'} component={DrawerNavigation} />
+          </AppNavigator.Group>
+        ) : (
+          <AppNavigator.Group>
+            <AppNavigator.Screen name={'auth'} component={AuthStack} />
+          </AppNavigator.Group>
+        )}
       </AppNavigator.Navigator>
       {floatingPlayer && (
         <FloatingPlayer

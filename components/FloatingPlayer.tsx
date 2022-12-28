@@ -1,12 +1,7 @@
 import React, {useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import FastImage from 'react-native-fast-image';
 import Animated, {
   FadeInDown,
   FadeOutUp,
@@ -102,7 +97,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
         exiting={FadeOutUp}
         style={[styles.mainContainer, animatedStyles]}>
         <View style={styles.side}>
-          <Image
+          <FastImage
             source={{uri: floatingPlayer.image}}
             resizeMode={'cover'}
             style={styles.image}
@@ -147,7 +142,6 @@ const styles = StyleSheet.create({
     height: 50,
     alignSelf: 'center',
     elevation: 5,
-    opacity: 0.85,
     width: PropDimensions.fullWidth,
     position: 'absolute',
     bottom: 50,
@@ -157,6 +151,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+    opacity: 0.75,
   },
   side: {
     flexDirection: 'row',

@@ -2,8 +2,8 @@
   "tabs": [
     {
       "id": 0,
-      "route": "favorites",
-      "icon": "heart"
+      "route": "search",
+      "icon": "search"
     },
     {
       "id": 1,
@@ -12,8 +12,8 @@
     },
     {
       "id": 2,
-      "route": "search",
-      "icon": "search"
+      "route": "menu",
+      "icon": "navicon"
     }
   ]
 }

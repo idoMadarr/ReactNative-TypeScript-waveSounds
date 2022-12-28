@@ -1,10 +1,7 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import Animated, {
-  FadeInDown,
-  FadeOutDown,
-  Layout,
-} from 'react-native-reanimated';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import Animated, {FadeInDown} from 'react-native-reanimated';
+import FastImage from 'react-native-fast-image';
 import {PropDimensions} from '../../dimensions/dimensions';
 import Colors from '../../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -30,8 +27,6 @@ const SearchItem: React.FC<SearchItemType> = ({
   return (
     <Animated.View
       entering={FadeInDown.delay(100 * index).springify()}
-      exiting={FadeOutDown.delay(100 * index).springify()}
-      layout={Layout}
       style={styles.searchContainer}>
       <View style={styles.details}>
         <TextElement fontSize={'sm'} fontWeight={'bold'} numberOfLines={1}>
@@ -45,7 +40,7 @@ const SearchItem: React.FC<SearchItemType> = ({
           Play
         </TextElement>
       </TouchableOpacity>
-      <Image source={{uri: image}} style={{width: '100%', height: '70%'}} />
+      <FastImage source={{uri: image}} style={{width: '100%', height: '70%'}} />
     </Animated.View>
   );
 };

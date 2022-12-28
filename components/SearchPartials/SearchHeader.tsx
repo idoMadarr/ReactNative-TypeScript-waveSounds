@@ -28,7 +28,7 @@ const SearchHeader: React.FC<SearchHeaderType> = ({
         tracks worldwide and other audio content
       </TextElement>
       {isFocused && (
-        <Animated.View entering={SlideInLeft} exiting={SlideInRight}>
+        <Animated.View entering={SlideInLeft}>
           <InputElement
             value={searchState}
             onChange={optimizeSearchFunc}

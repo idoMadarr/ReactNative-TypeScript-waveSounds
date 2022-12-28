@@ -1,16 +1,13 @@
 import React from 'react';
-import {
-  View,
-  Image,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Colors from '../../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Components
 import TextElement from '../resuable/TextElement';
+
+const ALBUM_SIZE = Dimensions.get('window').width * 0.6;
 
 interface AlbumHeaderType {
   name: string;
@@ -33,32 +30,33 @@ const AlbumHeader: React.FC<AlbumHeaderType> = ({
 
   return (
     <View style={styles.headerContainer}>
+      <View style={styles.sectionHeader}>
+        <TextElement fontWeight={'bold'} cStyle={styles.artistStyle}>
+          {name}
+        </TextElement>
+        <TextElement fontSize={'sm'} cStyle={styles.artistStyle}>
+          {title}
+        </TextElement>
+      </View>
       <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={pressBack}>
-          <Icon
-            name={'angle-left'}
-            size={32}
-            color={Colors.secondary}
-            style={styles.icon}
-          />
+        <TouchableOpacity onPress={pressBack} style={styles.icon}>
+          <Icon name={'angle-left'} size={32} color={Colors.secondary} />
         </TouchableOpacity>
-        <Image source={{uri: imageCover}} style={styles.image} />
+        <FastImage source={{uri: imageCover}} style={styles.image} />
       </View>
       <View style={styles.detailsContainer}>
-        <View style={styles.section}>
-          <TextElement cStyle={styles.artistStyle}>{name}</TextElement>
-          <TextElement fontSize={'sm'} cStyle={styles.artistStyle}>
-            {title}
-          </TextElement>
-        </View>
-        <View style={styles.section}>
-          <TextElement cStyle={styles.labelStyle} fontSize={'sm'}>
-            {label}
-          </TextElement>
-          <TextElement fontSize={'sm'} cStyle={styles.artistStyle}>
-            {formattedReleaseDate}
-          </TextElement>
-        </View>
+        <TextElement
+          fontWeight={'bold'}
+          cStyle={styles.labelStyle}
+          fontSize={'sm'}>
+          {label}
+        </TextElement>
+        <TextElement
+          fontWeight={'bold'}
+          fontSize={'sm'}
+          cStyle={styles.artistStyle}>
+          {formattedReleaseDate}
+        </TextElement>
       </View>
     </View>
   );
@@ -71,8 +69,8 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.42,
   },
   imageContainer: {
-    width: 250,
-    height: 250,
+    width: ALBUM_SIZE,
+    height: ALBUM_SIZE,
   },
   image: {
     width: '100%',
@@ -80,25 +78,25 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   detailsContainer: {
-    width: 250,
+    width: ALBUM_SIZE,
   },
-  section: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  sectionHeader: {
+    width: ALBUM_SIZE,
+    alignItems: 'flex-end',
   },
   labelStyle: {
     color: Colors.white,
   },
   artistStyle: {
-    textDecorationLine: 'underline',
     color: Colors.white,
   },
   icon: {
     position: 'absolute',
     top: 0,
-    left: '-20%',
+    left: '-30%',
     opacity: 0.6,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
     zIndex: 100,
   },
 });

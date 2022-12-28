@@ -3,12 +3,12 @@ import {View} from 'react-native';
 // Cpmponents
 import TextElement from '../components/resuable/TextElement';
 
-const FavoriteScreen = () => {
+const SignInScreen = () => {
   return (
     <View>
-      <TextElement>Favorite Screen</TextElement>
+      <TextElement>Login Screen</TextElement>
     </View>
   );
 };
 
-export default FavoriteScreen;
+export default SignInScreen;
