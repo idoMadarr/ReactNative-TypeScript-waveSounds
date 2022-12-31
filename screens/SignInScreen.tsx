@@ -6,17 +6,9 @@ import {
   TextInputChangeEventData,
   SafeAreaView,
 } from 'react-native';
-import Animated, {
-  FadeInDown,
-  FadeInLeft,
-  FadeInRight,
-  FadeInUp,
-  SlideInDown,
-  SlideInLeft,
-} from 'react-native-reanimated';
+import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
 import {useIsFocused} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import FastImage from 'react-native-fast-image';
 import Colors from '../assets/design/palette.json';
 
 // Cpmponents
