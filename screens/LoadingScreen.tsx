@@ -1,6 +1,7 @@
-import {useEffect} from 'react';
+import {useEffect, useCallback} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {StyleSheet, SafeAreaView} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
+import {View, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {
   Easing,
@@ -10,11 +11,15 @@ import {
 } from 'react-native-reanimated';
 import {fetchDeezerChart, fetchSequences} from '../redux/actions/deezerActions';
 import Colors from '../assets/design/palette.json';
+// @ts-ignore:
+import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import ClockLoader from '../components/ClockLoader';
 import TextElement from '../components/resuable/TextElement';
+
+const faviconSize = Dimensions.get('window').width * 0.45;
 
 type RootStackParamList = {
   loading: any;
@@ -28,22 +33,28 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
   const dispatch = useAppDispatch();
   const progress = useSharedValue(0);
 
-  useEffect(() => {
-    initClockLoader();
-    setTimeout(() => {
-      initApp();
-    }, 2000);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const initialization = async () => {
+        initClockLoader();
+        setTimeout(() => {
+          initApp();
+        }, 2000);
+      };
+      initialization();
+    }, [isAuth]),
+  );
 
   const initApp = async () => {
-    if (isAuth) {
-      await dispatch(fetchDeezerChart());
-      await dispatch(fetchSequences());
+    if (!isAuth) {
       // @ts-ignore:
-      return navigation.navigate('app');
+      return navigation.navigate('auth');
     }
+
+    await dispatch(fetchDeezerChart());
+    await dispatch(fetchSequences());
     // @ts-ignore:
-    navigation.navigate('auth');
+    navigation.navigate('app');
   };
 
   const initClockLoader = () => {
@@ -62,10 +73,14 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
         barStyle={'light-content'}
         backgroundColor={Colors.primary}
       />
-      <TextElement cStyle={styles.title} fontSize={'xl'}>
-        waveSounds
-      </TextElement>
+      <View style={styles.title}>
+        <FaviconVector height={faviconSize} width={faviconSize} />
+        <TextElement fontSize={'xl'} fontWeight={'bold'}>
+          waveSounds
+        </TextElement>
+      </View>
       <ClockLoader progress={progress} />
+      <TextElement cStyle={styles.wait}>Just few moments...</TextElement>
     </SafeAreaView>
   );
 };
@@ -79,8 +94,14 @@ const styles = StyleSheet.create({
   },
   title: {
     position: 'absolute',
-    top: '25%',
+    alignItems: 'center',
+    top: '12%',
     color: Colors.secondary,
+  },
+  wait: {
+    position: 'absolute',
+    bottom: '38%',
+    color: Colors.white,
   },
 });
 

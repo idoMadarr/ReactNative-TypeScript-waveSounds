@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, FlatList, StyleSheet} from 'react-native';
+import {View, FlatList, StyleSheet, Dimensions} from 'react-native';
+import {PropDimensions} from '../../dimensions/dimensions';
 import {AlbumTrack} from '../../types/album';
 import Track from './Track';
 
@@ -36,6 +37,7 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({
 
 const styles = StyleSheet.create({
   listContainer: {
+    marginTop: '5%',
     paddingHorizontal: 16,
   },
 });

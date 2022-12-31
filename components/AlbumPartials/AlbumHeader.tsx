@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: Dimensions.get('window').height * 0.42,
+    height: Dimensions.get('window').height * 0.45,
   },
   imageContainer: {
     width: ALBUM_SIZE,

@@ -18,7 +18,7 @@ const TextElement: React.FC<TextElementType> = ({
   numberOfLines,
 }) => {
   const setFontSize = (size: string = 'm') =>
-    size === 'sm' ? 10 : size === 'm' ? 14 : size === 'lg' ? 20 : 34;
+    size === 'sm' ? 12 : size === 'm' ? 14 : size === 'lg' ? 20 : 34;
 
   const setFontFamily = (font: string = 'Poppins-Regular') =>
     font === 'bold'

@@ -29,18 +29,24 @@ const SearchItem: React.FC<SearchItemType> = ({
       entering={FadeInDown.delay(100 * index).springify()}
       style={styles.searchContainer}>
       <View style={styles.details}>
-        <TextElement fontSize={'sm'} fontWeight={'bold'} numberOfLines={1}>
+        <TextElement
+          fontSize={'sm'}
+          fontWeight={'bold'}
+          cStyle={styles.text}
+          numberOfLines={1}>
           {artist}
         </TextElement>
-        <TextElement numberOfLines={2}>{title}</TextElement>
+        <TextElement cStyle={styles.text} numberOfLines={2}>
+          {title}
+        </TextElement>
       </View>
       <TouchableOpacity onPress={playSoundTrack} style={styles.icon}>
         <Icon name={'play'} size={28} color={Colors.primary} />
-        <TextElement fontWeight={'bold'} fontSize={'sm'}>
+        <TextElement fontWeight={'bold'} fontSize={'sm'} cStyle={styles.text}>
           Play
         </TextElement>
       </TouchableOpacity>
-      <FastImage source={{uri: image}} style={{width: '100%', height: '70%'}} />
+      <FastImage source={{uri: image}} style={styles.image} />
     </Animated.View>
   );
 };
@@ -63,6 +69,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '5%',
     right: '5%',
+  },
+  image: {
+    width: '100%',
+    height: '70%',
+  },
+  text: {
+    color: Colors.black,
   },
 });
 

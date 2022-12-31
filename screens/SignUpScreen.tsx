@@ -7,9 +7,13 @@ import {
   SafeAreaView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {useAppDispatch} from '../redux/hooks';
+import {signUp} from '../redux/actions/authAction';
 import {useIsFocused} from '@react-navigation/native';
 import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
 import Colors from '../assets/design/palette.json';
+// @ts-ignore:
+import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
 // Cpmponents
 import LinkElement from '../components/resuable/LinkElement';
@@ -38,6 +42,7 @@ const SignInScreen = () => {
   const {email, username, password} = formState;
   const {emailError, usernameError, passwordError} = formErrorState;
   const isFocused = useIsFocused();
+  const dispatch = useAppDispatch();
 
   const updateState = (
     name: string,
@@ -73,7 +78,9 @@ const SignInScreen = () => {
 
   const onPress = () => {
     const isValidForm = formValidator();
-    console.log(isValidForm);
+    if (isValidForm) {
+      dispatch(signUp(formState));
+    }
   };
 
   return (
@@ -91,7 +98,7 @@ const SignInScreen = () => {
         ]}>
         {isFocused && (
           <Animated.View entering={FadeInDown} style={styles.section}>
-            <TextElement>
+            <TextElement cStyle={styles.mainTitle}>
               We're more than a distributor. From Unlimited Guides & Master
               Classes, to showcasing top TuneCore talent across the globe, to
               the latest breaking news & partnerships.
@@ -104,7 +111,7 @@ const SignInScreen = () => {
               errorMessage={emailError}
             />
             <InputElement
-              value={email}
+              value={username}
               onChange={updateState.bind(this, 'username')}
               placeholder={'Username'}
               icon={'user-circle-o'}
@@ -138,6 +145,9 @@ const SignInScreen = () => {
             TikTok, YouTube, Tidal, Tencent and more. Keep 100% ownership of
             your music and stay in control of your career.
           </TextElement>
+          <View style={{alignItems: 'center'}}>
+            <FaviconVector height={80} width={80} />
+          </View>
         </Animated.View>
       </LinearGradient>
     </SafeAreaView>
@@ -153,7 +163,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 100,
   },
   linkContainer: {
     marginVertical: 8,
@@ -161,8 +170,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   section: {
-    marginVertical: 10,
     width: PropDimensions.buttonWidth,
+  },
+  mainTitle: {
+    paddingBottom: 8,
   },
 });
 

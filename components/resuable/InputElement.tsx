@@ -103,7 +103,8 @@ const InputElement: React.FC<InputElementType> = ({
   const displayError = (
     <TextElement
       cStyle={{...styles.error, color: Colors.warning}}
-      fontSize={'sm'}>
+      fontSize={'sm'}
+      fontWeight={'bold'}>
       {errorMessage ? errorMessage : ''}
     </TextElement>
   );

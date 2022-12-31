@@ -10,7 +10,7 @@ import TextElement from './resuable/TextElement';
 import Colors from '../assets/design/palette.json';
 
 const N = 12;
-const SQUARE_SIZE = 6;
+const SQUARE_SIZE = 3;
 
 interface DigitType {
   index: number;
@@ -77,7 +77,6 @@ const ClockLoader: React.FC<ClockLoaderType> = ({progress}) => {
       {new Array(12).fill(0).map((_, index) => (
         <Digit key={index} index={index} progress={progress} />
       ))}
-      <TextElement cStyle={styles.wait}>Just few moments...</TextElement>
     </Fragment>
   );
 };
@@ -88,11 +87,6 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     height: SQUARE_SIZE,
     backgroundColor: Colors.secondary,
-  },
-  wait: {
-    position: 'absolute',
-    bottom: '30%',
-    color: Colors.white,
   },
 });
 

@@ -7,9 +7,13 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
+import {useAppDispatch} from '../redux/hooks';
 import {useIsFocused} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
+import Icon from 'react-native-vector-icons/FontAwesome';
+// @ts-ignore:
+import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
 // Cpmponents
 import LinkElement from '../components/resuable/LinkElement';
@@ -18,6 +22,13 @@ import InputElement from '../components/resuable/InputElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 import {PropDimensions} from '../dimensions/dimensions';
 import StatusBarElement from '../components/resuable/StatusBarElement';
+import {signIn} from '../redux/actions/authAction';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+interface ApiError {
+  message: string;
+  field: string;
+}
 
 const defaultState = {
   email: '',
@@ -27,15 +38,23 @@ const defaultState = {
 const defaultErrorState = {
   emailError: '',
   passwordError: '',
+  apiError: [],
 };
 
-const SignInScreen = () => {
+type RootStackParamList = {
+  signin: any;
+};
+
+type SignInScreenType = NativeStackScreenProps<RootStackParamList, 'signin'>;
+
+const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
   const [formState, setFormState] = useState(defaultState);
   const [formErrorState, setFormErrorState] = useState(defaultErrorState);
-  const [secureTextEntry, setSecureTextEntry] = useState(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const {email, password} = formState;
-  const {emailError, passwordError} = formErrorState;
+  const {emailError, passwordError, apiError} = formErrorState;
   const isFocused = useIsFocused();
+  const dispatch = useAppDispatch();
 
   const updateState = (
     name: string,
@@ -66,9 +85,19 @@ const SignInScreen = () => {
     return true;
   };
 
-  const onPress = () => {
+  const onPress = async () => {
     const isValidForm = formValidator();
-    console.log(isValidForm);
+    if (isValidForm) {
+      const errors = await dispatch(signIn(formState));
+      if (errors) {
+        return setFormErrorState(prevState => ({
+          ...prevState,
+          apiError: errors.errors,
+        }));
+      }
+      // @ts-ignore:
+      navigation.navigate('loading');
+    }
   };
 
   return (
@@ -91,11 +120,12 @@ const SignInScreen = () => {
               width: PropDimensions.buttonWidth,
               marginVertical: 10,
             }}>
+            <FaviconVector height={50} width={50} />
             <TextElement
               fontSize={'xl'}
               fontWeight={'bold'}
               cStyle={{color: Colors.white}}>
-              waveSounds
+              WaveSounds
             </TextElement>
             <TextElement>
               WaveSounds is a digital music, podcast, and video service that
@@ -136,6 +166,19 @@ const SignInScreen = () => {
             </View>
           </Animated.View>
         )}
+        <View style={styles.errorList}>
+          {apiError.map((error: ApiError) => (
+            <View style={styles.errorContainer} key={Math.random()}>
+              <Icon name={'exclamation'} size={18} color={Colors.warning} />
+              <TextElement
+                fontSize={'sm'}
+                cStyle={styles.errorText}
+                fontWeight={'bold'}>
+                {error.message}
+              </TextElement>
+            </View>
+          ))}
+        </View>
       </LinearGradient>
     </SafeAreaView>
   );
@@ -156,6 +199,19 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     width: PropDimensions.buttonWidth,
     flexDirection: 'row',
+  },
+  errorList: {
+    alignItems: 'flex-start',
+    minHeight: '8%',
+    width: PropDimensions.buttonWidth,
+  },
+  errorContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  errorText: {
+    marginHorizontal: 8,
+    color: Colors.warning,
   },
 });
 
