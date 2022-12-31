@@ -1,16 +1,17 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
-import {useDrawerStatus} from '@react-navigation/drawer';
+import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
+import {useAppSelector} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Animated, {FadeInUp} from 'react-native-reanimated';
 
 // Components
 import TextElement from './resuable/TextElement';
+import FastImage from 'react-native-fast-image';
+import ButtonElement from './resuable/ButtonElement';
 
 const MenuDrawer = () => {
-  const isOpen = useDrawerStatus() === 'open';
+  const artists = useAppSelector(state => state.deezerSlice.artists);
 
   return (
     <LinearGradient
@@ -19,43 +20,38 @@ const MenuDrawer = () => {
       <View style={styles.drawerHeader}>
         <Icon
           name={'user-circle-o'}
-          size={58}
+          size={48}
           color={Colors.active}
           style={{marginBottom: 8}}
         />
-        <TextElement cStyle={{color: Colors.white}}>
-          * Idox2x@Gmail.com *
+        <TextElement fontSize={'sm'} fontWeight="bold" cStyle={styles.headers}>
+          Hello Ido
         </TextElement>
-        <TextElement
-          fontSize={'sm'}
-          fontWeight={'bold'}
-          cStyle={{color: Colors.white}}>
+        <TextElement fontSize={'sm'} cStyle={styles.headers}>
           Check your favorites tracks:
         </TextElement>
       </View>
-      {isOpen && (
-        <View>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i, index) => (
-            <Animated.View
-              key={i}
-              entering={FadeInUp.delay(100 * index).springify()}>
-              <TouchableOpacity
-                style={{
-                  borderBottomWidth: 1,
-                  marginHorizontal: 12,
-                  padding: 10,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  borderColor: Colors.secondary,
-                }}>
-                <TextElement cStyle={{color: Colors.white}}>Test</TextElement>
-                <Icon name={'play'} size={18} color={Colors.secondary} />
-              </TouchableOpacity>
-            </Animated.View>
-          ))}
-        </View>
-      )}
+      <FlatList
+        keyExtractor={itemData => itemData.id}
+        data={artists}
+        style={styles.artistsContainer}
+        showsVerticalScrollIndicator={false}
+        renderItem={({item}) => (
+          <View style={styles.artistItem}>
+            <TextElement fontSize={'sm'} cStyle={{color: Colors.white}}>
+              {item.name}
+            </TextElement>
+            <FastImage source={{uri: item.image}} style={styles.artistImage} />
+          </View>
+        )}
+      />
+      <ButtonElement
+        title={'Logout'}
+        backgroundColor={Colors.transparent}
+        titleColor={Colors.warning}
+        customStyle={styles.logout}
+        onPress={() => console.log(123)}
+      />
     </LinearGradient>
   );
 };
@@ -64,11 +60,39 @@ const styles = StyleSheet.create({
   drawerContainer: {
     flex: 1,
     backgroundColor: Colors.primary,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
   },
   drawerHeader: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: Dimensions.get('window').height * 0.2,
+  },
+  artistsContainer: {
+    marginVertical: 10,
+    height: Dimensions.get('window').height * 0.8,
+  },
+  artistItem: {
+    borderBottomWidth: 1,
+    marginHorizontal: 12,
+    paddingVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: Colors.greyish,
+  },
+  artistImage: {
+    width: 80,
+    height: 70,
+    borderRadius: 50,
+  },
+  headers: {
+    color: Colors.white,
+    textAlign: 'center',
+  },
+  logout: {
+    width: 100,
+    borderWidth: 1,
+    borderColor: Colors.placeholder,
   },
 });
 

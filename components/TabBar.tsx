@@ -2,6 +2,8 @@ import React from 'react';
 import {useEffect, useState} from 'react';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {cleanFloatingPlayer} from '../redux/slices/deezerSlice';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -13,23 +15,29 @@ import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {tabs} from '../fixtures/tabs.json';
 
-const DEFAULT = tabs[1].route;
+const DEFAULT_TAB = tabs[1].route;
+const DEFAULT_OFFSET = 130.9090909090909;
 
 interface TabType {
   id: number;
   route: string;
   icon: string;
   focus: string;
-  setFocus: any;
+  setFocus: Function;
 }
 
 const TabBar: React.FC = () => {
-  const [focus, setFocus] = useState(DEFAULT);
-  const offset = useSharedValue(0);
+  const [focus, setFocus] = useState(DEFAULT_TAB);
+  const offset = useSharedValue(DEFAULT_OFFSET);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const translateXAnimate = (route: string, index: number) => {
-    if (route === 'menu') return navigation.openDrawer();
+    if (route === 'menu') {
+      dispatch(cleanFloatingPlayer());
+      // @ts-ignore:
+      return navigation.openDrawer();
+    }
     setFocus(route);
     offset.value = setTranslateX(index);
     navigation.navigate(route as never);

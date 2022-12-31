@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {StyleSheet, SafeAreaView} from 'react-native';
-import {useAppDispatch} from '../redux/hooks';
+import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {
   Easing,
   useSharedValue,
@@ -24,6 +24,7 @@ type RootStackParamList = {
 type LoadingScreenType = NativeStackScreenProps<RootStackParamList, 'loading'>;
 
 const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
+  const isAuth = useAppSelector(state => state.authSlice.isAuth);
   const dispatch = useAppDispatch();
   const progress = useSharedValue(0);
 
@@ -35,10 +36,14 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
   }, []);
 
   const initApp = async () => {
-    await dispatch(fetchDeezerChart());
-    await dispatch(fetchSequences());
+    if (isAuth) {
+      await dispatch(fetchDeezerChart());
+      await dispatch(fetchSequences());
+      // @ts-ignore:
+      return navigation.navigate('app');
+    }
     // @ts-ignore:
-    navigation.navigate('app');
+    navigation.navigate('auth');
   };
 
   const initClockLoader = () => {

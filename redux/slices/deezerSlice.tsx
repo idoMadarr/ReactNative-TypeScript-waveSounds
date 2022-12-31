@@ -5,6 +5,7 @@ import {TrackType, SingleTrackType} from '../../types/TrackType';
 
 interface RootStateApp {
   trends: TrackType[];
+  artists: any;
   sequenceTree: SequencesType[];
   floatingPlayer: FloatingPlayerType | null;
   currentTrack: SingleTrackType | null;
@@ -14,6 +15,7 @@ interface RootStateApp {
 
 const initialState: RootStateApp = {
   trends: [],
+  artists: [],
   sequenceTree: [],
   floatingPlayer: null,
   currentTrack: null,
@@ -26,7 +28,8 @@ export const deezerSlice = createSlice({
   initialState,
   reducers: {
     setDeezerChart: (state, action) => {
-      state.trends = action.payload;
+      state.trends = action.payload.trends;
+      state.artists = action.payload.artists;
     },
     setSequence: (state, action) => {
       state.sequenceTree.push(action.payload);
@@ -38,6 +41,7 @@ export const deezerSlice = createSlice({
       state.currentTrack = action.payload;
     },
     cleanFloatingPlayer: state => {
+      state.currentTrack?.stop();
       state.floatingPlayer = null;
     },
     setModalPlayerContext: (state, action) => {

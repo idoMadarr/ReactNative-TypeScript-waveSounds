@@ -6,6 +6,7 @@ import {
   Dimensions,
   NativeSyntheticEvent,
   TextInputChangeEventData,
+  Pressable,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -14,6 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {PropDimensions} from '../../dimensions/dimensions';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../assets/design/palette.json';
 
 // Components
@@ -27,10 +29,10 @@ interface InputElementType {
   keyboard?: any;
   cStyle?: object;
   maxLength?: number;
-  children?: JSX.Element | JSX.Element[] | string;
   editable?: boolean;
   secureTextEntry?: boolean;
-  setSecureTextEntry?(): void;
+  setSecureTextEntry?: Function;
+  icon?: string;
   onIcon?(): void;
 }
 
@@ -43,10 +45,10 @@ const InputElement: React.FC<InputElementType> = ({
   secureTextEntry,
   setSecureTextEntry,
   maxLength,
+  icon,
   onIcon,
   cStyle,
   editable,
-  children,
 }) => {
   useEffect(() => {
     if (value?.length) {
@@ -80,20 +82,18 @@ const InputElement: React.FC<InputElementType> = ({
     scale.value = 1;
   };
 
-  const displayIcon = children && (
-    <View style={styles.iconContainer}>
-      <TouchableOpacity
-        onPress={onPressIcon}
-        style={[styles.inputWithIcon, {flexDirection: 'row'}]}>
-        {children}
-      </TouchableOpacity>
-    </View>
+  const displayIcon = icon && (
+    <Pressable onPress={onPressIcon} style={styles.iconContainer}>
+      <Icon name={icon} size={28} color={Colors.primary} />
+    </Pressable>
   );
 
   const displayPlaceholder = (
     <Animated.View style={[animatedStyle, styles.placeholderContainer]}>
       <TouchableOpacity onPress={focusAnimation} activeOpacity={0.9}>
-        <TextElement cStyle={{zIndex: 500}} fontSize={'sm'}>
+        <TextElement
+          cStyle={{zIndex: 500, color: Colors.black}}
+          fontSize={'sm'}>
           {placeholder}
         </TextElement>
       </TouchableOpacity>
@@ -138,27 +138,25 @@ const InputElement: React.FC<InputElementType> = ({
 const styles = StyleSheet.create({
   InputElementConainer: {
     height: PropDimensions.inputContainerHight,
-    marginVertical: 5,
   },
   input: {
     width: PropDimensions.inputWidth,
     paddingHorizontal: 8,
     height: PropDimensions.inputHight,
     borderRadius: 5,
-  },
-  inputWithIcon: {
-    width: '38%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: Colors.secondary,
   },
   error: {
     paddingLeft: 5,
     maxWidth: PropDimensions.inputWidth,
   },
   iconContainer: {
+    width: '15%',
+    height: PropDimensions.inputHight,
     position: 'absolute',
-    top: '8%',
-    left: Dimensions.get('window').width * 0.75,
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: Dimensions.get('window').width * 0.7,
   },
   placeholderContainer: {
     position: 'absolute',

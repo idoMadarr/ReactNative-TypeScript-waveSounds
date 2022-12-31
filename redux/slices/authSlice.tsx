@@ -5,7 +5,7 @@ interface RootStateApp {
 }
 
 const initialState: RootStateApp = {
-  isAuth: true,
+  isAuth: false,
 };
 
 export const authSlice = createSlice({

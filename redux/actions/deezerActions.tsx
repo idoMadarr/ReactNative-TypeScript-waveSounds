@@ -15,7 +15,14 @@ export const fetchDeezerChart = () => async (dispatch: Dispatch) => {
     preview: trend.preview,
   }));
 
-  dispatch(setDeezerChart(trends));
+  const artists = data.artists.data.map((artist: any) => ({
+    id: artist.id,
+    name: artist.name,
+    link: artist.link,
+    image: artist.picture_medium,
+  }));
+
+  dispatch(setDeezerChart({trends, artists}));
 };
 
 export const fetchSequences = () => async (dispatch: Dispatch) => {

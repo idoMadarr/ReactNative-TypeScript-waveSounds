@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, StyleSheet} from 'react-native';
+import Colors from '../../assets/design/palette.json';
 
 interface TextElementType {
   children: JSX.Element | JSX.Element[] | string;
@@ -30,6 +31,7 @@ const TextElement: React.FC<TextElementType> = ({
     constants: {
       fontSize: setFontSize(fontSize),
       fontFamily: setFontFamily(fontWeight),
+      color: Colors.white,
     },
   });
 
