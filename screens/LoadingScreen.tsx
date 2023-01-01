@@ -1,4 +1,4 @@
-import {useEffect, useCallback} from 'react';
+import {useCallback} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
 import {View, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
@@ -10,7 +10,9 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import {fetchDeezerChart, fetchSequences} from '../redux/actions/deezerActions';
+import {setAuthentication} from '../redux/slices/authSlice';
 import Colors from '../assets/design/palette.json';
+import {getFromStorage} from '../utils/asyncStorage';
 // @ts-ignore:
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
@@ -46,13 +48,16 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
   );
 
   const initApp = async () => {
-    if (!isAuth) {
+    const session = await getFromStorage('userSession');
+
+    if (!session?.userJwt) {
       // @ts-ignore:
       return navigation.navigate('auth');
     }
 
     await dispatch(fetchDeezerChart());
     await dispatch(fetchSequences());
+    dispatch(setAuthentication(session.existUser));
     // @ts-ignore:
     navigation.navigate('app');
   };

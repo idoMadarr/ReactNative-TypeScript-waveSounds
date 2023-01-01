@@ -1,9 +1,11 @@
 import React from 'react';
 import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
-import {useAppSelector} from '../redux/hooks';
+import {useAppSelector, useAppDispatch} from '../redux/hooks';
+import {clearStorage} from '../utils/asyncStorage';
 import LinearGradient from 'react-native-linear-gradient';
-import Colors from '../assets/design/palette.json';
+import {clearApp} from '../redux/slices/authSlice';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Colors from '../assets/design/palette.json';
 
 // Components
 import TextElement from './resuable/TextElement';
@@ -11,7 +13,14 @@ import FastImage from 'react-native-fast-image';
 import ButtonElement from './resuable/ButtonElement';
 
 const MenuDrawer = () => {
+  const user = useAppSelector(state => state.authSlice.user)!;
   const artists = useAppSelector(state => state.deezerSlice.artists);
+  const dispatch = useAppDispatch();
+
+  const onLogout = async () => {
+    await clearStorage();
+    dispatch(clearApp());
+  };
 
   return (
     <LinearGradient
@@ -25,7 +34,7 @@ const MenuDrawer = () => {
           style={{marginBottom: 8}}
         />
         <TextElement fontSize={'sm'} fontWeight="bold" cStyle={styles.headers}>
-          Hello Ido
+          {user.username}
         </TextElement>
         <TextElement fontSize={'sm'} cStyle={styles.headers}>
           Check your favorites tracks:
@@ -47,10 +56,10 @@ const MenuDrawer = () => {
       />
       <ButtonElement
         title={'Logout'}
-        backgroundColor={Colors.transparent}
+        backgroundColor={Colors.primary}
         titleColor={Colors.warning}
         customStyle={styles.logout}
-        onPress={() => console.log(123)}
+        onPress={onLogout}
       />
     </LinearGradient>
   );

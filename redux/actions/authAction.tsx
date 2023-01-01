@@ -1,5 +1,6 @@
 import {Dispatch} from '@reduxjs/toolkit';
 import axios from 'axios';
+import {saveToStorage} from '../../utils/asyncStorage';
 import {setAuthentication} from '../slices/authSlice';
 
 interface AuthenticationCredentialsType {
@@ -8,15 +9,22 @@ interface AuthenticationCredentialsType {
   password: string;
 }
 
+interface AuthenticationResponseType {
+  userJwt: string;
+  existUser?: unknown;
+  createUser?: unknown;
+}
+
 export const signIn =
   (state: AuthenticationCredentialsType) => async (dispatch: Dispatch) => {
     try {
-      const {data} = await axios.post(
+      const {data}: {data: AuthenticationResponseType} = await axios.post(
         'http://10.0.2.2:4000/ws-api/signin',
         state,
       );
+      saveToStorage('userSession', data);
       dispatch(setAuthentication(data.existUser));
-    } catch (error) {
+    } catch (error: any) {
       const errorsList = error.response.data || 'Something went worng';
       return errorsList;
     }
@@ -25,12 +33,13 @@ export const signIn =
 export const signUp =
   (state: AuthenticationCredentialsType) => async (dispatch: Dispatch) => {
     try {
-      const {data} = await axios.post(
+      const {data}: {data: AuthenticationResponseType} = await axios.post(
         'http://10.0.2.2:4000/ws-api/signup',
         state,
       );
+      saveToStorage('userSession', data);
       dispatch(setAuthentication(data.createUser));
-    } catch (error) {
+    } catch (error: any) {
       const errorsList = error.response.data || 'Something went worng';
       return errorsList;
     }
