@@ -8,10 +8,12 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppDispatch} from '../redux/hooks';
+import {toggleSpinner} from '../redux/slices/authSlice';
 import {signUp} from '../redux/actions/authAction';
 import {useIsFocused} from '@react-navigation/native';
 import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
 import Colors from '../assets/design/palette.json';
+import Icon from 'react-native-vector-icons/FontAwesome';
 // @ts-ignore:
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
@@ -22,6 +24,12 @@ import InputElement from '../components/resuable/InputElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 import {PropDimensions} from '../dimensions/dimensions';
 import StatusBarElement from '../components/resuable/StatusBarElement';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+interface ApiError {
+  message: string;
+  field: string;
+}
 
 const defaultState = {
   email: '',
@@ -33,14 +41,21 @@ const defaultErrorState = {
   emailError: '',
   usernameError: '',
   passwordError: '',
+  apiError: [],
 };
 
-const SignInScreen = () => {
+type RootStackParamList = {
+  signup: any;
+};
+
+type SignUpScreenType = NativeStackScreenProps<RootStackParamList, 'signup'>;
+
+const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
   const [formState, setFormState] = useState(defaultState);
   const [formErrorState, setFormErrorState] = useState(defaultErrorState);
-  const [secureTextEntry, setSecureTextEntry] = useState(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const {email, username, password} = formState;
-  const {emailError, usernameError, passwordError} = formErrorState;
+  const {emailError, usernameError, passwordError, apiError} = formErrorState;
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
 
@@ -76,10 +91,19 @@ const SignInScreen = () => {
     return true;
   };
 
-  const onPress = () => {
+  const onPress = async () => {
     const isValidForm = formValidator();
     if (isValidForm) {
-      dispatch(signUp(formState));
+      dispatch(toggleSpinner());
+      const errors = await dispatch(signUp(formState));
+      if (errors) {
+        return setFormErrorState(prevState => ({
+          ...prevState,
+          apiError: errors.errors,
+        }));
+      }
+      // @ts-ignore:
+      navigation.navigate('loading');
     }
   };
 
@@ -96,6 +120,19 @@ const SignInScreen = () => {
           Colors['gradient-mid'],
           Colors['gradient-end'],
         ]}>
+        <View style={styles.errorList}>
+          {apiError.map((error: ApiError) => (
+            <View style={styles.errorContainer} key={Math.random()}>
+              <Icon name={'exclamation'} size={18} color={Colors.warning} />
+              <TextElement
+                fontSize={'sm'}
+                cStyle={styles.errorText}
+                fontWeight={'bold'}>
+                {error.message}
+              </TextElement>
+            </View>
+          ))}
+        </View>
         {isFocused && (
           <Animated.View entering={FadeInDown} style={styles.section}>
             <TextElement cStyle={styles.mainTitle}>
@@ -174,6 +211,19 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     paddingBottom: 8,
+  },
+  errorList: {
+    alignItems: 'flex-start',
+    minHeight: '4%',
+    width: PropDimensions.buttonWidth,
+  },
+  errorContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  errorText: {
+    marginHorizontal: 8,
+    color: Colors.warning,
   },
 });
 

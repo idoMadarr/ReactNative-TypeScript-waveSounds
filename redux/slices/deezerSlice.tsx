@@ -50,6 +50,15 @@ export const deezerSlice = createSlice({
     setSearchResults: (state, action) => {
       state.searchResults = action.payload;
     },
+    resetDezeerSlice: state => {
+      state.trends = [];
+      state.artists = [];
+      state.sequenceTree = [];
+      state.floatingPlayer = null;
+      state.currentTrack = null;
+      state.searchResults = [];
+      state.modalContext = [];
+    },
   },
 });
 
@@ -61,6 +70,7 @@ export const {
   cleanFloatingPlayer,
   setModalPlayerContext,
   setSearchResults,
+  resetDezeerSlice,
 } = deezerSlice.actions;
 
 export default deezerSlice.reducer;

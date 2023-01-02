@@ -178,11 +178,11 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
           {floatingPlayer.artist}
         </TextElement>
       </View>
-      <View style={styles.progressLine}>
+      {/* <View style={styles.progressLine}>
         <GestureDetector gesture={gesture}>
           <Animated.View style={[styles.progressDot, animatedStyles]} />
         </GestureDetector>
-      </View>
+      </View> */}
       <View style={styles.controllerContainer}>
         <TouchableOpacity onPress={onTrackNavigate.bind(this, -1)}>
           <Icon name={'backward'} size={28} color={Colors.secondary} />

@@ -12,6 +12,7 @@ import LoadingScreen from '../screens/LoadingScreen';
 import FloatingPlayer from '../components/FloatingPlayer';
 import ModalElement from '../components/resuable/ModalElement';
 import ModalPlayer from '../components/ModalPlayer';
+import OverlaySpinner from '../components/OverlaySpinner';
 
 const AppNavigation: React.FC = () => {
   const [playerStatus, setPlayerStatus] = useState(false);
@@ -19,6 +20,7 @@ const AppNavigation: React.FC = () => {
 
   const modalizeRef = useRef<Modalize>();
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
+  const loading = useAppSelector(state => state.authSlice.loading);
   const isAuth = useAppSelector(state => state.authSlice.isAuth);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
@@ -48,6 +50,7 @@ const AppNavigation: React.FC = () => {
           </AppNavigator.Group>
         )}
       </AppNavigator.Navigator>
+      {loading && <OverlaySpinner />}
       {floatingPlayer && (
         <FloatingPlayer
           playerStatus={playerStatus}

@@ -1,12 +1,11 @@
 import React from 'react';
 import {View, FlatList, StyleSheet, Dimensions} from 'react-native';
-import {PropDimensions} from '../../dimensions/dimensions';
 import {AlbumTrack} from '../../types/album';
 import Track from './Track';
 
 interface AlbumTrackType {
   tracks: AlbumTrack[];
-  initSoundTrack(url: string, index: number): void;
+  initSoundTrack(item: AlbumTrack, index: number): void;
   indexIndicator: number;
 }
 
@@ -26,7 +25,7 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({
             preview={item.preview}
             title={item.title}
             index={index}
-            initSoundTrack={initSoundTrack}
+            initSoundTrack={initSoundTrack.bind(this, item, index)}
             indexIndicator={indexIndicator}
           />
         )}
@@ -37,6 +36,7 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({
 
 const styles = StyleSheet.create({
   listContainer: {
+    height: Dimensions.get('window').height * 0.45,
     marginTop: '5%',
     paddingHorizontal: 16,
   },

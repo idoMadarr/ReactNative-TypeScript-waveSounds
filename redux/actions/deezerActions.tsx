@@ -52,7 +52,13 @@ export const fetchAlbum = (albumId: number) => async (dispatch: Dispatch) => {
     image: data.cover_medium,
     label: data.label,
     releaseDate: data.release_date,
-    tracks: data.tracks.data,
+    tracks: data.tracks.data.map((track: any) => ({
+      id: track.id.toString(),
+      title: track.title,
+      artist: track.artist.name,
+      image: data.cover_medium,
+      preview: track.preview,
+    })),
   };
   return formattedData;
 };

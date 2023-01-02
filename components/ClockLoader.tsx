@@ -6,7 +6,6 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import TextElement from './resuable/TextElement';
 import Colors from '../assets/design/palette.json';
 
 const N = 12;

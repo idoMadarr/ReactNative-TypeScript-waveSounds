@@ -8,7 +8,7 @@ import {PropDimensions} from '../../dimensions/dimensions';
 interface AlbumTrackType {
   preview: string;
   title: string;
-  initSoundTrack(url: string, index: number): void;
+  initSoundTrack(): void;
   indexIndicator: number;
   index: number;
 }
@@ -22,7 +22,7 @@ const AlbumTrack: React.FC<AlbumTrackType> = ({
 }) => {
   return (
     <TouchableOpacity
-      onPress={initSoundTrack.bind(this, preview, index)}
+      onPress={initSoundTrack}
       style={[
         styles.TrackContainer,
         {
@@ -39,7 +39,7 @@ const AlbumTrack: React.FC<AlbumTrackType> = ({
       </View>
       <View>
         <Icon
-          name={'heart-o'}
+          name={'play'}
           size={18}
           color={indexIndicator == index ? Colors.primary : Colors.greyish}
         />

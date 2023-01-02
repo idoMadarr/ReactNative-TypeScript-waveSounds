@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
 import {useAppDispatch} from '../redux/hooks';
+import {toggleSpinner} from '../redux/slices/authSlice';
 import {useIsFocused} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
@@ -88,6 +89,7 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
   const onPress = async () => {
     const isValidForm = formValidator();
     if (isValidForm) {
+      dispatch(toggleSpinner());
       const errors = await dispatch(signIn(formState));
       if (errors) {
         return setFormErrorState(prevState => ({

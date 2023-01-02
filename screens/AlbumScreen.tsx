@@ -11,9 +11,13 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {fetchAlbum} from '../redux/actions/deezerActions';
 import Colors from '../assets/design/palette.json';
-import {AlbumType} from '../types/album';
+import {AlbumTrack, AlbumType} from '../types/album';
 import Sound from 'react-native-sound';
-import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
+import {
+  setCurrentTrack,
+  setFloatingPlayer,
+  setModalPlayerContext,
+} from '../redux/slices/deezerSlice';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 
 // Components
@@ -46,21 +50,24 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
 
   const initAlbum = async () => {
     const albumData = await dispatch(fetchAlbum(albumId));
+    console.log(albumData.tracks.length);
+
     setCurrentAlbum(albumData);
   };
 
-  const initSoundTrack = (url: string, index: number) => {
+  const initSoundTrack = (item: AlbumTrack, index: number) => {
     if (currentTrack) {
       currentTrack.stop();
     }
+
     setIndexIndicator(index);
-    const {title, artist, album} = currentAlbum?.tracks[index] as any;
     const createFloatingTrack = new FloatingPlayerInstance(
-      title,
-      artist.name,
-      album.cover_medium,
+      item.title,
+      item.artist,
+      item.image,
     );
-    const loadTrack = new Sound(url, '', async () => {
+    const loadTrack = new Sound(item.preview, '', async () => {
+      dispatch(setModalPlayerContext(currentAlbum?.tracks));
       dispatch(setFloatingPlayer(createFloatingTrack));
       dispatch(setCurrentTrack(loadTrack));
     });

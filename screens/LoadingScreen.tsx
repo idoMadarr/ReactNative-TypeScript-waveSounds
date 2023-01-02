@@ -2,7 +2,7 @@ import {useCallback} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
 import {View, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
-import {useAppSelector, useAppDispatch} from '../redux/hooks';
+import {useAppDispatch} from '../redux/hooks';
 import {
   Easing,
   useSharedValue,
@@ -31,7 +31,6 @@ type RootStackParamList = {
 type LoadingScreenType = NativeStackScreenProps<RootStackParamList, 'loading'>;
 
 const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
-  const isAuth = useAppSelector(state => state.authSlice.isAuth);
   const dispatch = useAppDispatch();
   const progress = useSharedValue(0);
 
@@ -44,7 +43,7 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
         }, 2000);
       };
       initialization();
-    }, [isAuth]),
+    }, []),
   );
 
   const initApp = async () => {
@@ -57,7 +56,7 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
 
     await dispatch(fetchDeezerChart());
     await dispatch(fetchSequences());
-    dispatch(setAuthentication(session.existUser));
+    await dispatch(setAuthentication(session.existUser || session.createUser));
     // @ts-ignore:
     navigation.navigate('app');
   };

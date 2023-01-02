@@ -8,10 +8,9 @@ export interface AlbumType {
 }
 
 export interface AlbumTrack {
-  id: number;
-  preview: string;
-  album: {
-    cover_medium: string;
-  };
+  id: string;
   title: string;
+  image: string;
+  preview: string;
+  artist: string;
 }

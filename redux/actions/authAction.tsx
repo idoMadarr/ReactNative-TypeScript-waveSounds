@@ -1,7 +1,7 @@
 import {Dispatch} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {saveToStorage} from '../../utils/asyncStorage';
-import {setAuthentication} from '../slices/authSlice';
+import {setAuthentication, toggleSpinner} from '../slices/authSlice';
 
 interface AuthenticationCredentialsType {
   email: string;
@@ -25,6 +25,7 @@ export const signIn =
       saveToStorage('userSession', data);
       dispatch(setAuthentication(data.existUser));
     } catch (error: any) {
+      dispatch(toggleSpinner());
       const errorsList = error.response.data || 'Something went worng';
       return errorsList;
     }
@@ -40,6 +41,7 @@ export const signUp =
       saveToStorage('userSession', data);
       dispatch(setAuthentication(data.createUser));
     } catch (error: any) {
+      dispatch(toggleSpinner());
       const errorsList = error.response.data || 'Something went worng';
       return errorsList;
     }
