@@ -19,7 +19,7 @@ export const signIn =
   (state: AuthenticationCredentialsType) => async (dispatch: Dispatch) => {
     try {
       const {data}: {data: AuthenticationResponseType} = await axios.post(
-        'http://10.0.2.2:4000/ws-api/signin',
+        'https://wavesounds.onrender.com/ws-api/signin',
         state,
       );
       saveToStorage('userSession', data);
@@ -35,7 +35,7 @@ export const signUp =
   (state: AuthenticationCredentialsType) => async (dispatch: Dispatch) => {
     try {
       const {data}: {data: AuthenticationResponseType} = await axios.post(
-        'http://10.0.2.2:4000/ws-api/signup',
+        'https://wavesounds.onrender.com/ws-api/signup',
         state,
       );
       saveToStorage('userSession', data);
