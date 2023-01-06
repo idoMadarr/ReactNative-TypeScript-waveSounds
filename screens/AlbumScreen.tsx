@@ -8,25 +8,18 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
-import {useAppDispatch, useAppSelector} from '../redux/hooks';
+import {useAppDispatch} from '../redux/hooks';
 import {fetchAlbum} from '../redux/actions/deezerActions';
 import Colors from '../assets/design/palette.json';
 import {AlbumTrack, AlbumType} from '../types/album';
-import Sound from 'react-native-sound';
-import {
-  setCurrentTrack,
-  setFloatingPlayer,
-  setModalPlayerContext,
-} from '../redux/slices/deezerSlice';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
+import {initSoundTrack} from '../utils/soundTracker';
 
 // Components
 import AlbumHeader from '../components/AlbumPartials/AlbumHeader';
 import AlbumTracks from '../components/AlbumPartials/AlbumTracks';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import ClockLoader from '../components/ClockLoader';
-
-Sound.setCategory('Playback', true);
 
 type RootStackParamList = {
   album: any;
@@ -39,7 +32,6 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
 
   const [currentAlbum, setCurrentAlbum] = useState<AlbumType | null>(null);
   const [indexIndicator, setIndexIndicator] = useState(0);
-  const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
   const dispatch = useAppDispatch();
   const progress = useSharedValue(0);
 
@@ -50,27 +42,18 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
 
   const initAlbum = async () => {
     const albumData = await dispatch(fetchAlbum(albumId));
-    console.log(albumData.tracks.length);
 
     setCurrentAlbum(albumData);
   };
 
-  const initSoundTrack = (item: AlbumTrack, index: number) => {
-    if (currentTrack) {
-      currentTrack.stop();
-    }
-
+  const onPlay = (item: AlbumTrack, index: number) => {
     setIndexIndicator(index);
     const createFloatingTrack = new FloatingPlayerInstance(
       item.title,
       item.artist,
       item.image,
     );
-    const loadTrack = new Sound(item.preview, '', async () => {
-      dispatch(setModalPlayerContext(currentAlbum?.tracks));
-      dispatch(setFloatingPlayer(createFloatingTrack));
-      dispatch(setCurrentTrack(loadTrack));
-    });
+    initSoundTrack(item.preview, currentAlbum?.tracks, createFloatingTrack);
   };
 
   const pressBack = () => navigation.goBack();
@@ -114,7 +97,7 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
             />
             <AlbumTracks
               tracks={currentAlbum.tracks}
-              initSoundTrack={initSoundTrack}
+              onPlay={onPlay}
               indexIndicator={indexIndicator}
             />
           </Fragment>

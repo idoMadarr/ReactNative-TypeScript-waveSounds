@@ -5,13 +5,13 @@ import Track from './Track';
 
 interface AlbumTrackType {
   tracks: AlbumTrack[];
-  initSoundTrack(item: AlbumTrack, index: number): void;
+  onPlay(item: AlbumTrack, index: number): void;
   indexIndicator: number;
 }
 
 const AlbumTracks: React.FC<AlbumTrackType> = ({
   tracks,
-  initSoundTrack,
+  onPlay,
   indexIndicator,
 }) => {
   return (
@@ -25,7 +25,7 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({
             preview={item.preview}
             title={item.title}
             index={index}
-            initSoundTrack={initSoundTrack.bind(this, item, index)}
+            initSoundTrack={onPlay.bind(this, item, index)}
             indexIndicator={indexIndicator}
           />
         )}

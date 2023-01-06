@@ -73,10 +73,6 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
   };
 
   const onTrackNavigate = (action: number) => {
-    if (currentTrack) {
-      currentTrack.stop();
-    }
-
     let nextTrack = modalContext[contextIndexRef.current + action] as any;
     if (!nextTrack) {
       nextTrack = modalContext[0];
@@ -92,9 +88,19 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     );
 
     const loadNextTrack = new Sound(nextTrack.preview, '', async () => {
-      setPlayerStatus(true);
-      dispatch(setFloatingPlayer(createFloatingTrack));
-      dispatch(setCurrentTrack(loadNextTrack));
+      if (currentTrack) {
+        // @ts-ignore:
+        currentTrack.stop(() => {
+          currentTrack.release();
+          dispatch(setFloatingPlayer(createFloatingTrack));
+          dispatch(setCurrentTrack(loadNextTrack));
+          setPlayerStatus(true);
+        });
+      } else {
+        dispatch(setFloatingPlayer(createFloatingTrack));
+        dispatch(setCurrentTrack(loadNextTrack));
+        setPlayerStatus(true);
+      }
     });
   };
 

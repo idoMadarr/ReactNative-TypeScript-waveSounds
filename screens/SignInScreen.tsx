@@ -130,11 +130,9 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
               WaveSounds
             </TextElement>
             <TextElement>
-              WaveSounds is a digital music, podcast, and video service that
-              gives you access to millions of songs and other content from
-              creators all over the world. Basic functions such as playing music
-              are totally free, but you can also choose to upgrade to Spotify
-              Premium.
+              WaveSounds is a digital music that gives you access to millions of
+              songs and other content from creators all over the world. Basic
+              functions such as playing music are totally free.
             </TextElement>
           </Animated.View>
         )}

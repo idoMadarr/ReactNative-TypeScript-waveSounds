@@ -86,7 +86,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [{translateX: offset.value}],
-      backgroundColor: isTocuhed.value ? Colors.gesture : Colors.greyish,
+      backgroundColor: isTocuhed.value ? '#666565bd' : '#525050bd',
     };
   });
 
@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    opacity: 0.75,
   },
   side: {
     flexDirection: 'row',

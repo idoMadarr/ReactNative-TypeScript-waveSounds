@@ -10,7 +10,7 @@ export interface TrackType {
 export interface SingleTrackType {
   play(): void;
   release(): void;
-  stop(): void;
+  stop(cb?: Function): void;
   pause(): void;
   getVolume(): void;
   getPan(): void;

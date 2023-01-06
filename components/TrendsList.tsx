@@ -1,45 +1,30 @@
 import React, {Fragment} from 'react';
-import TrendCard from './TrendCard';
-import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {
-  setCurrentTrack,
-  setFloatingPlayer,
-  setModalPlayerContext,
-} from '../redux/slices/deezerSlice';
 import {randomDate} from '../utils/randomDate';
 import {TrackType} from '../types/TrackType';
-import Sound from 'react-native-sound';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
+import {initSoundTrack} from '../utils/soundTracker';
+
+// Components
+import TrendCard from './TrendCard';
 
 interface TrendsListType {
   trends: TrackType[];
 }
 
 const TrendsList: React.FC<TrendsListType> = ({trends}) => {
-  const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
-
-  const dispatch = useAppDispatch();
-
   const onPlay = (
     image: string,
     title: string,
     artist: string,
     preview: string,
   ) => {
-    if (currentTrack) {
-      currentTrack.stop();
-    }
-
     const createFloatingTrack = new FloatingPlayerInstance(
       title,
       artist,
       image,
     );
-    const loadTrack = new Sound(preview, '', async () => {
-      dispatch(setModalPlayerContext(trends));
-      dispatch(setFloatingPlayer(createFloatingTrack));
-      dispatch(setCurrentTrack(loadTrack));
-    });
+
+    initSoundTrack(preview, trends, createFloatingTrack);
   };
 
   return (

@@ -2,17 +2,12 @@ import React, {useState, useCallback, useEffect} from 'react';
 import {FlatList, StyleSheet, SafeAreaView} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {fetchSerchResults} from '../redux/actions/deezerActions';
-import {
-  setCurrentTrack,
-  setFloatingPlayer,
-  setModalPlayerContext,
-  setSearchResults,
-} from '../redux/slices/deezerSlice';
+import {setSearchResults} from '../redux/slices/deezerSlice';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import Colors from '../assets/design/palette.json';
 import {TrackType} from '../types/TrackType';
-import Sound from 'react-native-sound';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
+import {initSoundTrack} from '../utils/soundTracker';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
@@ -22,7 +17,6 @@ import SearchItem from '../components/SearchPartials/SearchItem';
 const DEFAULT_SEARCH = 'poets of the fall';
 
 const SearchScreen = () => {
-  const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
   const searchResults = useAppSelector(
     state => state.deezerSlice.searchResults,
   );
@@ -58,10 +52,6 @@ const SearchScreen = () => {
   const optimizeSearchFunc = useCallback(debounce(updateSearch), []);
 
   const playSoundTrack = (item: TrackType) => {
-    if (currentTrack) {
-      currentTrack.stop();
-    }
-
     const {title, artist, preview, image} = item;
 
     const createFloatingTrack = new FloatingPlayerInstance(
@@ -69,11 +59,8 @@ const SearchScreen = () => {
       artist,
       image,
     );
-    const loadTrack = new Sound(preview, '', async () => {
-      dispatch(setModalPlayerContext(searchResults));
-      dispatch(setFloatingPlayer(createFloatingTrack));
-      dispatch(setCurrentTrack(loadTrack));
-    });
+
+    initSoundTrack(preview, searchResults, createFloatingTrack);
   };
 
   return (
