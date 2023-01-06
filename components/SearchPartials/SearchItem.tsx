@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.black,
+    textAlign: 'left',
   },
 });
 

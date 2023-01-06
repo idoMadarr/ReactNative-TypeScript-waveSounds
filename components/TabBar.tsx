@@ -1,7 +1,8 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {cleanFloatingPlayer} from '../redux/slices/deezerSlice';
 import Animated, {
@@ -14,6 +15,7 @@ import {PropDimensions} from '../dimensions/dimensions';
 import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {tabs} from '../fixtures/tabs.json';
+import TextElement from './resuable/TextElement';
 
 const DEFAULT_TAB = tabs[1].route;
 const DEFAULT_OFFSET = 130.9090909090909;
@@ -29,13 +31,12 @@ interface TabType {
 const TabBar: React.FC = () => {
   const [focus, setFocus] = useState(DEFAULT_TAB);
   const offset = useSharedValue(DEFAULT_OFFSET);
-  const navigation = useNavigation();
+  const navigation = useNavigation<DrawerNavigationProp<ParamListBase>>();
   const dispatch = useDispatch();
 
   const translateXAnimate = (route: string, index: number) => {
     if (route === 'menu') {
       dispatch(cleanFloatingPlayer());
-      // @ts-ignore:
       return navigation.openDrawer();
     }
     setFocus(route);
@@ -86,12 +87,12 @@ const Tab: React.FC<TabType> = ({id, route, icon, focus, setFocus}) => {
 
   const onPress = (route: string) => {
     setFocus(route, id);
-    scale.value = 1.4;
+    if (route !== 'menu') scale.value = 1.4;
   };
 
   return (
     <Animated.View style={scaleAnimation}>
-      <TouchableOpacity onPress={onPress.bind(this, route)}>
+      <TouchableOpacity style={styles.tab} onPress={onPress.bind(this, route)}>
         <Icon
           name={icon}
           size={22}
@@ -112,6 +113,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors['gradient-start'],
     elevation: 5,
+  },
+  tab: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: '5%',
+    paddingHorizontal: '10%',
   },
   indicator: {
     width: 50,

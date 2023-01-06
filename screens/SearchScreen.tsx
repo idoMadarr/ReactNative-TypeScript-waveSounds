@@ -78,6 +78,8 @@ const SearchScreen = () => {
           keyExtractor={itemData => itemData.id.toString()}
           data={searchResults}
           showsVerticalScrollIndicator={false}
+          initialNumToRender={5}
+          removeClippedSubviews={true}
           renderItem={({item, index}) => (
             <SearchItem
               title={item.title}
