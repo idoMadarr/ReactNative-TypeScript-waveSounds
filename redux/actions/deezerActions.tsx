@@ -1,5 +1,5 @@
 import {Dispatch} from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from '../../utils/axiosInstance';
 import {setDeezerChart, setSequence} from '../slices/deezerSlice';
 import {sequenceMap} from '../../fixtures/sequence-map.json';
 

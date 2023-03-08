@@ -1,6 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {FlatList, StyleSheet, SafeAreaView} from 'react-native';
-import {useIsFocused} from '@react-navigation/native';
 import {fetchSerchResults} from '../redux/actions/deezerActions';
 import {setSearchResults} from '../redux/slices/deezerSlice';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
@@ -21,7 +20,6 @@ const SearchScreen = () => {
     state => state.deezerSlice.searchResults,
   );
   const [searchState, setSearchState] = useState(DEFAULT_SEARCH);
-  const isFocused = useIsFocused();
 
   const dispatch = useAppDispatch();
 
@@ -73,7 +71,7 @@ const SearchScreen = () => {
         optimizeSearchFunc={optimizeSearchFunc}
         searchState={searchState}
       />
-      {isFocused && searchResults.length > 1 && (
+      {searchResults.length > 1 && (
         <FlatList
           keyExtractor={itemData => itemData.id.toString()}
           data={searchResults}

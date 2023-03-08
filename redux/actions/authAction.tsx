@@ -1,5 +1,5 @@
 import {Dispatch} from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from '../../utils/axiosInstance';
 import {saveToStorage} from '../../utils/asyncStorage';
 import {setAuthentication, toggleSpinner} from '../slices/authSlice';
 
