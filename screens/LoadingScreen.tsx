@@ -11,8 +11,9 @@ import {
 } from 'react-native-reanimated';
 import {fetchDeezerChart, fetchSequences} from '../redux/actions/deezerActions';
 import {setAuthentication} from '../redux/slices/authSlice';
-import Colors from '../assets/design/palette.json';
+import {fetchFavorites} from '../redux/actions/authAction';
 import {getFromStorage} from '../utils/asyncStorage';
+import Colors from '../assets/design/palette.json';
 // @ts-ignore:
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
@@ -54,6 +55,7 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
       return navigation.navigate('auth');
     }
 
+    await dispatch(fetchFavorites());
     await dispatch(fetchDeezerChart());
     await dispatch(fetchSequences());
     await dispatch(setAuthentication(session.existUser || session.createUser));

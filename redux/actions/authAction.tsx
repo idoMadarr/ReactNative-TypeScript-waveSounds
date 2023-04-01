@@ -1,7 +1,11 @@
 import {Dispatch} from '@reduxjs/toolkit';
 import axios from '../../utils/axiosInstance';
 import {saveToStorage} from '../../utils/asyncStorage';
-import {setAuthentication, toggleSpinner} from '../slices/authSlice';
+import {
+  setAuthentication,
+  setFavorites,
+  toggleSpinner,
+} from '../slices/authSlice';
 
 interface AuthenticationCredentialsType {
   email: string;
@@ -46,3 +50,16 @@ export const signUp =
       return errorsList;
     }
   };
+
+export const fetchFavorites = () => async (dispatch: Dispatch) => {
+  try {
+    const {data} = await axios.get(
+      'https://wavesounds.onrender.com/ws-api/favorites',
+    );
+    dispatch(setFavorites(data));
+  } catch (error: any) {
+    dispatch(toggleSpinner());
+    const errors = error.response.data || 'Something went worng';
+    return errors;
+  }
+};

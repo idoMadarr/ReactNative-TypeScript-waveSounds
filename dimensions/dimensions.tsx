@@ -8,6 +8,8 @@ export enum PropDimensions {
   cardWidth = Dimensions.get('window').width * 0.8,
   fullHight = Dimensions.get('window').height,
   cardHeight = Dimensions.get('window').height * 0.7,
+  favoriteWidth = Dimensions.get('window').width * 0.85,
+  favoriteHeight = Dimensions.get('window').height * 0.15,
   trendsHeight = Dimensions.get('window').height * 0.8,
   maxModalHeight = Dimensions.get('window').height * 0.7,
   inputContainerHight = Dimensions.get('window').height * 0.1,

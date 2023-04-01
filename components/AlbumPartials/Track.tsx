@@ -37,10 +37,17 @@ const AlbumTrack: React.FC<AlbumTrackType> = ({
           {title}
         </TextElement>
       </View>
-      <View>
+      <View style={{flexDirection: 'row'}}>
+        <Icon
+          name={'star'}
+          size={18}
+          style={{marginHorizontal: 6}}
+          color={indexIndicator == index ? Colors.primary : Colors.greyish}
+        />
         <Icon
           name={'play'}
           size={18}
+          style={{marginHorizontal: 6}}
           color={indexIndicator == index ? Colors.primary : Colors.greyish}
         />
       </View>

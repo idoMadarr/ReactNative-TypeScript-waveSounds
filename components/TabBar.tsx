@@ -15,10 +15,9 @@ import {PropDimensions} from '../dimensions/dimensions';
 import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {tabs} from '../fixtures/tabs.json';
-import TextElement from './resuable/TextElement';
 
 const DEFAULT_TAB = tabs[1].route;
-const DEFAULT_OFFSET = 130.9090909090909;
+const DEFAULT_OFFSET = PropDimensions.fullWidth / 4;
 
 interface TabType {
   id: number;
@@ -45,7 +44,7 @@ const TabBar: React.FC = () => {
   };
 
   const setTranslateX = (index: number) => {
-    return (PropDimensions.fullWidth / 3) * index;
+    return (PropDimensions.fullWidth / 4) * index;
   };
 
   const offsetAnimation = useAnimatedStyle(() => {
