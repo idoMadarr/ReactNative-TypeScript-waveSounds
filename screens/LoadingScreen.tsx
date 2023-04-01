@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   title: {
     position: 'absolute',
     alignItems: 'center',
-    top: '12%',
+    top: '6%',
     color: Colors.secondary,
   },
   wait: {

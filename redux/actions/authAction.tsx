@@ -1,9 +1,11 @@
 import {Dispatch} from '@reduxjs/toolkit';
 import axios from '../../utils/axiosInstance';
 import {saveToStorage} from '../../utils/asyncStorage';
+import {TrackType} from '../../types/TrackType';
 import {
   setAuthentication,
   setFavorites,
+  newFavorite,
   toggleSpinner,
 } from '../slices/authSlice';
 
@@ -56,7 +58,28 @@ export const fetchFavorites = () => async (dispatch: Dispatch) => {
     const {data} = await axios.get(
       'https://wavesounds.onrender.com/ws-api/favorites',
     );
-    dispatch(setFavorites(data));
+    const formattedData = data.reduce(
+      (accumulator: {}, currentValue: TrackType) => {
+        return {...accumulator, [currentValue.id]: currentValue};
+      },
+      {},
+    );
+    const payload = {favoriteArray: data, favoritesObject: formattedData};
+    dispatch(setFavorites(payload));
+  } catch (error: any) {
+    dispatch(toggleSpinner());
+    const errors = error.response.data || 'Something went worng';
+    return errors;
+  }
+};
+
+export const addFavorite = (favorite: any) => async (dispatch: Dispatch) => {
+  try {
+    const {data} = await axios.post(
+      'https://wavesounds.onrender.com/ws-api/add-favorite',
+      {...favorite, rank: 0},
+    );
+    dispatch(newFavorite(data));
   } catch (error: any) {
     dispatch(toggleSpinner());
     const errors = error.response.data || 'Something went worng';

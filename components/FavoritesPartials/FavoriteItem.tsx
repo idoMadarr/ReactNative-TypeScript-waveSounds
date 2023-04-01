@@ -2,17 +2,18 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import Animated, {FadeInDown, FadeOut, Layout} from 'react-native-reanimated';
 import {PropDimensions} from '../../dimensions/dimensions';
+import {TrackType} from '../../types/TrackType';
 
 import TextElement from '../resuable/TextElement';
 
 interface FavoriteItemPropsType {
-  name: string;
+  favorite: TrackType;
   index: number;
   onRemove(): void;
 }
 
 const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
-  name,
+  favorite,
   index,
   onRemove,
 }) => {
@@ -23,7 +24,7 @@ const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
       layout={Layout}
       onTouchEnd={onRemove}
       style={styles.container}>
-      <TextElement>{name.toString()}</TextElement>
+      <TextElement>{favorite.title}</TextElement>
     </Animated.View>
   );
 };

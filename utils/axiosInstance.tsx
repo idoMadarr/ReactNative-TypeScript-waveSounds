@@ -5,7 +5,7 @@ const localhost = Config.localhost;
 // const production = Config.production;
 
 const axiosInstance = axios.create({
-  baseURL: localhost,
+  // baseURL: localhost,
 });
 
 export default axiosInstance;

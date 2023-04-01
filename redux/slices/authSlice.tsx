@@ -5,14 +5,16 @@ import {TrackType} from '../../types/TrackType';
 interface RootStateApp {
   isAuth: boolean;
   user: UserType | null;
-  favorites: TrackType[];
+  favoritesList: TrackType[];
+  favoritesObj: Object;
   loading: boolean;
 }
 
 const initialState: RootStateApp = {
   isAuth: false,
   user: null,
-  favorites: [],
+  favoritesList: [],
+  favoritesObj: {},
   loading: false,
 };
 
@@ -30,10 +32,19 @@ export const authSlice = createSlice({
       state.user = null;
     },
     setFavorites: (state, action) => {
-      state.favorites = action.payload;
+      state.favoritesList = action.payload.favoriteArray;
+      state.favoritesObj = action.payload.favoritesObject;
+    },
+    newFavorite: (state, action) => {
+      state.favoritesList.push(action.payload);
+      state.favoritesObj = {
+        ...state.favoritesObj,
+        [action.payload.id]: action.payload,
+      };
+      state.loading = false;
     },
     updateFavorites: (state, action) => {
-      state.favorites = state.favorites.filter(
+      state.favoritesList = state.favoritesList.filter(
         favorite => favorite.id !== action.payload,
       );
     },
@@ -47,6 +58,7 @@ export const {
   setAuthentication,
   resetAuthSlice,
   setFavorites,
+  newFavorite,
   updateFavorites,
   toggleSpinner,
 } = authSlice.actions;

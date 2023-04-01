@@ -12,16 +12,17 @@ interface FavoritesListPropsType {
 const FavoritesList: React.FC<FavoritesListPropsType> = ({favorites}) => {
   const dispatch = useAppDispatch();
 
-  const onRemove = useCallback((id: number) => {
+  const onRemove = useCallback((id: string | number) => {
     dispatch(updateFavorites(id));
   }, []);
+  console.log(favorites);
 
   return (
     <ScrollView>
       {favorites.map((favorite, index) => (
         <FavoriteItem
           key={favorite.id}
-          name={favorite.title}
+          favorite={favorite}
           index={index}
           onRemove={onRemove.bind(this, favorite.id)}
         />

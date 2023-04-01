@@ -1,25 +1,42 @@
 import React from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import TextElement from '../resuable/TextElement';
+import {useAppSelector} from '../../redux/hooks';
 import Colors from '../../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {PropDimensions} from '../../dimensions/dimensions';
 
 interface AlbumTrackType {
+  id: string;
   preview: string;
   title: string;
   initSoundTrack(): void;
   indexIndicator: number;
+  onFavorite(): void;
   index: number;
 }
 
 const AlbumTrack: React.FC<AlbumTrackType> = ({
+  id,
   preview,
   title,
   initSoundTrack,
   indexIndicator,
+  onFavorite,
   index,
 }) => {
+  // @ts-ignore:
+  const isFavorite = useAppSelector(state => state.authSlice.favoritesObj[id]);
+
+  let dynamicColor = Colors.greyish;
+  if (isFavorite) {
+    dynamicColor = Colors.active;
+  }
+
+  if (indexIndicator == index && !isFavorite) {
+    dynamicColor = Colors.primary;
+  }
+
   return (
     <TouchableOpacity
       onPress={initSoundTrack}
@@ -30,27 +47,21 @@ const AlbumTrack: React.FC<AlbumTrackType> = ({
             indexIndicator == index ? Colors.greyish : Colors.transparent,
         },
       ]}>
-      <View style={{flexDirection: 'row'}}>
+      <View>
         <TextElement
           numberOfLines={1}
           cStyle={index % 2 === 0 ? styles.active : styles.passive}>
           {title}
         </TextElement>
       </View>
-      <View style={{flexDirection: 'row'}}>
+      <TouchableOpacity onPress={onFavorite} style={styles.favorite}>
         <Icon
           name={'star'}
           size={18}
           style={{marginHorizontal: 6}}
-          color={indexIndicator == index ? Colors.primary : Colors.greyish}
+          color={dynamicColor}
         />
-        <Icon
-          name={'play'}
-          size={18}
-          style={{marginHorizontal: 6}}
-          color={indexIndicator == index ? Colors.primary : Colors.greyish}
-        />
-      </View>
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 };
@@ -73,6 +84,9 @@ const styles = StyleSheet.create({
   passive: {
     maxWidth: PropDimensions.cardWidth,
     color: Colors.white,
+  },
+  favorite: {
+    paddingHorizontal: 8,
   },
 });
 
