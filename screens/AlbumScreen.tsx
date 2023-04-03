@@ -19,7 +19,7 @@ import {initSoundTrack} from '../utils/soundTracker';
 import AlbumHeader from '../components/AlbumPartials/AlbumHeader';
 import AlbumTracks from '../components/AlbumPartials/AlbumTracks';
 import StatusBarElement from '../components/resuable/StatusBarElement';
-import ClockLoader from '../components/ClockLoader';
+// import ClockLoader from '../components/ClockLoader';
 
 type RootStackParamList = {
   album: any;
@@ -83,7 +83,7 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
         ]}>
         {!currentAlbum ? (
           <View style={styles.loadingContainer}>
-            <ClockLoader progress={progress} />
+            {/* <ClockLoader progress={progress} /> */}
           </View>
         ) : (
           <Fragment>

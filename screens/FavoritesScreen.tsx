@@ -18,8 +18,7 @@ const FavoritesScreen = () => {
     state => state.deezerSlice.floatingPlayer,
   );
 
-  const onPlay = (item: TrackType, index?: number) => {
-    // setIndexIndicator(index);
+  const onPlay = (item: TrackType) => {
     const createFloatingTrack = new FloatingPlayerInstance(
       item.title,
       item.artist,
@@ -42,10 +41,11 @@ const FavoritesScreen = () => {
           Colors['gradient-mid'],
         ]}>
         <FavoriteHeader
+          counter={favorites.length}
           floatingPlayer={floatingPlayer}
           onPlay={onPlay.bind(this, favorites[0])}
         />
-        <FavoritesList favorites={favorites} />
+        <FavoritesList favorites={favorites} onPlay={onPlay} />
       </LinearGradient>
     </SafeAreaView>
   );

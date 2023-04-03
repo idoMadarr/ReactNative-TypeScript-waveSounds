@@ -11,12 +11,16 @@ import TextElement from '../resuable/TextElement';
 interface FavoriteItemPropsType {
   favorite: TrackType;
   index: number;
+  indexIndicator: number;
+  onSelect(): void;
   onRemove(): void;
 }
 
 const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
   favorite,
   index,
+  indexIndicator,
+  onSelect,
   onRemove,
 }) => {
   return (
@@ -24,8 +28,14 @@ const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
       entering={FadeInDown.delay(index * 100)}
       exiting={FadeOut}
       layout={Layout}
-      style={styles.container}>
-      <View style={styles.left}>
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            indexIndicator == index ? Colors.greyish : Colors.transparent,
+        },
+      ]}>
+      <TouchableOpacity onPress={onSelect} style={styles.left}>
         <View style={styles.imageContainer}>
           <Image
             source={{uri: favorite.image}}
@@ -39,7 +49,7 @@ const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
             {favorite.artist}
           </TextElement>
         </View>
-      </View>
+      </TouchableOpacity>
       <TouchableOpacity onPress={onRemove} style={styles.controller}>
         <Icon name={'minus'} size={12} color={Colors.secondary} />
       </TouchableOpacity>
@@ -57,6 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     paddingHorizontal: 8,
+    borderRadius: 5,
   },
   left: {
     width: '80%',

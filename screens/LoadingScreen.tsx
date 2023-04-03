@@ -9,6 +9,7 @@ import {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import Lottie from 'lottie-react-native';
 import {fetchDeezerChart, fetchSequences} from '../redux/actions/deezerActions';
 import {setAuthentication} from '../redux/slices/authSlice';
 import {fetchFavorites} from '../redux/actions/authAction';
@@ -19,7 +20,6 @@ import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
-import ClockLoader from '../components/ClockLoader';
 import TextElement from '../components/resuable/TextElement';
 
 const faviconSize = Dimensions.get('window').width * 0.45;
@@ -85,7 +85,12 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
           waveSounds
         </TextElement>
       </View>
-      <ClockLoader progress={progress} />
+      <Lottie
+        source={require('../assets/lottie/loader.json')}
+        autoPlay
+        loop
+        style={{width: 250}}
+      />
       <TextElement cStyle={styles.wait}>Just few moments...</TextElement>
     </SafeAreaView>
   );
@@ -99,14 +104,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   title: {
-    position: 'absolute',
     alignItems: 'center',
-    top: '6%',
     color: Colors.secondary,
   },
   wait: {
     position: 'absolute',
-    bottom: '38%',
+    bottom: '40%',
     color: Colors.white,
   },
 });

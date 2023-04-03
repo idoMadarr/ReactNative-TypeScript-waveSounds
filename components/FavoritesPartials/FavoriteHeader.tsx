@@ -10,17 +10,22 @@ import TextElement from '../resuable/TextElement';
 interface FavoriteHeaderPropsType {
   floatingPlayer: any;
   onPlay(): void;
+  counter: number;
 }
 
 const FavoriteHeader: React.FC<FavoriteHeaderPropsType> = ({
   floatingPlayer,
   onPlay,
+  counter,
 }) => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.info}>
         <TextElement fontSize={'xl'}>Liked Tracks</TextElement>
-        <TextElement cStyle={styles.songs}>49 Songs</TextElement>
+        <TextElement
+          cStyle={
+            styles.songs
+          }>{`${counter} Favorites in your list`}</TextElement>
       </View>
       <TouchableOpacity onPress={onPlay} style={styles.controller}>
         {floatingPlayer ? (

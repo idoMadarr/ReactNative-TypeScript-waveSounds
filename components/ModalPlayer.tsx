@@ -6,11 +6,17 @@ import Colors from '../assets/design/palette.json';
 import {PropDimensions} from '../dimensions/dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import Slider from '@react-native-community/slider';
-import {MotiView} from 'moti';
+import Lottie from 'lottie-react-native';
 
 // Components
 import TextElement from './resuable/TextElement';
-import Animated, {Easing, Layout, SlideInDown} from 'react-native-reanimated';
+import Animated, {
+  Easing,
+  FadeInLeft,
+  FadeOutRight,
+  Layout,
+  SlideInDown,
+} from 'react-native-reanimated';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import Sound from 'react-native-sound';
 import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
@@ -94,63 +100,56 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     });
   };
 
-  const CirclesAnimation =
-    playerStatus &&
-    [...Array(3).keys()].map(index => {
-      return (
-        <MotiView
-          from={{opacity: 0.2, scale: 1}}
-          animate={{opacity: 0, scale: 1.3}}
-          transition={{
-            type: 'timing',
-            duration: 2000,
-            delay: index * 400,
-            repeatReverse: false,
-            easing: Easing.out(Easing.ease),
-            loop: true,
-          }}
-          key={index}
-          style={[StyleSheet.absoluteFillObject, styles.circle]}
-        />
-      );
-    });
-
   return (
     <LinearGradient
       colors={[Colors['gradient--modal-start'], Colors['gradient-modal-end']]}
       style={styles.modalContainer}>
-      <View style={styles.imageContainer}>
-        {/* {CirclesAnimation} */}
-        <Animated.Image
-          entering={SlideInDown}
-          layout={Layout.duration(300).springify().stiffness(50)}
-          source={{uri: floatingPlayer.image}}
-          style={styles.image}
-        />
-        <Icon
-          name={'music'}
-          size={32}
-          color={Colors.secondary}
-          style={{position: 'absolute', top: '-18%', left: '44%', zIndex: 10}}
-        />
+      <View style={styles.modalHeader}>
+        <View style={styles.imageContainer}>
+          <Animated.Image
+            entering={SlideInDown}
+            layout={Layout.duration(300).springify().stiffness(50)}
+            source={{uri: floatingPlayer.image}}
+            style={styles.image}
+          />
+          <Icon
+            name={'music'}
+            size={32}
+            color={Colors.white}
+            style={styles.icon}
+          />
+        </View>
       </View>
-      <View>
+      <View style={styles.progressContainer}>
+        {playerStatus && (
+          <Animated.View
+            entering={FadeInLeft}
+            exiting={FadeOutRight}
+            style={styles.lottieContainer}>
+            <Lottie
+              source={require('../assets/lottie/waves.json')}
+              autoPlay
+              loop
+              style={{width: PropDimensions.fullWidth}}
+            />
+          </Animated.View>
+        )}
         <TextElement fontWeight={'bold'} cStyle={styles.text}>
           {floatingPlayer.title}
         </TextElement>
         <TextElement fontSize={'sm'} cStyle={styles.text}>
           {floatingPlayer.artist}
         </TextElement>
+        <Slider
+          value={timeLeft}
+          style={{width: END_REACH, height: 40}}
+          minimumValue={0}
+          maximumValue={currentTrack?._duration || 30}
+          minimumTrackTintColor={Colors.white}
+          maximumTrackTintColor={Colors.light}
+          onSlidingComplete={onSlidingComplete}
+        />
       </View>
-      <Slider
-        value={timeLeft}
-        style={{width: END_REACH, height: 40}}
-        minimumValue={0}
-        maximumValue={currentTrack?._duration || 30}
-        minimumTrackTintColor={Colors.white}
-        maximumTrackTintColor={Colors.light}
-        onSlidingComplete={onSlidingComplete}
-      />
       <View style={styles.controllerContainer}>
         <TouchableOpacity onPress={onTrackNavigate.bind(this, -1)}>
           <Icon name={'backward'} size={28} color={Colors.secondary} />
@@ -174,14 +173,18 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
 
 const styles = StyleSheet.create({
   modalContainer: {
+    height: PropDimensions.maxModalHeight,
+  },
+  modalHeader: {
+    height: '65%',
+    width: '100%',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: PropDimensions.maxModalHeight,
-    paddingVertical: '10%',
   },
   imageContainer: {
     width: 250,
     height: 250,
+    elevation: 0,
   },
   image: {
     borderRadius: 150,
@@ -194,19 +197,32 @@ const styles = StyleSheet.create({
     color: Colors.white,
     textAlign: 'center',
   },
+  icon: {
+    position: 'absolute',
+    top: '-10%',
+    left: '44%',
+    zIndex: 100,
+  },
+  progressContainer: {
+    height: '25%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   controllerContainer: {
-    width: 250,
+    height: '10%',
+    width: '100%',
     justifyContent: 'space-evenly',
     flexDirection: 'row',
   },
   active: {
     color: Colors.active,
   },
-  circle: {
-    width: 250,
-    height: 250,
-    borderRadius: 150,
-    backgroundColor: Colors.active,
+  lottieContainer: {
+    position: 'absolute',
+    bottom: -20,
+    zIndex: 0,
+    width: PropDimensions.fullWidth,
   },
 });
 
