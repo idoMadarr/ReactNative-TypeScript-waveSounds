@@ -1,8 +1,10 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
 import Animated, {FadeInDown, FadeOut, Layout} from 'react-native-reanimated';
 import {PropDimensions} from '../../dimensions/dimensions';
 import {TrackType} from '../../types/TrackType';
+import Colors from '../../assets/design/palette.json';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import TextElement from '../resuable/TextElement';
 
@@ -22,9 +24,25 @@ const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
       entering={FadeInDown.delay(index * 100)}
       exiting={FadeOut}
       layout={Layout}
-      onTouchEnd={onRemove}
       style={styles.container}>
-      <TextElement>{favorite.title}</TextElement>
+      <View style={styles.left}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={{uri: favorite.image}}
+            resizeMode={'cover'}
+            style={styles.image}
+          />
+        </View>
+        <View>
+          <TextElement>{favorite.title}</TextElement>
+          <TextElement fontSize={'sm'} cStyle={{color: Colors.placeholder}}>
+            {favorite.artist}
+          </TextElement>
+        </View>
+      </View>
+      <TouchableOpacity onPress={onRemove} style={styles.controller}>
+        <Icon name={'minus'} size={12} color={Colors.secondary} />
+      </TouchableOpacity>
     </Animated.View>
   );
 };
@@ -33,11 +51,32 @@ const styles = StyleSheet.create({
   container: {
     width: PropDimensions.favoriteWidth,
     height: PropDimensions.favoriteHeight,
-    backgroundColor: 'red',
-    marginVertical: 6,
-    borderRadius: 15,
+    borderBottomWidth: 1,
+    borderColor: '#5757573a',
+    marginBottom: 5,
     justifyContent: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+  },
+  left: {
+    width: '80%',
+    flexDirection: 'row',
     alignItems: 'center',
+  },
+  imageContainer: {
+    width: 40,
+    height: 40,
+    marginRight: '8%',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  controller: {
+    width: '20%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
 });
 

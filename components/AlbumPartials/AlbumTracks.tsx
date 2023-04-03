@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, Dimensions} from 'react-native';
+import {View, FlatList, StyleSheet} from 'react-native';
 import {AlbumTrack} from '../../types/album';
 import {useAppDispatch} from '../../redux/hooks';
 import {addFavorite} from '../../redux/actions/authAction';
@@ -48,9 +48,7 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({
 
 const styles = StyleSheet.create({
   listContainer: {
-    height: Dimensions.get('window').height * 0.45,
-    marginTop: '5%',
-    paddingHorizontal: 16,
+    padding: 16,
   },
 });
 

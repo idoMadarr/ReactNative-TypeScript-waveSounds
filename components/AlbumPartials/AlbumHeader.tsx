@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // Components
 import TextElement from '../resuable/TextElement';
 
-const ALBUM_SIZE = Dimensions.get('window').width * 0.6;
+const ALBUM_SIZE = Dimensions.get('window').width * 0.5;
 
 interface AlbumHeaderType {
   name: string;

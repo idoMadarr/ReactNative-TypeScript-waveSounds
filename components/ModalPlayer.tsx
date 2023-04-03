@@ -5,39 +5,32 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../assets/design/palette.json';
 import {PropDimensions} from '../dimensions/dimensions';
 import LinearGradient from 'react-native-linear-gradient';
+import Slider from '@react-native-community/slider';
 import {MotiView} from 'moti';
 
 // Components
 import TextElement from './resuable/TextElement';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
-import Animated, {
-  Easing,
-  Layout,
-  SlideInDown,
-  SlideInRight,
-  useAnimatedStyle,
-  useSharedValue,
-} from 'react-native-reanimated';
+import Animated, {Easing, Layout, SlideInDown} from 'react-native-reanimated';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import Sound from 'react-native-sound';
 import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
 
-const END_REACH = 250;
+const END_REACH = 240;
 
 interface ModalPlayerType {
   playerStatus: boolean;
-  setPlayerStatus: any;
+  setPlayerStatus: Function;
+  timeLeft: number;
+  setTimeLeft: Function;
   closeModal(): void;
 }
 
 const ModalPlayer: React.FC<ModalPlayerType> = ({
   playerStatus,
+  timeLeft,
+  setTimeLeft,
   setPlayerStatus,
 }) => {
-  const offset = useSharedValue(0);
-  const start = useSharedValue(0);
-  const isTocuhed = useSharedValue(false);
-
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
   const modalContext = useAppSelector(state => state.deezerSlice.modalContext);
   const floatingPlayer = useAppSelector(
@@ -51,17 +44,6 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     modalContext.findIndex(item => item.preview === currentTrack._filename),
   );
 
-  // @ts-ignore:
-  // const totalTime = currentTrack.getCurrentTime(seconds =>
-  //   console.log('at ' + seconds),
-  // );
-  // @ts-ignore:
-  //    const test2 = currentTrack._duration;
-  //  const test = currentTrack.getCurrentTime(seconds => {
-  // const dotPosition = (seconds / test2) * 250
-  // }
-  // );
-
   const onPlay = () => {
     setPlayerStatus(true);
     currentTrack?.play();
@@ -70,6 +52,12 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
   const onPause = () => {
     setPlayerStatus(false);
     currentTrack?.pause();
+  };
+
+  const onSlidingComplete = (current: any) => {
+    setTimeLeft(parseInt(current));
+    currentTrack?.setCurrentTime(current);
+    onPlay();
   };
 
   const onTrackNavigate = (action: number) => {
@@ -95,46 +83,16 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
           dispatch(setFloatingPlayer(createFloatingTrack));
           dispatch(setCurrentTrack(loadNextTrack));
           setPlayerStatus(true);
+          setTimeLeft(0);
         });
       } else {
         dispatch(setFloatingPlayer(createFloatingTrack));
         dispatch(setCurrentTrack(loadNextTrack));
         setPlayerStatus(true);
+        setTimeLeft(0);
       }
     });
   };
-
-  const onGestureDrop = () => {
-    console.log('done');
-  };
-
-  const gesture = Gesture.Pan()
-    .runOnJS(true)
-    .onBegin(event => {
-      isTocuhed.value = true;
-      offset.value = event.translationX;
-    })
-    .onUpdate(event => {
-      if (event.translationX < 0) {
-        offset.value = 0;
-      } else if (event.translationX > END_REACH) {
-        offset.value = END_REACH;
-      } else {
-        offset.value = event.translationX + start.value;
-      }
-    })
-    .onEnd(e => {
-      isTocuhed.value = false;
-      onGestureDrop();
-      // offset.value = withTiming(0);
-    });
-
-  const animatedStyles = useAnimatedStyle(() => {
-    return {
-      transform: [{translateX: offset.value}],
-      backgroundColor: isTocuhed.value ? Colors.active : Colors.white,
-    };
-  });
 
   const CirclesAnimation =
     playerStatus &&
@@ -162,7 +120,7 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
       colors={[Colors['gradient--modal-start'], Colors['gradient-modal-end']]}
       style={styles.modalContainer}>
       <View style={styles.imageContainer}>
-        {CirclesAnimation}
+        {/* {CirclesAnimation} */}
         <Animated.Image
           entering={SlideInDown}
           layout={Layout.duration(300).springify().stiffness(50)}
@@ -184,11 +142,15 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
           {floatingPlayer.artist}
         </TextElement>
       </View>
-      {/* <View style={styles.progressLine}>
-        <GestureDetector gesture={gesture}>
-          <Animated.View style={[styles.progressDot, animatedStyles]} />
-        </GestureDetector>
-      </View> */}
+      <Slider
+        value={timeLeft}
+        style={{width: END_REACH, height: 40}}
+        minimumValue={0}
+        maximumValue={currentTrack?._duration || 30}
+        minimumTrackTintColor={Colors.white}
+        maximumTrackTintColor={Colors.light}
+        onSlidingComplete={onSlidingComplete}
+      />
       <View style={styles.controllerContainer}>
         <TouchableOpacity onPress={onTrackNavigate.bind(this, -1)}>
           <Icon name={'backward'} size={28} color={Colors.secondary} />
@@ -236,18 +198,6 @@ const styles = StyleSheet.create({
     width: 250,
     justifyContent: 'space-evenly',
     flexDirection: 'row',
-  },
-  progressLine: {
-    height: 1,
-    width: 250,
-    backgroundColor: Colors.white,
-  },
-  progressDot: {
-    position: 'absolute',
-    top: -10,
-    width: 20,
-    height: 20,
-    borderRadius: 50,
   },
   active: {
     color: Colors.active,

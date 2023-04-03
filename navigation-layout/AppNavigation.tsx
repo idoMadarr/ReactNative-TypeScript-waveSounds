@@ -14,8 +14,11 @@ import ModalElement from '../components/resuable/ModalElement';
 import ModalPlayer from '../components/ModalPlayer';
 import OverlaySpinner from '../components/OverlaySpinner';
 
+const END_REACH = 240;
+
 const AppNavigation: React.FC = () => {
   const [playerStatus, setPlayerStatus] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(0);
   const AppNavigator = createNativeStackNavigator();
 
   const modalizeRef = useRef<Modalize>();
@@ -31,6 +34,19 @@ const AppNavigation: React.FC = () => {
       soundTracker(currentTrack);
     }
   }, [currentTrack]);
+
+  useEffect(() => {
+    const clacTime = () => {
+      if (timeLeft >= END_REACH || !playerStatus) {
+        return clearInterval(timer);
+      }
+      setTimeLeft(prevState => prevState + 1);
+    };
+
+    const timer = setInterval(clacTime, 1000);
+
+    return () => clearInterval(timer);
+  }, [playerStatus]);
 
   const openModal = () => modalizeRef.current?.open();
 
@@ -62,6 +78,8 @@ const AppNavigation: React.FC = () => {
         <ModalPlayer
           playerStatus={playerStatus}
           setPlayerStatus={setPlayerStatus}
+          timeLeft={timeLeft}
+          setTimeLeft={setTimeLeft}
           closeModal={closeModal}
         />
       </ModalElement>

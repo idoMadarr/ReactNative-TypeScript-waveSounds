@@ -15,10 +15,9 @@ const FavoritesList: React.FC<FavoritesListPropsType> = ({favorites}) => {
   const onRemove = useCallback((id: string | number) => {
     dispatch(updateFavorites(id));
   }, []);
-  console.log(favorites);
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       {favorites.map((favorite, index) => (
         <FavoriteItem
           key={favorite.id}

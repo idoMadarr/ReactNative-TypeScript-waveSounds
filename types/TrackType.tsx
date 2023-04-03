@@ -12,6 +12,8 @@ export interface SingleTrackType {
   release(): void;
   stop(cb?: Function): void;
   pause(): void;
+  _duration: any;
+  setCurrentTime(val: number): void;
   getVolume(): void;
   getPan(): void;
   getCurrentTime(): void;
