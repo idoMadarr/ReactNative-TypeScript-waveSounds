@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useAppSelector} from '../redux/hooks';
+import Sound from 'react-native-sound';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {Modalize} from 'react-native-modalize';
 import soundTracker from '../utils/soundTracker';
 
@@ -14,39 +15,90 @@ import ModalElement from '../components/resuable/ModalElement';
 import ModalPlayer from '../components/ModalPlayer';
 import OverlaySpinner from '../components/OverlaySpinner';
 
-const END_REACH = 240;
+import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
+import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
+
+const END_REACH = 30;
 
 const AppNavigation: React.FC = () => {
-  const [playerStatus, setPlayerStatus] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0);
   const AppNavigator = createNativeStackNavigator();
 
+  const [playerStatus, setPlayerStatus] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(0);
   const modalizeRef = useRef<Modalize>();
+
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
   const loading = useAppSelector(state => state.authSlice.loading);
   const isAuth = useAppSelector(state => state.authSlice.isAuth);
+  const modalContext = useAppSelector(state => state.deezerSlice.modalContext);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   );
+  const contextIndexRef = useRef(
+    // @ts-ignore:
+    modalContext.findIndex(item => item.preview === currentTrack?._filename) ||
+      1,
+  );
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (currentTrack) {
       soundTracker(currentTrack);
+      setTimeLeft(0);
     }
   }, [currentTrack]);
 
   useEffect(() => {
     const clacTime = () => {
-      if (timeLeft >= END_REACH || !playerStatus) {
+      if (!playerStatus) {
         return clearInterval(timer);
       }
+
+      if (timeLeft >= END_REACH) {
+        return onTrackNavigate(1);
+      }
+
       setTimeLeft(prevState => prevState + 1);
     };
 
     const timer = setInterval(clacTime, 1000);
 
     return () => clearInterval(timer);
-  }, [playerStatus]);
+  }, [playerStatus, timeLeft]);
+
+  const onTrackNavigate = (action: number) => {
+    let nextTrack = modalContext[contextIndexRef.current + action] as any;
+    if (!nextTrack) {
+      nextTrack = modalContext[0];
+      contextIndexRef.current = 0;
+    } else {
+      contextIndexRef.current = contextIndexRef.current + action;
+    }
+
+    const createFloatingTrack = new FloatingPlayerInstance(
+      nextTrack.title,
+      nextTrack.artist,
+      nextTrack.image,
+    );
+
+    const loadNextTrack = new Sound(nextTrack.preview, '', async () => {
+      if (currentTrack) {
+        // @ts-ignore:
+        currentTrack.stop(() => {
+          currentTrack.release();
+          dispatch(setFloatingPlayer(createFloatingTrack));
+          dispatch(setCurrentTrack(loadNextTrack));
+          setPlayerStatus(true);
+          setTimeLeft(0);
+        });
+      } else {
+        dispatch(setFloatingPlayer(createFloatingTrack));
+        dispatch(setCurrentTrack(loadNextTrack));
+        setPlayerStatus(true);
+        setTimeLeft(0);
+      }
+    });
+  };
 
   const openModal = () => modalizeRef.current?.open();
 
@@ -71,6 +123,7 @@ const AppNavigation: React.FC = () => {
         <FloatingPlayer
           playerStatus={playerStatus}
           setPlayerStatus={setPlayerStatus}
+          setTimeLeft={setTimeLeft}
           openModal={openModal}
         />
       )}
@@ -80,6 +133,7 @@ const AppNavigation: React.FC = () => {
           setPlayerStatus={setPlayerStatus}
           timeLeft={timeLeft}
           setTimeLeft={setTimeLeft}
+          onTrackNavigate={onTrackNavigate}
           closeModal={closeModal}
         />
       </ModalElement>

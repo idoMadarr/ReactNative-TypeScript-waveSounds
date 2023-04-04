@@ -59,7 +59,7 @@ const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: PropDimensions.favoriteWidth,
+    width: '100%',
     height: PropDimensions.favoriteHeight,
     borderBottomWidth: 1,
     borderColor: '#5757573a',

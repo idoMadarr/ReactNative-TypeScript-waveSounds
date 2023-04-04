@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // Components
 import TextElement from '../resuable/TextElement';
 
-const ALBUM_SIZE = Dimensions.get('window').width * 0.5;
+const ALBUM_SIZE = Dimensions.get('window').width * 0.35;
 
 interface AlbumHeaderType {
   name: string;
@@ -51,11 +51,8 @@ const AlbumHeader: React.FC<AlbumHeaderType> = ({
           fontSize={'sm'}>
           {label}
         </TextElement>
-        <TextElement
-          fontWeight={'bold'}
-          fontSize={'sm'}
-          cStyle={styles.artistStyle}>
-          {formattedReleaseDate}
+        <TextElement fontSize={'sm'} cStyle={styles.artistStyle}>
+          {`Release on ${formattedReleaseDate}`}
         </TextElement>
       </View>
     </View>
@@ -66,11 +63,12 @@ const styles = StyleSheet.create({
   headerContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: Dimensions.get('window').height * 0.45,
+    height: Dimensions.get('window').height * 0.35,
   },
   imageContainer: {
     width: ALBUM_SIZE,
     height: ALBUM_SIZE,
+    marginVertical: 6,
   },
   image: {
     width: '100%',
@@ -78,10 +76,10 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   detailsContainer: {
-    width: ALBUM_SIZE,
+    width: ALBUM_SIZE * 2,
   },
   sectionHeader: {
-    width: ALBUM_SIZE,
+    width: ALBUM_SIZE * 2,
     alignItems: 'flex-end',
   },
   labelStyle: {
@@ -93,8 +91,8 @@ const styles = StyleSheet.create({
   icon: {
     position: 'absolute',
     top: 0,
-    left: '-30%',
-    opacity: 0.6,
+    left: '-80%',
+    opacity: 0.8,
     paddingHorizontal: 20,
     paddingBottom: 20,
     zIndex: 100,

@@ -1,9 +1,10 @@
 import React, {useState, useCallback} from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import FavoriteItem from './FavoriteItem';
 import {TrackType} from '../../types/TrackType';
 import {useAppDispatch} from '../../redux/hooks';
-import {updateFavorites} from '../../redux/slices/authSlice';
+import {deleteFavorite} from '../../redux/actions/authAction';
+import {PropDimensions} from '../../dimensions/dimensions';
 
 interface FavoritesListPropsType {
   favorites: TrackType[];
@@ -18,7 +19,7 @@ const FavoritesList: React.FC<FavoritesListPropsType> = ({
   const dispatch = useAppDispatch();
 
   const onRemove = useCallback((id: string | number) => {
-    dispatch(updateFavorites(id));
+    dispatch(deleteFavorite(id));
   }, []);
 
   const onSelect = useCallback((index: number, track: TrackType) => {
@@ -27,7 +28,9 @@ const FavoritesList: React.FC<FavoritesListPropsType> = ({
   }, []);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={styles.listContainer}
+      showsVerticalScrollIndicator={false}>
       {favorites.map((favorite, index) => (
         <FavoriteItem
           key={favorite.id}
@@ -41,5 +44,11 @@ const FavoritesList: React.FC<FavoritesListPropsType> = ({
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  listContainer: {
+    width: PropDimensions.favoriteWidth,
+  },
+});
 
 export default FavoritesList;

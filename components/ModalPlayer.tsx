@@ -1,6 +1,6 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {useAppSelector, useAppDispatch} from '../redux/hooks';
+import {useAppSelector} from '../redux/hooks';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../assets/design/palette.json';
 import {PropDimensions} from '../dimensions/dimensions';
@@ -11,23 +11,17 @@ import Lottie from 'lottie-react-native';
 // Components
 import TextElement from './resuable/TextElement';
 import Animated, {
-  Easing,
   FadeInLeft,
   FadeOutRight,
-  Layout,
   SlideInDown,
 } from 'react-native-reanimated';
-import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
-import Sound from 'react-native-sound';
-import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
-
-const END_REACH = 240;
 
 interface ModalPlayerType {
   playerStatus: boolean;
   setPlayerStatus: Function;
   timeLeft: number;
   setTimeLeft: Function;
+  onTrackNavigate(action: number): void;
   closeModal(): void;
 }
 
@@ -35,20 +29,13 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
   playerStatus,
   timeLeft,
   setTimeLeft,
+  onTrackNavigate,
   setPlayerStatus,
 }) => {
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
-  const modalContext = useAppSelector(state => state.deezerSlice.modalContext);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   )!;
-
-  const dispatch = useAppDispatch();
-
-  const contextIndexRef = useRef(
-    // @ts-ignore:
-    modalContext.findIndex(item => item.preview === currentTrack._filename),
-  );
 
   const onPlay = () => {
     setPlayerStatus(true);
@@ -66,40 +53,6 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     onPlay();
   };
 
-  const onTrackNavigate = (action: number) => {
-    let nextTrack = modalContext[contextIndexRef.current + action] as any;
-    if (!nextTrack) {
-      nextTrack = modalContext[0];
-      contextIndexRef.current = 0;
-    } else {
-      contextIndexRef.current = contextIndexRef.current + action;
-    }
-
-    const createFloatingTrack = new FloatingPlayerInstance(
-      nextTrack.title,
-      nextTrack.artist,
-      nextTrack.image,
-    );
-
-    const loadNextTrack = new Sound(nextTrack.preview, '', async () => {
-      if (currentTrack) {
-        // @ts-ignore:
-        currentTrack.stop(() => {
-          currentTrack.release();
-          dispatch(setFloatingPlayer(createFloatingTrack));
-          dispatch(setCurrentTrack(loadNextTrack));
-          setPlayerStatus(true);
-          setTimeLeft(0);
-        });
-      } else {
-        dispatch(setFloatingPlayer(createFloatingTrack));
-        dispatch(setCurrentTrack(loadNextTrack));
-        setPlayerStatus(true);
-        setTimeLeft(0);
-      }
-    });
-  };
-
   return (
     <LinearGradient
       colors={[Colors['gradient--modal-start'], Colors['gradient-modal-end']]}
@@ -107,8 +60,7 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
       <View style={styles.modalHeader}>
         <View style={styles.imageContainer}>
           <Animated.Image
-            entering={SlideInDown}
-            layout={Layout.duration(300).springify().stiffness(50)}
+            entering={SlideInDown.duration(300).springify().stiffness(50)}
             source={{uri: floatingPlayer.image}}
             style={styles.image}
           />
@@ -134,21 +86,21 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
             />
           </Animated.View>
         )}
+        <Slider
+          value={timeLeft}
+          style={{width: 240, height: 40, zIndex: 100}}
+          minimumValue={0}
+          maximumValue={parseInt(currentTrack?._duration || 29)}
+          minimumTrackTintColor={Colors.white}
+          maximumTrackTintColor={Colors.light}
+          onSlidingComplete={onSlidingComplete}
+        />
         <TextElement fontWeight={'bold'} cStyle={styles.text}>
           {floatingPlayer.title}
         </TextElement>
         <TextElement fontSize={'sm'} cStyle={styles.text}>
           {floatingPlayer.artist}
         </TextElement>
-        <Slider
-          value={timeLeft}
-          style={{width: END_REACH, height: 40}}
-          minimumValue={0}
-          maximumValue={currentTrack?._duration || 30}
-          minimumTrackTintColor={Colors.white}
-          maximumTrackTintColor={Colors.light}
-          onSlidingComplete={onSlidingComplete}
-        />
       </View>
       <View style={styles.controllerContainer}>
         <TouchableOpacity onPress={onTrackNavigate.bind(this, -1)}>

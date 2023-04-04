@@ -65,7 +65,7 @@ const TabBar: React.FC = () => {
           setFocus={translateXAnimate}
         />
       ))}
-      <Animated.View style={[offsetAnimation, styles.indicator]} />
+      {/* <Animated.View style={[offsetAnimation, styles.indicator]} /> */}
     </View>
   );
 };

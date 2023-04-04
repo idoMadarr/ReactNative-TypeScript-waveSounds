@@ -3,7 +3,9 @@ import {View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
 import Animated, {
+  FadeIn,
   FadeInDown,
+  FadeOut,
   FadeOutUp,
   useAnimatedStyle,
   useSharedValue,
@@ -14,6 +16,7 @@ import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {cleanFloatingPlayer} from '../redux/slices/deezerSlice';
 import {PropDimensions} from '../dimensions/dimensions';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Lottie from 'lottie-react-native';
 import Colors from '../assets/design/palette.json';
 
 // Components
@@ -24,13 +27,15 @@ const OUT_SCREEN = Dimensions.get('window').width * 1.15;
 
 interface FloatingPlayerType {
   playerStatus: boolean;
-  setPlayerStatus: any;
+  setPlayerStatus: Function;
+  setTimeLeft: Function;
   openModal(): void;
 }
 
 const FloatingPlayer: React.FC<FloatingPlayerType> = ({
   playerStatus,
   setPlayerStatus,
+  setTimeLeft,
   openModal,
 }) => {
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
@@ -60,6 +65,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
 
   const onGestureClose = () => {
     currentTrack?.stop();
+    setTimeLeft(0);
     setTimeout(() => {
       dispatch(cleanFloatingPlayer());
     }, 100);
@@ -113,7 +119,24 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
             </TextElement>
           </View>
         </View>
-        <View style={styles.side}>
+        <View
+          style={[
+            styles.side,
+            {
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+            },
+          ]}>
+          {playerStatus && (
+            <Animated.View entering={FadeIn} exiting={FadeOut}>
+              <Lottie
+                source={require('../assets/lottie/music.json')}
+                autoPlay
+                loop
+                style={{width: 50, height: 50}}
+              />
+            </Animated.View>
+          )}
           <TouchableOpacity onPress={openModal}>
             <Icon
               name={'expand'}
@@ -155,7 +178,7 @@ const styles = StyleSheet.create({
   side: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '75%',
+    width: '50%',
   },
   details: {
     marginHorizontal: 16,

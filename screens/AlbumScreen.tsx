@@ -1,12 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {
-  Easing,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppDispatch} from '../redux/hooks';
 import {fetchAlbum} from '../redux/actions/deezerActions';
@@ -19,7 +13,7 @@ import {initSoundTrack} from '../utils/soundTracker';
 import AlbumHeader from '../components/AlbumPartials/AlbumHeader';
 import AlbumTracks from '../components/AlbumPartials/AlbumTracks';
 import StatusBarElement from '../components/resuable/StatusBarElement';
-// import ClockLoader from '../components/ClockLoader';
+import {toggleSpinner} from '../redux/slices/authSlice';
 
 type RootStackParamList = {
   album: any;
@@ -33,16 +27,15 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
   const [currentAlbum, setCurrentAlbum] = useState<AlbumType | null>(null);
   const [indexIndicator, setIndexIndicator] = useState(0);
   const dispatch = useAppDispatch();
-  const progress = useSharedValue(0);
 
   useEffect(() => {
-    initClockLoader();
+    dispatch(toggleSpinner());
     initAlbum();
   }, []);
 
   const initAlbum = async () => {
     const albumData = await dispatch(fetchAlbum(albumId));
-
+    dispatch(toggleSpinner());
     setCurrentAlbum(albumData);
   };
 
@@ -58,16 +51,6 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
 
   const pressBack = () => navigation.goBack();
 
-  const initClockLoader = () => {
-    progress.value = withRepeat(
-      withTiming(4 * Math.PI, {
-        duration: 4000,
-        easing: Easing.linear,
-      }),
-      -1,
-    );
-  };
-
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBarElement
@@ -75,18 +58,15 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
         backgroundColor={Colors['gradient-mid']}
       />
       <LinearGradient
-        style={styles.screen}
         colors={[
           Colors['gradient-mid'],
           Colors['gradient-start'],
           Colors['gradient-end'],
         ]}>
         {!currentAlbum ? (
-          <View style={styles.loadingContainer}>
-            {/* <ClockLoader progress={progress} /> */}
-          </View>
+          <View>{/* <ClockLoader progress={progress} /> */}</View>
         ) : (
-          <Fragment>
+          <View style={styles.main}>
             <AlbumHeader
               title={currentAlbum.title}
               label={currentAlbum.label}
@@ -100,7 +80,7 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
               onPlay={onPlay}
               indexIndicator={indexIndicator}
             />
-          </Fragment>
+          </View>
         )}
       </LinearGradient>
     </SafeAreaView>
@@ -111,10 +91,8 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  main: {
+    alignSelf: 'center',
   },
 });
 
