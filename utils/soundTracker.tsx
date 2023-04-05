@@ -1,5 +1,5 @@
 import Sound from 'react-native-sound';
-import {SingleTrackType} from '../types/TrackType';
+import {OptionsTrackType, TrackType} from '../types/Types';
 import store from '../redux/store';
 import {
   setCurrentTrack,
@@ -9,7 +9,7 @@ import {
 
 Sound.setCategory('Playback', true);
 
-const soundTracker = (track: SingleTrackType) => {
+const soundTracker = (track: OptionsTrackType) => {
   if (track?.play) {
     track.play();
   }
@@ -17,8 +17,8 @@ const soundTracker = (track: SingleTrackType) => {
 
 export const initSoundTrack = (
   preview: string,
-  tracks: any,
-  playTrack: any,
+  tracks?: TrackType[],
+  playTrack?: TrackType,
 ) => {
   const currentTrack = store.getState().deezerSlice.currentTrack;
   const loadTrack = new Sound(preview, '', async () => {

@@ -8,7 +8,6 @@ import {PropDimensions} from '../../dimensions/dimensions';
 
 interface AlbumTrackType {
   id: string;
-  preview: string;
   title: string;
   initSoundTrack(): void;
   indexIndicator: number;
@@ -18,7 +17,6 @@ interface AlbumTrackType {
 
 const AlbumTrack: React.FC<AlbumTrackType> = ({
   id,
-  preview,
   title,
   initSoundTrack,
   indexIndicator,
@@ -74,7 +72,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderColor: '#5757573a',
-    marginBottom: 5,
     borderRadius: 5,
   },
   active: {

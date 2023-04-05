@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {randomDate} from '../utils/randomDate';
-import {TrackType} from '../types/TrackType';
+import {TrackType} from '../types/Types';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {initSoundTrack} from '../utils/soundTracker';
 
@@ -13,12 +13,14 @@ interface TrendsListType {
 
 const TrendsList: React.FC<TrendsListType> = ({trends}) => {
   const onPlay = (
+    id: string,
     image: string,
     title: string,
     artist: string,
     preview: string,
   ) => {
     const createFloatingTrack = new FloatingPlayerInstance(
+      id,
       title,
       artist,
       image,
@@ -29,15 +31,21 @@ const TrendsList: React.FC<TrendsListType> = ({trends}) => {
 
   return (
     <Fragment>
-      {trends.map(({id, artist, title, rank, image, preview}, index) => (
+      {trends.map(({id, artist, title, image, preview}, index) => (
         <TrendCard
           key={id}
           artist={artist}
           title={title}
           release={randomDate()}
-          rank={rank || 1}
           image={image}
-          onPlay={onPlay.bind(this, image, title, artist, preview)}
+          onPlay={onPlay.bind(
+            this,
+            id.toString(),
+            image,
+            title,
+            artist,
+            preview!,
+          )}
           darkMode={index % 2 !== 0}
         />
       ))}

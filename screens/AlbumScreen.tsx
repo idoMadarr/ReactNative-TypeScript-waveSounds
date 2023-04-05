@@ -1,11 +1,9 @@
-import React, {useState, useEffect, Fragment} from 'react';
+import React, {useState} from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import LinearGradient from 'react-native-linear-gradient';
-import {useAppDispatch} from '../redux/hooks';
-import {fetchAlbum} from '../redux/actions/deezerActions';
 import Colors from '../assets/design/palette.json';
-import {AlbumTrack, AlbumType} from '../types/album';
+import {TrackType, AlbumType} from '../types/Types';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {initSoundTrack} from '../utils/soundTracker';
 
@@ -13,7 +11,6 @@ import {initSoundTrack} from '../utils/soundTracker';
 import AlbumHeader from '../components/AlbumPartials/AlbumHeader';
 import AlbumTracks from '../components/AlbumPartials/AlbumTracks';
 import StatusBarElement from '../components/resuable/StatusBarElement';
-import {toggleSpinner} from '../redux/slices/authSlice';
 
 type RootStackParamList = {
   album: any;
@@ -22,31 +19,19 @@ type RootStackParamList = {
 type AlbumScreenType = NativeStackScreenProps<RootStackParamList, 'album'>;
 
 const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
-  const {albumId} = route.params as any;
+  const albumData = route.params!.albumData as AlbumType;
 
-  const [currentAlbum, setCurrentAlbum] = useState<AlbumType | null>(null);
   const [indexIndicator, setIndexIndicator] = useState(0);
-  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(toggleSpinner());
-    initAlbum();
-  }, []);
-
-  const initAlbum = async () => {
-    const albumData = await dispatch(fetchAlbum(albumId));
-    dispatch(toggleSpinner());
-    setCurrentAlbum(albumData);
-  };
-
-  const onPlay = (item: AlbumTrack, index: number) => {
+  const onPlay = (item: TrackType, index: number) => {
     setIndexIndicator(index);
     const createFloatingTrack = new FloatingPlayerInstance(
+      item.id,
       item.title,
       item.artist,
       item.image,
     );
-    initSoundTrack(item.preview, currentAlbum?.tracks, createFloatingTrack);
+    initSoundTrack(item.preview!, albumData?.tracks, createFloatingTrack);
   };
 
   const pressBack = () => navigation.goBack();
@@ -63,25 +48,21 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
           Colors['gradient-start'],
           Colors['gradient-end'],
         ]}>
-        {!currentAlbum ? (
-          <View>{/* <ClockLoader progress={progress} /> */}</View>
-        ) : (
-          <View style={styles.main}>
-            <AlbumHeader
-              title={currentAlbum.title}
-              label={currentAlbum.label}
-              imageCover={currentAlbum.image}
-              name={currentAlbum.artist}
-              releaseDate={currentAlbum.releaseDate}
-              pressBack={pressBack}
-            />
-            <AlbumTracks
-              tracks={currentAlbum.tracks}
-              onPlay={onPlay}
-              indexIndicator={indexIndicator}
-            />
-          </View>
-        )}
+        <View style={styles.main}>
+          <AlbumHeader
+            title={albumData.title}
+            label={albumData.label}
+            imageCover={albumData.image}
+            name={albumData.artist}
+            releaseDate={albumData.releaseDate}
+            pressBack={pressBack}
+          />
+          <AlbumTracks
+            tracks={albumData.tracks}
+            onPlay={onPlay}
+            indexIndicator={indexIndicator}
+          />
+        </View>
       </LinearGradient>
     </SafeAreaView>
   );

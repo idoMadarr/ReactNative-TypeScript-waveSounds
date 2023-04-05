@@ -2,6 +2,7 @@ import {Dispatch} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {setDeezerChart, setSequence} from '../slices/deezerSlice';
 import {sequenceMap} from '../../fixtures/sequence-map.json';
+import {toggleSpinner} from '../slices/authSlice';
 
 export const fetchDeezerChart = () => async (dispatch: Dispatch) => {
   const {data} = await axios.get('https://api.deezer.com/chart');
@@ -44,7 +45,7 @@ export const fetchSequences = () => async (dispatch: Dispatch) => {
   });
 };
 
-export const fetchAlbum = (albumId: number) => async (dispatch: Dispatch) => {
+export const fetchAlbum = (albumId: string) => async (dispatch: Dispatch) => {
   const {data} = await axios.get(`https://api.deezer.com/album/${albumId}`);
   const formattedData = {
     title: data.title,
@@ -60,6 +61,7 @@ export const fetchAlbum = (albumId: number) => async (dispatch: Dispatch) => {
       preview: track.preview,
     })),
   };
+  dispatch(toggleSpinner());
   return formattedData;
 };
 

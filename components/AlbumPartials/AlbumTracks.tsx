@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, Dimensions} from 'react-native';
-import {AlbumTrack} from '../../types/album';
+import {FlatList, StyleSheet, Dimensions} from 'react-native';
+import {TrackType} from '../../types/Types';
 import {useAppDispatch} from '../../redux/hooks';
 import {addFavorite} from '../../redux/actions/authAction';
 import {toggleSpinner} from '../../redux/slices/authSlice';
@@ -8,8 +8,8 @@ import Track from './Track';
 import {PropDimensions} from '../../dimensions/dimensions';
 
 interface AlbumTrackType {
-  tracks: AlbumTrack[];
-  onPlay(item: AlbumTrack, index: number): void;
+  tracks: TrackType[];
+  onPlay(item: TrackType, index: number): void;
   indexIndicator: number;
 }
 
@@ -20,7 +20,7 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const onStarFavorite = (item: any) => {
+  const onStarFavorite = (item: TrackType) => {
     dispatch(toggleSpinner());
     dispatch(addFavorite(item));
   };
@@ -34,7 +34,6 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({
       renderItem={({item, index}) => (
         <Track
           id={item.id.toString()}
-          preview={item.preview}
           title={item.title}
           onFavorite={onStarFavorite.bind(this, item)}
           index={index}
@@ -48,7 +47,7 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({
 
 const styles = StyleSheet.create({
   listContainer: {
-    height: Dimensions.get('window').height * 0.55,
+    flex: 1,
     width: PropDimensions.favoriteWidth,
   },
 });

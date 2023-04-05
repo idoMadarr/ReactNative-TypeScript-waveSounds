@@ -1,10 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Sound from 'react-native-sound';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {Modalize} from 'react-native-modalize';
+import Sound from 'react-native-sound';
 import soundTracker from '../utils/soundTracker';
+import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
+import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
+import {Modalize} from 'react-native-modalize';
 
 // Screens
 import {AuthStack} from './StackNavigation';
@@ -14,9 +16,6 @@ import FloatingPlayer from '../components/FloatingPlayer';
 import ModalElement from '../components/resuable/ModalElement';
 import ModalPlayer from '../components/ModalPlayer';
 import OverlaySpinner from '../components/OverlaySpinner';
-
-import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
-import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
 
 const END_REACH = 30;
 
@@ -76,6 +75,7 @@ const AppNavigation: React.FC = () => {
     }
 
     const createFloatingTrack = new FloatingPlayerInstance(
+      nextTrack.id,
       nextTrack.title,
       nextTrack.artist,
       nextTrack.image,

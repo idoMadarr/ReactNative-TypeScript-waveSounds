@@ -4,7 +4,7 @@ import {fetchSerchResults} from '../redux/actions/deezerActions';
 import {setSearchResults} from '../redux/slices/deezerSlice';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import Colors from '../assets/design/palette.json';
-import {TrackType} from '../types/TrackType';
+import {TrackType} from '../types/Types';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {initSoundTrack} from '../utils/soundTracker';
 
@@ -35,7 +35,7 @@ const SearchScreen = () => {
     }
   };
 
-  const debounce = (func: any) => {
+  const debounce = (func: Function) => {
     let timer: any;
     return (args: any) => {
       setSearchState(args);
@@ -50,15 +50,16 @@ const SearchScreen = () => {
   const optimizeSearchFunc = useCallback(debounce(updateSearch), []);
 
   const playSoundTrack = (item: TrackType) => {
-    const {title, artist, preview, image} = item;
+    const {id, title, artist, preview, image} = item;
 
     const createFloatingTrack = new FloatingPlayerInstance(
+      id,
       title,
       artist,
       image,
     );
 
-    initSoundTrack(preview, searchResults, createFloatingTrack);
+    initSoundTrack(preview!, searchResults, createFloatingTrack);
   };
 
   return (

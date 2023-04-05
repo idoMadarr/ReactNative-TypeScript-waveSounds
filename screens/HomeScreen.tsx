@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, StyleSheet, SafeAreaView, Text} from 'react-native';
+import {ScrollView, StyleSheet, SafeAreaView} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import Animated, {
   interpolateColor,

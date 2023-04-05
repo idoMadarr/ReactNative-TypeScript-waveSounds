@@ -1,7 +1,7 @@
 import {Dispatch} from '@reduxjs/toolkit';
 import axios from '../../utils/axiosInstance';
 import {saveToStorage} from '../../utils/asyncStorage';
-import {TrackType} from '../../types/TrackType';
+import {TrackType} from '../../types/Types';
 import {
   setAuthentication,
   setFavorites,

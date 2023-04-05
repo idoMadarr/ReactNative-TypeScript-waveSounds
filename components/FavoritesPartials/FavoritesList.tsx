@@ -1,7 +1,7 @@
 import React, {useState, useCallback} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import FavoriteItem from './FavoriteItem';
-import {TrackType} from '../../types/TrackType';
+import {TrackType} from '../../types/Types';
 import {useAppDispatch} from '../../redux/hooks';
 import {deleteFavorite} from '../../redux/actions/authAction';
 import {PropDimensions} from '../../dimensions/dimensions';

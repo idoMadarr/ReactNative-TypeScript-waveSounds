@@ -24,7 +24,7 @@ const SectionList = () => {
           <View style={styles.sectionContainer}>
             <Icon name={'caret-right'} size={28} color={Colors.secondary} />
             <TextElement fontSize={'lg'} cStyle={styles.categoryTitle}>
-              {name}
+              {name!}
             </TextElement>
           </View>
           <Sequence albums={albums} />

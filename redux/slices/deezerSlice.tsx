@@ -1,14 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {SequencesType} from '../../types/sequence';
-import {FloatingPlayerType} from '../../types/floating-player';
-import {TrackType, SingleTrackType} from '../../types/TrackType';
+import {TrackType, OptionsTrackType, SequenceType} from '../../types/Types';
 
 interface RootStateApp {
   trends: TrackType[];
   artists: any;
-  sequenceTree: SequencesType[];
-  floatingPlayer: FloatingPlayerType | null;
-  currentTrack: SingleTrackType | null;
+  sequenceTree: SequenceType[];
+  floatingPlayer: TrackType | null;
+  currentTrack: OptionsTrackType | null;
   searchResults: TrackType[];
   modalContext: TrackType[];
 }

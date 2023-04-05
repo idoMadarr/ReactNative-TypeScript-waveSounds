@@ -2,10 +2,9 @@ import React from 'react';
 import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
 import Animated, {FadeInDown, FadeOut, Layout} from 'react-native-reanimated';
 import {PropDimensions} from '../../dimensions/dimensions';
-import {TrackType} from '../../types/TrackType';
+import {TrackType} from '../../types/Types';
 import Colors from '../../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import TextElement from '../resuable/TextElement';
 
 interface FavoriteItemPropsType {

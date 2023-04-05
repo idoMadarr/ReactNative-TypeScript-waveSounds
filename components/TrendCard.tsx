@@ -12,7 +12,6 @@ import TextElement from './resuable/TextElement';
 interface TrendCardType {
   artist: string;
   title: string;
-  rank: number;
   release: string;
   image: string;
   darkMode: boolean;
@@ -22,7 +21,6 @@ interface TrendCardType {
 const TrendCard: React.FC<TrendCardType> = ({
   artist,
   title,
-  rank,
   release,
   image,
   darkMode,
@@ -59,7 +57,6 @@ const TrendCard: React.FC<TrendCardType> = ({
           />
         </View>
         <Icon name={'star'} size={42} color={buttonColor} style={styles.icon} />
-        <TextElement cStyle={{color: textColor}}>{`Rank: ${rank}`}</TextElement>
         <TouchableOpacity
           onPress={onPlay}
           activeOpacity={0.8}

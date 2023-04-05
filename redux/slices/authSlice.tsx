@@ -1,6 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {UserType} from '../../types/UserType';
-import {TrackType} from '../../types/TrackType';
+import {UserType, TrackType} from '../../types/Types';
 
 interface RootStateApp {
   isAuth: boolean;

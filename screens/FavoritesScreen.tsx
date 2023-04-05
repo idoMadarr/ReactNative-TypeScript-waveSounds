@@ -10,7 +10,7 @@ import {initSoundTrack} from '../utils/soundTracker';
 import FavoriteHeader from '../components/FavoritesPartials/FavoriteHeader';
 import FavoritesList from '../components/FavoritesPartials/FavoritesList';
 import StatusBarElement from '../components/resuable/StatusBarElement';
-import {TrackType} from '../types/TrackType';
+import {TrackType} from '../types/Types';
 
 const FavoritesScreen = () => {
   const favorites = useAppSelector(state => state.authSlice.favoritesList);
@@ -20,11 +20,12 @@ const FavoritesScreen = () => {
 
   const onPlay = (item: TrackType) => {
     const createFloatingTrack = new FloatingPlayerInstance(
+      item.id.toString(),
       item.title,
       item.artist,
       item.image,
     );
-    initSoundTrack(item.preview, favorites, createFloatingTrack);
+    initSoundTrack(item.preview!, favorites, createFloatingTrack);
   };
 
   return (

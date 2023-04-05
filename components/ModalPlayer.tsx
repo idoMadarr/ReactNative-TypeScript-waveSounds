@@ -36,6 +36,9 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   )!;
+  const favoritesObj = useAppSelector(state => state.authSlice.favoritesObj);
+  // @ts-ignore:
+  const isFavorite = favoritesObj[floatingPlayer.id];
 
   const onPlay = () => {
     setPlayerStatus(true);
@@ -101,6 +104,13 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
         <TextElement fontSize={'sm'} cStyle={styles.text}>
           {floatingPlayer.artist}
         </TextElement>
+        <TouchableOpacity style={styles.liked} onPress={() => {}}>
+          <Icon
+            name={'heart'}
+            size={28}
+            color={isFavorite ? Colors.active : Colors.secondary}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.controllerContainer}>
         <TouchableOpacity onPress={onTrackNavigate.bind(this, -1)}>
@@ -154,6 +164,11 @@ const styles = StyleSheet.create({
     top: '-10%',
     left: '44%',
     zIndex: 100,
+  },
+  liked: {
+    position: 'absolute',
+    bottom: '20%',
+    right: '10%',
   },
   progressContainer: {
     height: '25%',
