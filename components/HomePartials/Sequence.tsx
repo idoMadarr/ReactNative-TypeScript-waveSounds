@@ -1,15 +1,15 @@
 import React from 'react';
 import {ScrollView, TouchableOpacity, View, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {useAppDispatch} from '../redux/hooks';
-import {toggleSpinner} from '../redux/slices/authSlice';
-import {fetchAlbum} from '../redux/actions/deezerActions';
+import {useAppDispatch} from '../../redux/hooks';
+import {toggleSpinner} from '../../redux/slices/authSlice';
+import {fetchAlbum} from '../../redux/actions/deezerActions';
 import {useNavigation} from '@react-navigation/native';
-import Colors from '../assets/design/palette.json';
-import {SequenceType} from '../types/Types';
+import Colors from '../../assets/design/palette.json';
+import {SequenceType} from '../../types/Types';
 
 // Components
-import TextElement from './resuable/TextElement';
+import TextElement from '../resuable/TextElement';
 
 const Sequence: React.FC<SequenceType> = ({albums}) => {
   const navigation = useNavigation();

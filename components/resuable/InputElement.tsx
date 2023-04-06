@@ -114,6 +114,7 @@ const InputElement: React.FC<InputElementType> = ({
       {displayPlaceholder}
       <TextInput
         value={value}
+        // @ts-ignore:
         onChangeText={onChange}
         onFocus={focusAnimation}
         onBlur={blurAnimation}

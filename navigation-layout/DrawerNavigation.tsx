@@ -12,7 +12,7 @@ const DrawerNavigation = () => {
       screenOptions={{
         drawerType: 'slide',
         headerShown: false,
-        drawerStyle: {width: '30%'},
+        drawerStyle: {width: '100%'},
         drawerPosition: 'left',
         overlayColor: Colors.transparent,
         swipeEdgeWidth: 0,

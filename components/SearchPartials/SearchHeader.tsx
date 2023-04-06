@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // Components
 import TextElement from '../resuable/TextElement';
 import InputElement from '../resuable/InputElement';
+import {View} from 'react-native';
 
 interface SearchHeaderType {
   searchState: string;
@@ -18,7 +19,7 @@ const SearchHeader: React.FC<SearchHeaderType> = ({
   optimizeSearchFunc,
 }) => {
   return (
-    <Fragment>
+    <View>
       <TextElement
         cStyle={{color: Colors.white, width: PropDimensions.inputWidth}}>
         Exploer our music streaming app that gives you access to over 90 million
@@ -32,7 +33,7 @@ const SearchHeader: React.FC<SearchHeaderType> = ({
           <Icon name={'search'} size={28} color={Colors.primary} />
         </InputElement>
       </Animated.View>
-    </Fragment>
+    </View>
   );
 };
 

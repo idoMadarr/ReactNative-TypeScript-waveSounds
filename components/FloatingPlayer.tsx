@@ -93,6 +93,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
     return {
       transform: [{translateX: offset.value}],
       backgroundColor: isTocuhed.value ? '#666565bd' : '#525050bd',
+      opacity: 1,
     };
   });
 
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: PropDimensions.fullWidth,
     position: 'absolute',
-    bottom: 50,
+    bottom: 60,
     left: 0,
     zIndex: 100,
     flexDirection: 'row',

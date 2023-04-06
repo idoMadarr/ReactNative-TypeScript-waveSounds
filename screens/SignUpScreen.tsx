@@ -45,10 +45,10 @@ const defaultErrorState = {
 };
 
 type RootStackParamList = {
-  signup: any;
+  ['sign-up']: any;
 };
 
-type SignUpScreenType = NativeStackScreenProps<RootStackParamList, 'signup'>;
+type SignUpScreenType = NativeStackScreenProps<RootStackParamList, 'sign-up'>;
 
 const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
   const [formState, setFormState] = useState(defaultState);

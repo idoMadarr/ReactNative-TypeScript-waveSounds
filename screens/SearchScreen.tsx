@@ -2,6 +2,7 @@ import React, {useState, useCallback, useEffect} from 'react';
 import {FlatList, StyleSheet, SafeAreaView} from 'react-native';
 import {fetchSerchResults} from '../redux/actions/deezerActions';
 import {setSearchResults} from '../redux/slices/deezerSlice';
+import LinearGradient from 'react-native-linear-gradient';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import Colors from '../assets/design/palette.json';
 import {TrackType} from '../types/Types';
@@ -68,31 +69,39 @@ const SearchScreen = () => {
     <SafeAreaView style={styles.screen}>
       <StatusBarElement
         barStyle={'light-content'}
-        backgroundColor={Colors.primary}
+        backgroundColor={Colors['gradient-start']}
       />
-      <SearchHeader
-        optimizeSearchFunc={optimizeSearchFunc}
-        searchState={searchState}
-      />
-      {searchResults.length > 1 && (
-        <FlatList
-          keyExtractor={itemData => itemData.id.toString()}
-          data={searchResults}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.listContainer}
-          initialNumToRender={5}
-          removeClippedSubviews={true}
-          renderItem={({item, index}) => (
-            <SearchItem
-              title={item.title}
-              artist={item.artist}
-              image={item.image}
-              index={index}
-              playSoundTrack={playSoundTrack.bind(this, item)}
-            />
-          )}
+      <LinearGradient
+        style={styles.main}
+        colors={[
+          Colors['gradient-start'],
+          Colors['gradient-end'],
+          Colors['gradient-mid'],
+        ]}>
+        <SearchHeader
+          optimizeSearchFunc={optimizeSearchFunc}
+          searchState={searchState}
         />
-      )}
+        {searchResults.length > 1 && (
+          <FlatList
+            keyExtractor={itemData => itemData.id.toString()}
+            data={searchResults}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.listContainer}
+            initialNumToRender={5}
+            removeClippedSubviews={true}
+            renderItem={({item, index}) => (
+              <SearchItem
+                title={item.title}
+                artist={item.artist}
+                image={item.image}
+                index={index}
+                playSoundTrack={playSoundTrack.bind(this, item)}
+              />
+            )}
+          />
+        )}
+      </LinearGradient>
     </SafeAreaView>
   );
 };
@@ -100,12 +109,14 @@ const SearchScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    alignItems: 'center',
-    paddingTop: 16,
-    backgroundColor: Colors.primary,
   },
   listContainer: {
     width: PropDimensions.favoriteWidth,
+  },
+  main: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
   },
 });
 

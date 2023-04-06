@@ -26,7 +26,7 @@ const SearchItem: React.FC<SearchItemType> = ({
 }) => {
   return (
     <Animated.View
-      entering={FadeInDown.delay(100 * index).springify()}
+      entering={FadeInDown.delay(100 * index)}
       style={styles.searchContainer}>
       <TouchableOpacity onPress={playSoundTrack} style={styles.details}>
         <View style={styles.row}>

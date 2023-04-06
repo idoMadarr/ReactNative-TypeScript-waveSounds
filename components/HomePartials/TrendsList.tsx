@@ -1,8 +1,8 @@
 import React, {Fragment} from 'react';
-import {randomDate} from '../utils/randomDate';
-import {TrackType} from '../types/Types';
-import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
-import {initSoundTrack} from '../utils/soundTracker';
+import {randomDate} from '../../utils/randomDate';
+import {TrackType} from '../../types/Types';
+import {FloatingPlayerInstance} from '../../models/FloatingPlayerInstance';
+import {initSoundTrack} from '../../utils/soundTracker';
 
 // Components
 import TrendCard from './TrendCard';

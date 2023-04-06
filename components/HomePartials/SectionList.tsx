@@ -1,12 +1,12 @@
 import {View, StyleSheet} from 'react-native';
-import {useAppSelector} from '../redux/hooks';
+import {useAppSelector} from '../../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
-import {PropDimensions} from '../dimensions/dimensions';
-import Colors from '../assets/design/palette.json';
+import {PropDimensions} from '../../dimensions/dimensions';
+import Colors from '../../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Components
-import TextElement from './resuable/TextElement';
+import TextElement from '../resuable/TextElement';
 import Sequence from './Sequence';
 
 const SectionList = () => {

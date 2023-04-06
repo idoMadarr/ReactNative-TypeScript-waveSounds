@@ -2,12 +2,12 @@ import React from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import Animated, {FadeInLeft} from 'react-native-reanimated';
 import FastImage from 'react-native-fast-image';
-import {PropDimensions} from '../dimensions/dimensions';
-import Colors from '../assets/design/palette.json';
+import {PropDimensions} from '../../dimensions/dimensions';
+import Colors from '../../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Components
-import TextElement from './resuable/TextElement';
+import TextElement from '../resuable/TextElement';
 
 interface TrendCardType {
   artist: string;

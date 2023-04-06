@@ -4,6 +4,7 @@ import HomeScreen from '../screens/HomeScreen';
 import AlbumScreen from '../screens/AlbumScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
+import HomeHeader from '../components/HomePartials/HomeHeader';
 
 export const MainStack = () => {
   const MainStack = createNativeStackNavigator();
@@ -13,7 +14,7 @@ export const MainStack = () => {
       <MainStack.Screen
         name={'home'}
         component={HomeScreen}
-        options={{headerShown: false}}
+        options={{headerShown: true, header: () => <HomeHeader />}}
       />
       <MainStack.Screen
         name={'album'}

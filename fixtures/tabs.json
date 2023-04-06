@@ -14,11 +14,6 @@
       "id": 2,
       "route": "favorites",
       "icon": "star"
-    },
-    {
-      "id": 3,
-      "route": "menu",
-      "icon": "navicon"
     }
   ]
 }

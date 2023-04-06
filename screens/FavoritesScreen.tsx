@@ -33,7 +33,7 @@ const FavoritesScreen = () => {
     <SafeAreaView style={[styles.screen]}>
       <StatusBarElement
         barStyle={'light-content'}
-        backgroundColor={Colors.primary}
+        backgroundColor={Colors['gradient-start']}
       />
       <LinearGradient
         style={styles.main}

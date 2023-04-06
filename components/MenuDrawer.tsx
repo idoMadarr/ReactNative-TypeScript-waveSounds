@@ -26,7 +26,11 @@ const MenuDrawer = () => {
 
   return (
     <LinearGradient
-      colors={[Colors['gradient--modal-start'], Colors['gradient-modal-end']]}
+      colors={[
+        Colors.primary,
+        Colors['gradient--modal-start'],
+        Colors['gradient-modal-end'],
+      ]}
       style={styles.drawerContainer}>
       <View style={styles.drawerHeader}>
         <Icon

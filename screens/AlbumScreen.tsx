@@ -41,13 +41,13 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
     <SafeAreaView style={styles.screen}>
       <StatusBarElement
         barStyle={'light-content'}
-        backgroundColor={Colors['gradient-mid']}
+        backgroundColor={Colors['gradient-start']}
       />
       <LinearGradient
         colors={[
-          Colors['gradient-mid'],
           Colors['gradient-start'],
           Colors['gradient-end'],
+          Colors['gradient-mid'],
         ]}>
         <View style={styles.main}>
           <AlbumHeader

@@ -8,8 +8,8 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import {useAppSelector} from '../redux/hooks';
-import TrendsList from '../components/TrendsList';
-import SectionList from '../components/SectionList';
+import TrendsList from '../components/HomePartials/TrendsList';
+import SectionList from '../components/HomePartials/SectionList';
 import {PropDimensions} from '../dimensions/dimensions';
 import Colors from '../assets/design/palette.json';
 
