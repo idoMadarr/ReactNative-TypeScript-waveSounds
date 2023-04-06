@@ -62,7 +62,7 @@ export const fetchFavorites = () => async (dispatch: Dispatch) => {
 
 export const addFavorite = (favorite: any) => async (dispatch: Dispatch) => {
   try {
-    const {data} = await axios.post('add-favorite', {...favorite, rank: 0});
+    const {data} = await axios.post('add-favorite', favorite);
     dispatch(newFavorite(data));
   } catch (error: any) {
     dispatch(toggleSpinner());

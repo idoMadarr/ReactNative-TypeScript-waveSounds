@@ -30,6 +30,7 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
       item.title,
       item.artist,
       item.image,
+      item.preview!,
     );
     initSoundTrack(item.preview!, albumData?.tracks, createFloatingTrack);
   };

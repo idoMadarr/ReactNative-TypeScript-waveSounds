@@ -10,9 +10,9 @@
   "gesture": "#666565",
   "placeholder": "#AAAFB1",
   "transparent": "#ffffff00",
-  "gradient-start": "#1f1f1f",
-  "gradient-mid": "#464645",
-  "gradient-end": "#1f1f1e",
+  "gradient-start": "#1a1a1a",
+  "gradient-mid": "#353535",
+  "gradient-end": "#1a1a1a",
   "gradient--modal-start": "#2c2c2c",
   "gradient-modal-end": "#202020"
 }

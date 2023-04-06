@@ -24,6 +24,7 @@ const TrendsList: React.FC<TrendsListType> = ({trends}) => {
       title,
       artist,
       image,
+      preview,
     );
 
     initSoundTrack(preview, trends, createFloatingTrack);

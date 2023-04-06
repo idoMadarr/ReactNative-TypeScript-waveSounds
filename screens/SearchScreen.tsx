@@ -12,6 +12,7 @@ import {initSoundTrack} from '../utils/soundTracker';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import SearchHeader from '../components/SearchPartials/SearchHeader';
 import SearchItem from '../components/SearchPartials/SearchItem';
+import {PropDimensions} from '../dimensions/dimensions';
 
 const DEFAULT_SEARCH = 'poets of the fall';
 
@@ -57,6 +58,7 @@ const SearchScreen = () => {
       title,
       artist,
       image,
+      preview!,
     );
 
     initSoundTrack(preview!, searchResults, createFloatingTrack);
@@ -77,6 +79,7 @@ const SearchScreen = () => {
           keyExtractor={itemData => itemData.id.toString()}
           data={searchResults}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContainer}
           initialNumToRender={5}
           removeClippedSubviews={true}
           renderItem={({item, index}) => (
@@ -100,6 +103,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 16,
     backgroundColor: Colors.primary,
+  },
+  listContainer: {
+    width: PropDimensions.favoriteWidth,
   },
 });
 

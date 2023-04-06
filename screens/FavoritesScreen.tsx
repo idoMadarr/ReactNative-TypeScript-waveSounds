@@ -24,6 +24,7 @@ const FavoritesScreen = () => {
       item.title,
       item.artist,
       item.image,
+      item.preview!,
     );
     initSoundTrack(item.preview!, favorites, createFloatingTrack);
   };

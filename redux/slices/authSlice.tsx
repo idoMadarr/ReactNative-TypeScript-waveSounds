@@ -35,7 +35,7 @@ export const authSlice = createSlice({
       state.favoritesObj = action.payload.favoritesObject;
     },
     newFavorite: (state, action) => {
-      state.favoritesList.push(action.payload);
+      state.favoritesList.unshift(action.payload);
       state.favoritesObj = {
         ...state.favoritesObj,
         [action.payload.id]: action.payload,

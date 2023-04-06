@@ -28,55 +28,53 @@ const SearchItem: React.FC<SearchItemType> = ({
     <Animated.View
       entering={FadeInDown.delay(100 * index).springify()}
       style={styles.searchContainer}>
-      <View style={styles.details}>
-        <TextElement
-          fontSize={'sm'}
-          fontWeight={'bold'}
-          cStyle={styles.text}
-          numberOfLines={1}>
-          {artist}
-        </TextElement>
-        <TextElement cStyle={styles.text} numberOfLines={2}>
-          {title}
-        </TextElement>
-      </View>
-      <TouchableOpacity onPress={playSoundTrack} style={styles.icon}>
-        <Icon name={'play'} size={28} color={Colors.primary} />
-        <TextElement fontWeight={'bold'} fontSize={'sm'} cStyle={styles.text}>
-          Play
-        </TextElement>
+      <TouchableOpacity onPress={playSoundTrack} style={styles.details}>
+        <View style={styles.row}>
+          <FastImage source={{uri: image}} style={styles.image} />
+          <View>
+            <TextElement numberOfLines={2}>{title}</TextElement>
+            <TextElement
+              fontSize={'sm'}
+              cStyle={styles.artist}
+              numberOfLines={1}>
+              {artist}
+            </TextElement>
+          </View>
+        </View>
+        <Icon name={'play'} size={20} color={Colors.white} />
       </TouchableOpacity>
-      <FastImage source={{uri: image}} style={styles.image} />
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   searchContainer: {
-    width: PropDimensions.searchWidth,
-    height: PropDimensions.searchHeight,
-    backgroundColor: Colors.secondary,
-    marginBottom: 10,
-    borderRadius: 10,
-    elevation: 5,
-    justifyContent: 'space-between',
-    overflow: 'hidden',
+    width: '100%',
+    height: PropDimensions.favoriteHeight,
+    borderBottomWidth: 1,
+    borderColor: '#5757573a',
+    marginBottom: 5,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    borderRadius: 5,
   },
   details: {
-    padding: 8,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  icon: {
-    position: 'absolute',
-    top: '5%',
-    right: '5%',
+  artist: {
+    color: Colors.placeholder,
+  },
+  row: {
+    flexDirection: 'row',
   },
   image: {
-    width: '100%',
-    height: '70%',
-  },
-  text: {
-    color: Colors.black,
-    textAlign: 'left',
+    width: 40,
+    height: 40,
+    marginRight: '8%',
   },
 });
 

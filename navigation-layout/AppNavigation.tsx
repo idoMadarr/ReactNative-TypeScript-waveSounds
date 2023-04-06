@@ -79,6 +79,7 @@ const AppNavigation: React.FC = () => {
       nextTrack.title,
       nextTrack.artist,
       nextTrack.image,
+      nextTrack.preview,
     );
 
     const loadNextTrack = new Sound(nextTrack.preview, '', async () => {

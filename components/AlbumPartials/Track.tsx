@@ -1,10 +1,9 @@
 import React from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
 import TextElement from '../resuable/TextElement';
 import {useAppSelector} from '../../redux/hooks';
 import Colors from '../../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {PropDimensions} from '../../dimensions/dimensions';
 
 interface AlbumTrackType {
   id: string;
@@ -75,11 +74,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   active: {
-    maxWidth: PropDimensions.cardWidth,
+    width: Dimensions.get('window').width * 0.7,
     color: Colors.active,
   },
   passive: {
-    maxWidth: PropDimensions.cardWidth,
+    width: Dimensions.get('window').width * 0.7,
     color: Colors.white,
   },
   favorite: {

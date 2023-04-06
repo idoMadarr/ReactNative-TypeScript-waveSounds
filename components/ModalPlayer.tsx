@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {useAppSelector} from '../redux/hooks';
+import {useAppSelector, useAppDispatch} from '../redux/hooks';
+import {addFavorite, deleteFavorite} from '../redux/actions/authAction';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../assets/design/palette.json';
 import {PropDimensions} from '../dimensions/dimensions';
+import {TrackType} from '../types/Types';
 import LinearGradient from 'react-native-linear-gradient';
 import Slider from '@react-native-community/slider';
 import Lottie from 'lottie-react-native';
@@ -37,8 +39,11 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     state => state.deezerSlice.floatingPlayer,
   )!;
   const favoritesObj = useAppSelector(state => state.authSlice.favoritesObj);
-  // @ts-ignore:
-  const isFavorite = favoritesObj[floatingPlayer.id];
+  const [isFavorite, setFavorite] = useState(
+    // @ts-ignore:
+    favoritesObj[floatingPlayer.id] ? true : false,
+  );
+  const dispatch = useAppDispatch();
 
   const onPlay = () => {
     setPlayerStatus(true);
@@ -55,6 +60,24 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     currentTrack?.setCurrentTime(current);
     onPlay();
   };
+
+  const handleFavorite = async (track: TrackType) => {
+    setFavorite(prevState => !prevState);
+    dispatch(isFavorite ? deleteFavorite(track.id) : addFavorite(track));
+  };
+
+  const debounce = (func: Function) => {
+    let timer: any;
+    return (args: any) => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        timer = null;
+        func(args);
+      }, 500);
+    };
+  };
+
+  const optimizeFavoriteFunc = useCallback(debounce(handleFavorite), []);
 
   return (
     <LinearGradient
@@ -104,7 +127,9 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
         <TextElement fontSize={'sm'} cStyle={styles.text}>
           {floatingPlayer.artist}
         </TextElement>
-        <TouchableOpacity style={styles.liked} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.liked}
+          onPress={optimizeFavoriteFunc.bind(this, floatingPlayer)}>
           <Icon
             name={'heart'}
             size={28}
