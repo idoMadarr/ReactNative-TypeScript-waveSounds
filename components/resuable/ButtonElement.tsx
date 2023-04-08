@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View,
   ActivityIndicator,
-  TouchableOpacity,
+  TouchableNativeFeedback,
   StyleSheet,
 } from 'react-native';
 import Colors from '../../assets/design/palette.json';
@@ -29,19 +29,13 @@ const ButtonElement: React.FC<ButtonElementType> = ({
   customStyle,
 }) => {
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[
-        styles.buttonContainer,
-        {
-          backgroundColor: backgroundColor,
-          width: PropDimensions.buttonWidth,
-          height: PropDimensions.buttonHight,
-          ...customStyle,
-        },
-      ]}
-      activeOpacity={0.6}>
-      <View>
+    <TouchableNativeFeedback onPress={onPress}>
+      <View
+        style={[
+          styles.buttonContainer,
+          {backgroundColor: backgroundColor},
+          {...customStyle},
+        ]}>
         {setSpinner ? (
           <ActivityIndicator size={'large'} color={Colors.white} />
         ) : (
@@ -54,12 +48,14 @@ const ButtonElement: React.FC<ButtonElementType> = ({
           </TextElement>
         )}
       </View>
-    </TouchableOpacity>
+    </TouchableNativeFeedback>
   );
 };
 
 const styles = StyleSheet.create({
   buttonContainer: {
+    width: PropDimensions.buttonWidth,
+    height: PropDimensions.buttonHight,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',

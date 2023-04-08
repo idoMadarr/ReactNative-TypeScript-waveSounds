@@ -5,6 +5,7 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
   SafeAreaView,
+  Dimensions,
 } from 'react-native';
 import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
 import {useAppDispatch} from '../redux/hooks';
@@ -15,6 +16,7 @@ import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // @ts-ignore:
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
+import {oauthSignin, oauthSignout} from '../utils/OAuth';
 
 // Cpmponents
 import LinkElement from '../components/resuable/LinkElement';
@@ -119,8 +121,8 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
           <Animated.View
             entering={FadeInLeft.springify()}
             style={{
+              height: Dimensions.get('window').height * 0.3,
               width: PropDimensions.buttonWidth,
-              marginVertical: 10,
             }}>
             <FaviconVector height={50} width={50} />
             <TextElement
@@ -138,47 +140,64 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
         )}
         {isFocused && (
           <Animated.View entering={FadeInDown}>
-            <InputElement
-              value={email}
-              onChange={updateState.bind(this, 'email')}
-              placeholder={'Email'}
-              icon={'envelope-o'}
-              errorMessage={emailError}
-            />
-            <InputElement
-              value={password}
-              onChange={updateState.bind(this, 'password')}
-              placeholder={'Password'}
-              icon={'eye-slash'}
-              errorMessage={passwordError}
-              secureTextEntry={secureTextEntry}
-              setSecureTextEntry={togglePasswordMode}
-            />
-            <ButtonElement
-              title={'LOG IN'}
-              titleColor={Colors.black}
-              onPress={onPress}
-              backgroundColor={Colors.active}
-            />
-            <View style={styles.linkContainer}>
-              <TextElement>Dont have account yet? </TextElement>
-              <LinkElement url={'sign-up'}> Sign up</LinkElement>
+            <View
+              style={{
+                height: Dimensions.get('window').height * 0.4,
+              }}>
+              <InputElement
+                value={email}
+                onChange={updateState.bind(this, 'email')}
+                placeholder={'Email'}
+                icon={'envelope-o'}
+                errorMessage={emailError}
+              />
+              <InputElement
+                value={password}
+                onChange={updateState.bind(this, 'password')}
+                placeholder={'Password'}
+                icon={'eye-slash'}
+                errorMessage={passwordError}
+                secureTextEntry={secureTextEntry}
+                setSecureTextEntry={togglePasswordMode}
+              />
+              <ButtonElement
+                title={'LOG IN'}
+                titleColor={Colors.black}
+                onPress={onPress}
+                backgroundColor={Colors.active}
+              />
+              <View style={styles.linkContainer}>
+                <TextElement>Dont have account yet? </TextElement>
+                <LinkElement url={'sign-up'}> Sign up</LinkElement>
+              </View>
+            </View>
+            <View style={styles.errorList}>
+              {apiError.map((error: ApiError) => (
+                <View style={styles.errorContainer} key={Math.random()}>
+                  <Icon name={'exclamation'} size={18} color={Colors.warning} />
+                  <TextElement
+                    fontSize={'sm'}
+                    cStyle={styles.errorText}
+                    fontWeight={'bold'}>
+                    {error.message}
+                  </TextElement>
+                </View>
+              ))}
+            </View>
+            <View
+              style={{
+                height: Dimensions.get('window').height * 0.1,
+                justifyContent: 'flex-end',
+              }}>
+              <ButtonElement
+                title={'Google OAuth'}
+                titleColor={Colors.black}
+                backgroundColor={Colors.active}
+                onPress={oauthSignin}
+              />
             </View>
           </Animated.View>
         )}
-        <View style={styles.errorList}>
-          {apiError.map((error: ApiError) => (
-            <View style={styles.errorContainer} key={Math.random()}>
-              <Icon name={'exclamation'} size={18} color={Colors.warning} />
-              <TextElement
-                fontSize={'sm'}
-                cStyle={styles.errorText}
-                fontWeight={'bold'}>
-                {error.message}
-              </TextElement>
-            </View>
-          ))}
-        </View>
       </LinearGradient>
     </SafeAreaView>
   );
@@ -189,11 +208,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mainContainer: {
-    height: '100%',
-    width: '100%',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 100,
   },
   linkContainer: {
     marginVertical: 8,
