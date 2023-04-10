@@ -1,24 +1,28 @@
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-export const oauthSignin = async () => {
-  const androidClientId =
-    '1029253442024-f9vvnrm4a2iogfv3n930vdi1fogdfrev.apps.googleusercontent.com';
+const androidClientId =
+  '1029253442024-f9vvnrm4a2iogfv3n930vdi1fogdfrev.apps.googleusercontent.com';
 
-  GoogleSignin.configure({
-    //  @ts-ignore:
-    androidClientId,
-  });
+GoogleSignin.configure({
+  //  @ts-ignore:
+  androidClientId,
+});
+
+export const getOAuthCredentials = async () => {
+  let userCredentials = null;
 
   try {
     const hasPlayService = await GoogleSignin.hasPlayServices();
     if (hasPlayService) {
-      GoogleSignin.signIn()
-        .then(userInfo => {
-          console.log(JSON.stringify(userInfo));
+      await GoogleSignin.signIn()
+        .then(async userInfo => {
+          const {name, email} = userInfo.user;
+          userCredentials = {username: name, email};
         })
         .catch(e => {
           console.log('ERROR IS: ' + JSON.stringify(e));
         });
+      return userCredentials;
     }
   } catch (error) {
     console.log(error, 'OAuth service error');

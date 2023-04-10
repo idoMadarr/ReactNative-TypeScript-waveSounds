@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   View,
+  TouchableOpacity,
   StyleSheet,
   NativeSyntheticEvent,
   TextInputChangeEventData,
@@ -8,15 +9,19 @@ import {
   Dimensions,
 } from 'react-native';
 import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useAppDispatch} from '../redux/hooks';
+import {googleOAuth, signIn} from '../redux/actions/authAction';
 import {toggleSpinner} from '../redux/slices/authSlice';
 import {useIsFocused} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // @ts-ignore:
+import GoogleVector from '../assets/vectors/icon_google.svg';
+// @ts-ignore:
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
-import {oauthSignin, oauthSignout} from '../utils/OAuth';
+import {getOAuthCredentials} from '../utils/OAuth';
 
 // Cpmponents
 import LinkElement from '../components/resuable/LinkElement';
@@ -25,8 +30,6 @@ import InputElement from '../components/resuable/InputElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 import {PropDimensions} from '../dimensions/dimensions';
 import StatusBarElement from '../components/resuable/StatusBarElement';
-import {signIn} from '../redux/actions/authAction';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 interface ApiError {
   message: string;
@@ -102,6 +105,12 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
       // @ts-ignore:
       navigation.navigate('loading');
     }
+  };
+
+  const onGoogleOAuth = async () => {
+    const credentials = (await getOAuthCredentials()) as any;
+    dispatch(toggleSpinner());
+    dispatch(googleOAuth(credentials));
   };
 
   return (
@@ -184,17 +193,17 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
                 </View>
               ))}
             </View>
-            <View
-              style={{
-                height: Dimensions.get('window').height * 0.1,
-                justifyContent: 'flex-end',
-              }}>
-              <ButtonElement
-                title={'Google OAuth'}
-                titleColor={Colors.black}
-                backgroundColor={Colors.active}
-                onPress={oauthSignin}
-              />
+            <View style={styles.socialLogin}>
+              <View style={styles.socialLoginHeader}>
+                <View style={styles.line}></View>
+                <TextElement>Or connect with</TextElement>
+                <View style={styles.line}></View>
+              </View>
+              <TouchableOpacity
+                onPress={onGoogleOAuth}
+                style={styles.googleIcon}>
+                <GoogleVector />
+              </TouchableOpacity>
             </View>
           </Animated.View>
         )}
@@ -229,6 +238,24 @@ const styles = StyleSheet.create({
   errorText: {
     marginHorizontal: 8,
     color: Colors.warning,
+  },
+  socialLogin: {
+    alignItems: 'center',
+  },
+  socialLoginHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  line: {
+    width: '25%',
+    marginHorizontal: 6,
+    borderBottomWidth: 1,
+    borderColor: Colors.greyish,
+  },
+  googleIcon: {
+    width: 50,
+    marginVertical: 12,
+    alignSelf: 'center',
   },
 });
 

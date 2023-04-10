@@ -58,7 +58,11 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
     await dispatch(fetchFavorites());
     await dispatch(fetchDeezerChart());
     await dispatch(fetchSequences());
-    await dispatch(setAuthentication(session.existUser || session.createUser));
+    await dispatch(
+      setAuthentication(
+        session.existUser || session.createUser || session.user,
+      ),
+    );
     // @ts-ignore:
     navigation.navigate('app');
   };
