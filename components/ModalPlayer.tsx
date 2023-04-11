@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {addFavorite, deleteFavorite} from '../redux/actions/authAction';
@@ -39,11 +39,13 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     state => state.deezerSlice.floatingPlayer,
   )!;
   const favoritesObj = useAppSelector(state => state.authSlice.favoritesObj);
-  const [isFavorite, setFavorite] = useState(
-    // @ts-ignore:
-    favoritesObj[floatingPlayer.id] ? true : false,
-  );
+  const [isFavorite, setFavorite] = useState(false);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // @ts-ignore:
+    setFavorite(favoritesObj[floatingPlayer.id] ? true : false);
+  }, [currentTrack]);
 
   const onPlay = () => {
     setPlayerStatus(true);

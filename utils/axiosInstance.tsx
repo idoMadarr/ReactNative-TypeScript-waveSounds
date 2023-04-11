@@ -1,11 +1,12 @@
 import axios from 'axios';
-// import Config from 'react-native-config';
+import Config from 'react-native-config';
 
-const localhost = 'http://localhost:4000/ws-api/';
-const production = 'https://wavesounds.onrender.com/ws-api/';
+// const development = Config.localhost;
+const production = Config.production;
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:4000/ws-api/',
+  baseURL: production,
+  timeout: 15000,
 });
 
 export default axiosInstance;

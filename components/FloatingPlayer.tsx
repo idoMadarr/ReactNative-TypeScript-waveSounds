@@ -65,6 +65,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
 
   const onGestureClose = () => {
     currentTrack?.stop();
+    setPlayerStatus(false);
     setTimeLeft(0);
     setTimeout(() => {
       dispatch(cleanFloatingPlayer());

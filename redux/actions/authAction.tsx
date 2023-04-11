@@ -1,6 +1,5 @@
 import {Dispatch} from '@reduxjs/toolkit';
-// import axios from '../../utils/axiosInstance';
-import axios from 'axios';
+import axios from '../../utils/axiosInstance';
 import {saveToStorage} from '../../utils/asyncStorage';
 import {TrackType} from '../../types/Types';
 import {
@@ -20,10 +19,7 @@ interface AuthenticationCredentialsType {
 export const signIn =
   (state: AuthenticationCredentialsType) => async (dispatch: Dispatch) => {
     try {
-      const {data} = await axios.post(
-        'https://wavesounds.onrender.com/ws-api/signin',
-        state,
-      );
+      const {data} = await axios.post('signin', state);
       saveToStorage('userSession', data);
       dispatch(setAuthentication(data.existUser));
     } catch (error: any) {
@@ -36,10 +32,7 @@ export const signIn =
 export const signUp =
   (state: AuthenticationCredentialsType) => async (dispatch: Dispatch) => {
     try {
-      const {data} = await axios.post(
-        'https://wavesounds.onrender.com/ws-api/signup',
-        state,
-      );
+      const {data} = await axios.post('signup', state);
       saveToStorage('userSession', data);
       dispatch(setAuthentication(data.createUser));
     } catch (error: any) {
@@ -52,10 +45,7 @@ export const signUp =
 export const googleOAuth =
   (state: AuthenticationCredentialsType) => async (dispatch: Dispatch) => {
     try {
-      const {data} = await axios.post(
-        'https://wavesounds.onrender.com/ws-api/google-oauth',
-        state,
-      );
+      const {data} = await axios.post('google-oauth', state);
       saveToStorage('userSession', data);
       dispatch(setAuthentication(data.user));
     } catch (error: any) {
@@ -67,9 +57,7 @@ export const googleOAuth =
 
 export const fetchFavorites = () => async (dispatch: Dispatch) => {
   try {
-    const {data} = await axios.get(
-      'https://wavesounds.onrender.com/ws-api/favorites',
-    );
+    const {data} = await axios.get('favorites');
     const formattedData = data.reduce(
       (accumulator: {}, currentValue: TrackType) => {
         return {...accumulator, [currentValue.id]: currentValue};
@@ -87,10 +75,7 @@ export const fetchFavorites = () => async (dispatch: Dispatch) => {
 
 export const addFavorite = (favorite: any) => async (dispatch: Dispatch) => {
   try {
-    const {data} = await axios.post(
-      'https://wavesounds.onrender.com/ws-api/add-favorite',
-      favorite,
-    );
+    const {data} = await axios.post('add-favorite', favorite);
     dispatch(newFavorite(data));
   } catch (error: any) {
     dispatch(toggleSpinner());
@@ -103,9 +88,7 @@ export const deleteFavorite =
   (favoriteId: string | number) => async (dispatch: Dispatch) => {
     try {
       dispatch(updateFavorites(favoriteId));
-      await axios.delete(
-        `https://wavesounds.onrender.com/ws-api/remove-favorite/${favoriteId}`,
-      );
+      await axios.delete(`remove-favorite/${favoriteId}`);
     } catch (error: any) {
       const errors = error.response.data || 'Something went worng';
       return errors;

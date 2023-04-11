@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply from: project(":react-native-config").projectDir.getPath() + "/dotenv.gradle"
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -142,6 +143,7 @@ android {
         versionCode 5
         versionName "1.0.3"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+        resValue "string", "build_config_package", "com.wavesounds"
 
         if (isNewArchitectureEnabled()) {
             // We configure the CMake build only if you decide to opt-in for the New Architecture.

@@ -35,8 +35,7 @@ const AppNavigation: React.FC = () => {
   );
   const contextIndexRef = useRef(
     // @ts-ignore:
-    modalContext.findIndex(item => item.preview === currentTrack?._filename) ||
-      1,
+    modalContext.findIndex(item => item.preview === currentTrack?._filename),
   );
   const dispatch = useAppDispatch();
 

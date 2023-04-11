@@ -1,10 +1,11 @@
 import React from 'react';
 import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
-import {clearStorage} from '../utils/asyncStorage';
 import LinearGradient from 'react-native-linear-gradient';
 import {resetDezeerSlice} from '../redux/slices/deezerSlice';
 import {resetAuthSlice} from '../redux/slices/authSlice';
+import {clearStorage} from '../utils/asyncStorage';
+import {oauthSignout} from '../utils/OAuth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../assets/design/palette.json';
 
@@ -19,9 +20,10 @@ const MenuDrawer = () => {
   const dispatch = useAppDispatch();
 
   const onLogout = async () => {
+    oauthSignout();
     dispatch(resetAuthSlice());
     dispatch(resetDezeerSlice());
-    await clearStorage();
+    clearStorage();
   };
 
   return (

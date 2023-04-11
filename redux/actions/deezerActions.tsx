@@ -1,11 +1,12 @@
 import {Dispatch} from '@reduxjs/toolkit';
 import axios from 'axios';
+import Config from 'react-native-config';
 import {setDeezerChart, setSequence} from '../slices/deezerSlice';
 import {sequenceMap} from '../../fixtures/sequence-map.json';
 import {toggleSpinner} from '../slices/authSlice';
 
 export const fetchDeezerChart = () => async (dispatch: Dispatch) => {
-  const {data} = await axios.get('https://api.deezer.com/chart');
+  const {data} = await axios.get(`${Config.deezer_api}chart`);
   const trends = data.tracks.data.map((trend: any) => ({
     id: trend.id,
     artist: trend.artist.name,
@@ -28,9 +29,7 @@ export const fetchDeezerChart = () => async (dispatch: Dispatch) => {
 
 export const fetchSequences = () => async (dispatch: Dispatch) => {
   sequenceMap.forEach(async sequence => {
-    const {data} = await axios.get(
-      `https://api.deezer.com/chart/${sequence.id}`,
-    );
+    const {data} = await axios.get(`${Config.deezer_api}chart/${sequence.id}`);
     dispatch(
       setSequence({
         name: sequence.name,
@@ -46,7 +45,7 @@ export const fetchSequences = () => async (dispatch: Dispatch) => {
 };
 
 export const fetchAlbum = (albumId: string) => async (dispatch: Dispatch) => {
-  const {data} = await axios.get(`https://api.deezer.com/album/${albumId}`);
+  const {data} = await axios.get(`${Config.deezer_api}album/${albumId}`);
   const formattedData = {
     title: data.title,
     artist: data.artist.name,
@@ -67,7 +66,7 @@ export const fetchAlbum = (albumId: string) => async (dispatch: Dispatch) => {
 
 export const fetchSerchResults =
   (query: string) => async (dispatch: Dispatch) => {
-    const {data} = await axios.get(`https://api.deezer.com/search?q=${query}`);
+    const {data} = await axios.get(`${Config.deezer_api}search?q=${query}`);
     if (data.data.length) {
       const formattedResults = data.data.map((result: any) => ({
         id: result.id,
