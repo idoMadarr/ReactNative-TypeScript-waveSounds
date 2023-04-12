@@ -18,14 +18,20 @@ const FavoritesList: React.FC<FavoritesListPropsType> = ({
   const [indexIndicator, setIndexIndicator] = useState(0);
   const dispatch = useAppDispatch();
 
-  const onRemove = useCallback((id: string | number) => {
-    dispatch(deleteFavorite(id));
-  }, []);
+  const onRemove = useCallback(
+    (id: string | number) => {
+      dispatch(deleteFavorite(id));
+    },
+    [favorites],
+  );
 
-  const onSelect = useCallback((index: number, track: TrackType) => {
-    setIndexIndicator(index);
-    onPlay(track);
-  }, []);
+  const onSelect = useCallback(
+    (index: number, track: TrackType) => {
+      setIndexIndicator(index);
+      onPlay(track);
+    },
+    [favorites],
+  );
 
   return (
     <ScrollView

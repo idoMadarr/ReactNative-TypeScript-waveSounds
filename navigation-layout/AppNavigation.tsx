@@ -4,7 +4,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import Sound from 'react-native-sound';
 import soundTracker from '../utils/soundTracker';
-import {setCurrentTrack, setFloatingPlayer} from '../redux/slices/deezerSlice';
+import {
+  setCurrentIndexTrack,
+  setCurrentTrack,
+  setFloatingPlayer,
+  updateCurrentIndexTrack,
+} from '../redux/slices/deezerSlice';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {Modalize} from 'react-native-modalize';
 
@@ -27,16 +32,16 @@ const AppNavigation: React.FC = () => {
   const modalizeRef = useRef<Modalize>();
 
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
+  const currentIndexTrack = useAppSelector(
+    state => state.deezerSlice.currentIndexTrack,
+  );
   const loading = useAppSelector(state => state.authSlice.loading);
   const isAuth = useAppSelector(state => state.authSlice.isAuth);
   const modalContext = useAppSelector(state => state.deezerSlice.modalContext);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   );
-  const contextIndexRef = useRef(
-    // @ts-ignore:
-    modalContext.findIndex(item => item.preview === currentTrack?._filename),
-  );
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -65,12 +70,12 @@ const AppNavigation: React.FC = () => {
   }, [playerStatus, timeLeft]);
 
   const onTrackNavigate = (action: number) => {
-    let nextTrack = modalContext[contextIndexRef.current + action] as any;
+    let nextTrack = modalContext[currentIndexTrack + action] as any;
     if (!nextTrack) {
       nextTrack = modalContext[0];
-      contextIndexRef.current = 0;
+      dispatch(setCurrentIndexTrack(0));
     } else {
-      contextIndexRef.current = contextIndexRef.current + action;
+      dispatch(updateCurrentIndexTrack(action));
     }
 
     const createFloatingTrack = new FloatingPlayerInstance(

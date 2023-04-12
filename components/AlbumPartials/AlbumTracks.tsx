@@ -47,7 +47,7 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({
 
 const styles = StyleSheet.create({
   listContainer: {
-    flex: 1,
+    alignSelf: 'center',
     width: PropDimensions.favoriteWidth,
   },
 });

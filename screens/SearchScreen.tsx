@@ -7,13 +7,13 @@ import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import Colors from '../assets/design/palette.json';
 import {TrackType} from '../types/Types';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
+import {PropDimensions} from '../dimensions/dimensions';
 import {initSoundTrack} from '../utils/soundTracker';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import SearchHeader from '../components/SearchPartials/SearchHeader';
 import SearchItem from '../components/SearchPartials/SearchItem';
-import {PropDimensions} from '../dimensions/dimensions';
 
 const DEFAULT_SEARCH = 'poets of the fall';
 

@@ -7,6 +7,7 @@ interface RootStateApp {
   sequenceTree: SequenceType[];
   floatingPlayer: TrackType | null;
   currentTrack: OptionsTrackType | null;
+  currentIndexTrack: number;
   searchResults: TrackType[];
   modalContext: TrackType[];
 }
@@ -17,6 +18,7 @@ const initialState: RootStateApp = {
   sequenceTree: [],
   floatingPlayer: null,
   currentTrack: null,
+  currentIndexTrack: 0,
   searchResults: [],
   modalContext: [],
 };
@@ -37,6 +39,12 @@ export const deezerSlice = createSlice({
     },
     setCurrentTrack: (state, action) => {
       state.currentTrack = action.payload;
+    },
+    setCurrentIndexTrack: (state, action) => {
+      state.currentIndexTrack = action.payload;
+    },
+    updateCurrentIndexTrack: (state, action) => {
+      state.currentIndexTrack = state.currentIndexTrack + action.payload;
     },
     cleanFloatingPlayer: state => {
       state.currentTrack?.stop();
@@ -65,6 +73,8 @@ export const {
   setSequence,
   setFloatingPlayer,
   setCurrentTrack,
+  setCurrentIndexTrack,
+  updateCurrentIndexTrack,
   cleanFloatingPlayer,
   setModalPlayerContext,
   setSearchResults,

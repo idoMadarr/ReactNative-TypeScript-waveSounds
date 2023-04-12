@@ -3,6 +3,7 @@ import {OptionsTrackType, TrackType} from '../types/Types';
 import store from '../redux/store';
 import {
   setCurrentTrack,
+  setCurrentIndexTrack,
   setFloatingPlayer,
   setModalPlayerContext,
 } from '../redux/slices/deezerSlice';
@@ -15,13 +16,15 @@ const soundTracker = (track: OptionsTrackType) => {
   }
 };
 
-export const initSoundTrack = (
+export const initSoundTrack = async (
   preview: string,
   tracks?: TrackType[],
   playTrack?: TrackType,
 ) => {
+  const trackIndex = tracks?.findIndex(item => item.preview === preview);
+  await store.dispatch(setCurrentIndexTrack(trackIndex));
   const currentTrack = store.getState().deezerSlice.currentTrack;
-  const loadTrack = new Sound(preview, '', async () => {
+  const loadTrack = new Sound(preview, '', () => {
     if (currentTrack) {
       currentTrack.stop(async () => {
         await currentTrack.release();

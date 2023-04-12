@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import Colors from '../../assets/design/palette.json';
 import {PropDimensions} from '../../dimensions/dimensions';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,6 +18,19 @@ const FavoriteHeader: React.FC<FavoriteHeaderPropsType> = ({
   onPlay,
   counter,
 }) => {
+  let controller = null;
+  if (counter) {
+    controller = (
+      <TouchableOpacity onPress={onPlay} style={styles.controller}>
+        {floatingPlayer ? (
+          <Icon name={'pause'} size={34} color={Colors.active} />
+        ) : (
+          <Icon name={'play'} size={34} color={Colors.secondary} />
+        )}
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <View style={styles.headerContainer}>
       <View style={styles.info}>
@@ -27,13 +40,7 @@ const FavoriteHeader: React.FC<FavoriteHeaderPropsType> = ({
             styles.songs
           }>{`${counter} Favorites in your list`}</TextElement>
       </View>
-      <TouchableOpacity onPress={onPlay} style={styles.controller}>
-        {floatingPlayer ? (
-          <Icon name={'pause'} size={34} color={Colors.active} />
-        ) : (
-          <Icon name={'play'} size={34} color={Colors.secondary} />
-        )}
-      </TouchableOpacity>
+      {controller}
     </View>
   );
 };

@@ -16,7 +16,7 @@ import ButtonElement from './resuable/ButtonElement';
 
 const MenuDrawer = () => {
   const user = useAppSelector(state => state.authSlice.user)!;
-  const artists = useAppSelector(state => state.deezerSlice.artists);
+  const artists = [] || useAppSelector(state => state.deezerSlice.artists);
   const dispatch = useAppDispatch();
 
   const onLogout = async () => {
@@ -41,14 +41,33 @@ const MenuDrawer = () => {
           color={Colors.active}
           style={{marginBottom: 8}}
         />
-        <TextElement fontSize={'sm'} fontWeight="bold" cStyle={styles.headers}>
+        <TextElement
+          fontSize={'sm'}
+          fontWeight={'bold'}
+          cStyle={styles.headers}>
           {user.username}
         </TextElement>
-        <TextElement fontSize={'sm'} cStyle={styles.headers}>
-          Check your favorites tracks:
-        </TextElement>
+        <View
+          style={{
+            padding: 16,
+          }}>
+          <TextElement>
+            WaveSounds is a Fullstack digital music application that gives you
+            access to millions of songs and other content from creators all over
+            the world. This project is build from the ground up by Ido Adar, and
+            made for representail only serice.
+          </TextElement>
+          <TextElement>
+            This project was built from the ground up with TypeScript on all
+            levels. NodeJS as a backend, combined with MongoDB for storing
+            user's data & React Native (CLI) for building beautiful & complex
+            user interfaces - including Full Authentication Process, Social
+            login, Complex Navigation , Reanimated animations and interactions,
+            Gestures handlers, Colors interpolation, and much more.
+          </TextElement>
+        </View>
       </View>
-      <FlatList
+      {/* <FlatList
         keyExtractor={itemData => itemData.id}
         data={artists}
         style={styles.artistsContainer}
@@ -61,7 +80,7 @@ const MenuDrawer = () => {
             <FastImage source={{uri: item.image}} style={styles.artistImage} />
           </View>
         )}
-      />
+      /> */}
       <ButtonElement
         title={'Logout'}
         backgroundColor={Colors.primary}
