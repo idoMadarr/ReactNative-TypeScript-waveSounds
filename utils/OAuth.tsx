@@ -1,13 +1,13 @@
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
 
-const androidClientId = __DEV__
-  ? Config.oauth_client_dev
-  : Config.oauth_client_prod;
+// const androidClientId = __DEV__
+//   ? Config.oauth_client_dev
+//   : Config.oauth_client_prod;
 
 GoogleSignin.configure({
   //  @ts-ignore:
-  androidClientId,
+  androidClientId: Config.oauth_client_prod,
 });
 
 export const getOAuthCredentials = async () => {
