@@ -6,6 +6,7 @@ interface RootStateApp {
   user: UserType | null;
   favoritesList: TrackType[];
   favoritesObj: Object;
+  drawerStatus: string;
   loading: boolean;
 }
 
@@ -14,6 +15,7 @@ const initialState: RootStateApp = {
   user: null,
   favoritesList: [],
   favoritesObj: {},
+  drawerStatus: 'closed',
   loading: false,
 };
 
@@ -47,6 +49,9 @@ export const authSlice = createSlice({
         favorite => favorite.id !== action.payload,
       );
     },
+    updateDrawerStatus: (state, action) => {
+      state.drawerStatus = action.payload;
+    },
     toggleSpinner: state => {
       state.loading = !state.loading;
     },
@@ -59,6 +64,7 @@ export const {
   setFavorites,
   newFavorite,
   updateFavorites,
+  updateDrawerStatus,
   toggleSpinner,
 } = authSlice.actions;
 

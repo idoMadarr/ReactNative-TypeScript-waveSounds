@@ -39,6 +39,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
   openModal,
 }) => {
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
+  const drawerStatus = useAppSelector(state => state.authSlice.drawerStatus);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   )!;
@@ -103,7 +104,11 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
       <Animated.View
         entering={FadeInDown}
         exiting={FadeOutUp}
-        style={[styles.mainContainer, animatedStyles]}>
+        style={[
+          styles.mainContainer,
+          animatedStyles,
+          {display: drawerStatus === 'closed' ? 'flex' : 'none'},
+        ]}>
         <View style={styles.side}>
           <FastImage
             source={{uri: floatingPlayer.image}}
@@ -121,14 +126,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
             </TextElement>
           </View>
         </View>
-        <View
-          style={[
-            styles.side,
-            {
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-            },
-          ]}>
+        <View style={[styles.side, {justifyContent: 'flex-end'}]}>
           {playerStatus && (
             <Animated.View entering={FadeIn} exiting={FadeOut}>
               <Lottie
@@ -166,7 +164,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     height: 50,
     alignSelf: 'center',
-    elevation: 5,
     width: PropDimensions.fullWidth,
     position: 'absolute',
     bottom: 60,

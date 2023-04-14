@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, SafeAreaView} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
+import {useDrawerStatus} from '@react-navigation/drawer';
 import Animated, {
   interpolateColor,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
-import {useAppSelector} from '../redux/hooks';
+import {useAppSelector, useAppDispatch} from '../redux/hooks';
+import {updateDrawerStatus} from '../redux/slices/authSlice';
 import TrendsList from '../components/HomePartials/TrendsList';
 import SectionList from '../components/HomePartials/SectionList';
 import {PropDimensions} from '../dimensions/dimensions';
@@ -20,8 +22,14 @@ const HomeScreen = () => {
   const trends = useAppSelector(state => state.deezerSlice.trends!);
   const translateX = useSharedValue(0);
   const isFocused = useIsFocused();
+  const drawerStatus = useDrawerStatus();
+  const dispatch = useAppDispatch();
 
-  // Creating an 'array mock length' cuase We cant interpolate directly from redux state
+  useEffect(() => {
+    dispatch(updateDrawerStatus(drawerStatus));
+  }, [drawerStatus]);
+
+  // Creating an 'array mock length' cuase we cant interpolate directly from redux state
   const InterpolationMock = trends.map(() => ({}));
 
   const onHorizontalScroll = useAnimatedScrollHandler({

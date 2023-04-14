@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   listContainer: {
     alignSelf: 'center',
     width: PropDimensions.favoriteWidth,
+    minHeight: Dimensions.get('window').height * 0.65,
   },
 });
 

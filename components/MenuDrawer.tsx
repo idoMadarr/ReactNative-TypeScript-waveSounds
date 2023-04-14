@@ -13,6 +13,7 @@ import Colors from '../assets/design/palette.json';
 import TextElement from './resuable/TextElement';
 import FastImage from 'react-native-fast-image';
 import ButtonElement from './resuable/ButtonElement';
+import {PropDimensions} from '../dimensions/dimensions';
 
 const MenuDrawer = () => {
   const user = useAppSelector(state => state.authSlice.user)!;
@@ -49,42 +50,43 @@ const MenuDrawer = () => {
         </TextElement>
         <View
           style={{
-            padding: 16,
+            margin: 16,
           }}>
-          <TextElement>
-            WaveSounds is a Fullstack digital music application that gives you
-            access to millions of songs and other content from creators all over
-            the world. This project is build from the ground up by Ido Adar, and
-            made for representail only serice.
-          </TextElement>
-          <TextElement>
-            This project was built from the ground up with TypeScript on all
-            levels. NodeJS as a backend, combined with MongoDB for storing
-            user's data & React Native (CLI) for building beautiful & complex
-            user interfaces - including Full Authentication Process, Social
-            login, Complex Navigation , Reanimated animations and interactions,
-            Gestures handlers, Colors interpolation, and much more.
-          </TextElement>
+          <View
+            style={{
+              borderLeftWidth: 1,
+              borderColor: Colors.active,
+              padding: 20,
+            }}>
+            <TextElement>
+              WaveSounds is a Fullstack digital music application that gives you
+              access to millions of songs and other content from creators all
+              over the world. This project is built from the ground up by Ido
+              Adar, and made for representation only service.
+            </TextElement>
+          </View>
+          <View
+            style={{
+              borderRightWidth: 1,
+              borderColor: Colors.active,
+              padding: 20,
+            }}>
+            <TextElement>
+              This project was built from the ground up with TypeScript on all
+              levels. NodeJS as a backend, combined with MongoDB for storing
+              user's data & React Native (CLI) for building beautiful & complex
+              user interfaces - including Full Authentication Process, Social
+              login, Complex Navigation , Reanimated animations and
+              interactions, Gestures handlers, Colors interpolation, and much
+              more.
+            </TextElement>
+          </View>
         </View>
       </View>
-      {/* <FlatList
-        keyExtractor={itemData => itemData.id}
-        data={artists}
-        style={styles.artistsContainer}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item}) => (
-          <View style={styles.artistItem}>
-            <TextElement fontSize={'sm'} cStyle={{color: Colors.white}}>
-              {item.name}
-            </TextElement>
-            <FastImage source={{uri: item.image}} style={styles.artistImage} />
-          </View>
-        )}
-      /> */}
       <ButtonElement
         title={'Logout'}
         backgroundColor={Colors.primary}
-        titleColor={Colors.warning}
+        titleColor={Colors.placeholder}
         customStyle={styles.logout}
         onPress={onLogout}
       />
@@ -126,7 +128,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   logout: {
-    width: 100,
     borderWidth: 1,
     borderColor: Colors.placeholder,
   },
