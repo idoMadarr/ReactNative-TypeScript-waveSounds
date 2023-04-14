@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
 import {resetDezeerSlice} from '../redux/slices/deezerSlice';
@@ -11,17 +11,16 @@ import Colors from '../assets/design/palette.json';
 
 // Components
 import TextElement from './resuable/TextElement';
-import FastImage from 'react-native-fast-image';
 import ButtonElement from './resuable/ButtonElement';
-import {PropDimensions} from '../dimensions/dimensions';
 
 const MenuDrawer = () => {
   const user = useAppSelector(state => state.authSlice.user)!;
-  const artists = [] || useAppSelector(state => state.deezerSlice.artists);
+  const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack)!;
   const dispatch = useAppDispatch();
 
   const onLogout = async () => {
     oauthSignout();
+    currentTrack?.stop();
     dispatch(resetAuthSlice());
     dispatch(resetDezeerSlice());
     clearStorage();
@@ -38,14 +37,11 @@ const MenuDrawer = () => {
       <View style={styles.drawerHeader}>
         <Icon
           name={'user-circle-o'}
-          size={48}
+          size={68}
           color={Colors.active}
           style={{marginBottom: 8}}
         />
-        <TextElement
-          fontSize={'sm'}
-          fontWeight={'bold'}
-          cStyle={styles.headers}>
+        <TextElement fontWeight={'bold'} cStyle={styles.headers}>
           {user.username}
         </TextElement>
         <View
@@ -105,23 +101,6 @@ const styles = StyleSheet.create({
   drawerHeader: {
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  artistsContainer: {
-    marginVertical: 10,
-    height: Dimensions.get('window').height * 0.8,
-  },
-  artistItem: {
-    borderBottomWidth: 1,
-    marginHorizontal: 12,
-    paddingVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: Colors.greyish,
-  },
-  artistImage: {
-    width: 80,
-    height: 70,
-    borderRadius: 50,
   },
   headers: {
     color: Colors.white,
