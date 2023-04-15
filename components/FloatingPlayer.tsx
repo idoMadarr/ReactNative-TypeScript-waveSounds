@@ -117,11 +117,15 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
           />
           <View style={styles.details}>
             <TextElement
+              fontSize={'sm'}
               numberOfLines={1}
               cStyle={{color: Colors.white, width: 200}}>
               {floatingPlayer.title}
             </TextElement>
-            <TextElement fontSize={'sm'} cStyle={{color: Colors.white}}>
+            <TextElement
+              fontSize={'sm'}
+              fontWeight={'bold'}
+              cStyle={{color: Colors.white}}>
               {floatingPlayer.artist}
             </TextElement>
           </View>
@@ -178,6 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '50%',
+    overflow: 'hidden',
   },
   details: {
     marginHorizontal: 16,

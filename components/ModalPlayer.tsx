@@ -45,7 +45,7 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
   useEffect(() => {
     // @ts-ignore:
     setFavorite(favoritesObj[floatingPlayer.id] ? true : false);
-  }, [currentTrack]);
+  }, [currentTrack, floatingPlayer]);
 
   const onPlay = () => {
     setPlayerStatus(true);
@@ -79,7 +79,10 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     };
   };
 
-  const optimizeFavoriteFunc = useCallback(debounce(handleFavorite), []);
+  const optimizeFavoriteFunc = useCallback(debounce(handleFavorite), [
+    isFavorite,
+    floatingPlayer,
+  ]);
 
   return (
     <LinearGradient
