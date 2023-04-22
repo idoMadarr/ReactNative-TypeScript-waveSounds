@@ -26,7 +26,7 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
     state => state.deezerSlice.currentIndexTrack,
   );
 
-  const onPlay = (item: TrackType, index: number) => {
+  const onPlay = (item: TrackType) => {
     const createFloatingTrack = new FloatingPlayerInstance(
       item.id,
       item.title,

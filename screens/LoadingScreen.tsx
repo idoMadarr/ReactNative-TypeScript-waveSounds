@@ -1,19 +1,14 @@
-import {useCallback} from 'react';
+import {useCallback, useContext} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
 import {View, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
 import {useAppDispatch} from '../redux/hooks';
-import {
-  Easing,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
 import Lottie from 'lottie-react-native';
 import {fetchDeezerChart, fetchSequences} from '../redux/actions/deezerActions';
 import {setAuthentication} from '../redux/slices/authSlice';
-import {fetchFavorites} from '../redux/actions/authAction';
+import {fetchFavorites, fetchOnlines} from '../redux/actions/authAction';
 import {getFromStorage} from '../utils/asyncStorage';
+import {SocketContext} from '../utils/socketIO';
 import Colors from '../assets/design/palette.json';
 // @ts-ignore:
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
@@ -33,12 +28,11 @@ type LoadingScreenType = NativeStackScreenProps<RootStackParamList, 'loading'>;
 
 const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
   const dispatch = useAppDispatch();
-  const progress = useSharedValue(0);
+  const socket = useContext(SocketContext) as any;
 
   useFocusEffect(
     useCallback(() => {
       const initialization = async () => {
-        initClockLoader();
         setTimeout(() => {
           initApp();
         }, 2000);
@@ -58,23 +52,13 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
     await dispatch(fetchFavorites());
     await dispatch(fetchDeezerChart());
     await dispatch(fetchSequences());
-    await dispatch(
-      setAuthentication(
-        session.existUser || session.createUser || session.user,
-      ),
-    );
+    await dispatch(fetchOnlines());
+    await dispatch(setAuthentication(session.user));
+
+    await socket.connect();
+    socket.emit('auth', session);
     // @ts-ignore:
     navigation.navigate('app');
-  };
-
-  const initClockLoader = () => {
-    progress.value = withRepeat(
-      withTiming(4 * Math.PI, {
-        duration: 4000,
-        easing: Easing.linear,
-      }),
-      -1,
-    );
   };
 
   return (

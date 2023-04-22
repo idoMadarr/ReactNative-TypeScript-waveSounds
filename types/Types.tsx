@@ -38,3 +38,22 @@ export interface UserType {
   username: string;
   createAt: string;
 }
+
+export interface OnlineListType {
+  [socketId: string]: ConnectedOnlineType;
+}
+
+export interface ConnectedOnlineType {
+  userId: number;
+  username: string;
+  online: boolean;
+  socketAddress?: string;
+}
+
+export interface ChatMessageType {
+  id: string;
+  message: string;
+  sender: string;
+  recipient: string;
+  timestamp: string;
+}

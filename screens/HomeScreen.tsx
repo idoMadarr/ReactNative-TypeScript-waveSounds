@@ -1,7 +1,8 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {ScrollView, StyleSheet, SafeAreaView} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {useDrawerStatus} from '@react-navigation/drawer';
+import {SocketContext} from '../utils/socketIO';
 import Animated, {
   interpolateColor,
   useAnimatedScrollHandler,
@@ -9,25 +10,49 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
-import {updateDrawerStatus} from '../redux/slices/authSlice';
+import {
+  updateChainChat,
+  updateDrawerStatus,
+  updateOnline,
+} from '../redux/slices/authSlice';
 import TrendsList from '../components/HomePartials/TrendsList';
 import SectionList from '../components/HomePartials/SectionList';
 import {PropDimensions} from '../dimensions/dimensions';
+import {onLogout} from '../utils/onLogout';
 import Colors from '../assets/design/palette.json';
+import {ConnectedOnlineType, ChatMessageType} from '../types/Types';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
 
 const HomeScreen = () => {
   const trends = useAppSelector(state => state.deezerSlice.trends!);
+
   const translateX = useSharedValue(0);
   const isFocused = useIsFocused();
   const drawerStatus = useDrawerStatus();
   const dispatch = useAppDispatch();
+  const socket = useContext(SocketContext) as any;
 
   useEffect(() => {
     dispatch(updateDrawerStatus(drawerStatus));
   }, [drawerStatus]);
+
+  useEffect(() => {
+    socket.on('logout', async () => {
+      onLogout();
+    });
+
+    socket.on('message', (data: ChatMessageType) => {
+      dispatch(updateChainChat(data));
+    });
+
+    socket.on('update-onlines', async (data: ConnectedOnlineType) => {
+      dispatch(updateOnline(data));
+    });
+
+    return () => socket.disconnect();
+  }, []);
 
   // Creating an 'array mock length' cuase we cant interpolate directly from redux state
   const InterpolationMock = trends.map(() => ({}));

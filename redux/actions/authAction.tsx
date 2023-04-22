@@ -8,6 +8,7 @@ import {
   updateFavorites,
   newFavorite,
   toggleSpinner,
+  setOnlines,
 } from '../slices/authSlice';
 
 interface AuthenticationCredentialsType {
@@ -21,7 +22,7 @@ export const signIn =
     try {
       const {data} = await axios.post('signin', state);
       saveToStorage('userSession', data);
-      dispatch(setAuthentication(data.existUser));
+      dispatch(setAuthentication(data.user));
     } catch (error: any) {
       dispatch(toggleSpinner());
       const errorsList = error.response.data || 'Something went worng';
@@ -34,7 +35,7 @@ export const signUp =
     try {
       const {data} = await axios.post('signup', state);
       saveToStorage('userSession', data);
-      dispatch(setAuthentication(data.createUser));
+      dispatch(setAuthentication(data.user));
     } catch (error: any) {
       dispatch(toggleSpinner());
       const errorsList = error.response.data || 'Something went worng';
@@ -54,6 +55,16 @@ export const googleOAuth =
       return errorsList;
     }
   };
+
+export const fetchOnlines = () => async (dispatch: Dispatch) => {
+  try {
+    const {data} = await axios.get('connected-users');
+    dispatch(setOnlines(data));
+  } catch (error: any) {
+    const errorsList = error.response.data || 'Something went worng';
+    return errorsList;
+  }
+};
 
 export const fetchFavorites = () => async (dispatch: Dispatch) => {
   try {

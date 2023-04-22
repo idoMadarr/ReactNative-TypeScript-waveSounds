@@ -23,7 +23,7 @@ import TextElement from './TextElement';
 
 interface InputElementType {
   value?: string;
-  onChange(e: NativeSyntheticEvent<TextInputChangeEventData>): void;
+  onChange: Function;
   placeholder: string;
   errorMessage?: string;
   keyboard?: any;
@@ -123,13 +123,7 @@ const InputElement: React.FC<InputElementType> = ({
         secureTextEntry={secureTextEntry}
         editable={editable}
         allowFontScaling={false}
-        style={[
-          styles.input,
-          {
-            backgroundColor: Colors.secondary,
-          },
-          cStyle,
-        ]}
+        style={[styles.input, cStyle]}
       />
       {displayIcon}
       {displayError}

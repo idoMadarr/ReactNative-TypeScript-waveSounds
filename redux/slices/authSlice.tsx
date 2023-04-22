@@ -1,9 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {UserType, TrackType} from '../../types/Types';
+import {
+  UserType,
+  TrackType,
+  OnlineListType,
+  ChatMessageType,
+} from '../../types/Types';
 
 interface RootStateApp {
   isAuth: boolean;
   user: UserType | null;
+  onlines: OnlineListType;
+  chainChat: ChatMessageType[];
   favoritesList: TrackType[];
   favoritesObj: Object;
   drawerStatus: string;
@@ -13,6 +20,8 @@ interface RootStateApp {
 const initialState: RootStateApp = {
   isAuth: false,
   user: null,
+  onlines: {},
+  chainChat: [],
   favoritesList: [],
   favoritesObj: {},
   drawerStatus: 'closed',
@@ -27,6 +36,24 @@ export const authSlice = createSlice({
       state.isAuth = true;
       state.user = action.payload;
       state.loading = false;
+    },
+    setOnlines: (state, action) => {
+      state.onlines = action.payload;
+    },
+    updateOnline: (state, action) => {
+      const method = action.payload.type;
+      if (method === 'add') {
+        // @ts-ignore:
+        state.onlines = {
+          ...state.onlines,
+          [Object.keys(action.payload)[1]]: Object.values(action.payload)[1],
+        };
+        return;
+      }
+      delete state.onlines[Object.keys(action.payload)[1]];
+    },
+    updateChainChat: (state, action) => {
+      state.chainChat.push(action.payload);
     },
     resetAuthSlice: state => {
       state.isAuth = false;
@@ -60,6 +87,9 @@ export const authSlice = createSlice({
 
 export const {
   setAuthentication,
+  setOnlines,
+  updateOnline,
+  updateChainChat,
   resetAuthSlice,
   setFavorites,
   newFavorite,
