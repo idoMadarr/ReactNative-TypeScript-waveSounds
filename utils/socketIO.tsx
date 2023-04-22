@@ -1,5 +1,9 @@
 import {createContext} from 'react';
 import SocketIO from 'socket.io-client';
+import Config from 'react-native-config';
 
-export const socket = SocketIO('http://10.0.2.2:4000/');
+// const development = Config.localhost;
+const production = Config.production;
+
+export const socket = SocketIO(production!);
 export const SocketContext = createContext({});
