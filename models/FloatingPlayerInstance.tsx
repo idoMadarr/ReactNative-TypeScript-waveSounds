@@ -1,9 +1,9 @@
 export class FloatingPlayerInstance {
-  id = '';
-  title = '';
-  artist = '';
-  image = '';
-  preview = '';
+  id;
+  title;
+  artist;
+  image;
+  preview;
 
   constructor(
     id: string,

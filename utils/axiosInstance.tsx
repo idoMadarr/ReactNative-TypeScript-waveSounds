@@ -5,7 +5,7 @@ const development = Config.localhost;
 const production = Config.production;
 
 const axiosInstance = axios.create({
-  baseURL: production,
+  baseURL: development,
   timeout: 15000,
 });
 

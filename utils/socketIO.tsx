@@ -1,5 +1,9 @@
 import {createContext} from 'react';
 import SocketIO from 'socket.io-client';
+import Config from 'react-native-config';
 
-export const socket = SocketIO('https://wavesounds.onrender.com/');
+const development = Config.localhost;
+const production = Config.production;
+
+export const socket = SocketIO(development!);
 export const SocketContext = createContext({});

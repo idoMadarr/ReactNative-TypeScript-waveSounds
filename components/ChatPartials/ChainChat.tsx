@@ -18,6 +18,7 @@ const ChainChat: React.FC<ChainChatPropsType> = ({
     <FlatList
       data={messagesList}
       keyExtractor={itemData => itemData.id}
+      initialScrollIndex={messagesList.length - 1}
       renderItem={({item, index}) => (
         <ChatMessage item={item} userSocketId={userSocketId} index={index} />
       )}

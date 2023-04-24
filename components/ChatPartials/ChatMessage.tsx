@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import Animated, {SlideInLeft} from 'react-native-reanimated';
 import {ChatMessageType} from '../../types/Types';
 

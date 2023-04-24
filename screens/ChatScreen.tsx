@@ -9,9 +9,11 @@ import {
 } from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {updateChainChat} from '../redux/slices/authSlice';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Colors from '../assets/design/palette.json';
 import {SocketContext} from '../utils/socketIO';
 import {ConnectedOnlineType} from '../types/Types';
+import {MessageInstance} from '../models/MessageInstance';
 
 // Components
 import ChainChat from '../components/ChatPartials/ChainChat';
@@ -19,7 +21,6 @@ import ChatHeader from '../components/ChatPartials/ChatHeader';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 import InputElement from '../components/resuable/InputElement';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 type RootStackParamList = {
   user: ConnectedOnlineType;
@@ -42,15 +43,16 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
   };
 
   const onSend = async () => {
-    const notification = {
-      id: Math.random().toString(),
-      message: messageState,
-      sender: socket.id,
-      recipient: user.socketAddress,
-      timestamp: new Date().toLocaleString().split(',')[1],
-    };
-    await socket.emit('message', notification);
-    dispatch(updateChainChat(notification));
+    if (!messageState.trim().length) return;
+    const newMessage = new MessageInstance(
+      Math.random().toString(),
+      messageState,
+      socket.id,
+      user.socketAddress!,
+      new Date().toLocaleString().split(',')[1],
+    );
+    await socket.emit('message', newMessage);
+    dispatch(updateChainChat(newMessage));
     setMessageState('');
   };
 

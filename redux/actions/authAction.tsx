@@ -20,7 +20,7 @@ interface AuthenticationCredentialsType {
 export const signIn =
   (state: AuthenticationCredentialsType) => async (dispatch: Dispatch) => {
     try {
-      const {data} = await axios.post('signin', state);
+      const {data} = await axios.post('/ws-api/signin', state);
       saveToStorage('userSession', data);
       dispatch(setAuthentication(data.user));
     } catch (error: any) {
@@ -33,7 +33,7 @@ export const signIn =
 export const signUp =
   (state: AuthenticationCredentialsType) => async (dispatch: Dispatch) => {
     try {
-      const {data} = await axios.post('signup', state);
+      const {data} = await axios.post('/ws-api/signup', state);
       saveToStorage('userSession', data);
       dispatch(setAuthentication(data.user));
     } catch (error: any) {
@@ -46,7 +46,7 @@ export const signUp =
 export const googleOAuth =
   (state: AuthenticationCredentialsType) => async (dispatch: Dispatch) => {
     try {
-      const {data} = await axios.post('google-oauth', state);
+      const {data} = await axios.post('/ws-api/google-oauth', state);
       saveToStorage('userSession', data);
       dispatch(setAuthentication(data.user));
     } catch (error: any) {
@@ -58,7 +58,7 @@ export const googleOAuth =
 
 export const fetchOnlines = () => async (dispatch: Dispatch) => {
   try {
-    const {data} = await axios.get('connected-users');
+    const {data} = await axios.get('/ws-api/connected-users');
     dispatch(setOnlines(data));
   } catch (error: any) {
     const errorsList = error.response.data || 'Something went worng';
@@ -68,7 +68,7 @@ export const fetchOnlines = () => async (dispatch: Dispatch) => {
 
 export const fetchFavorites = () => async (dispatch: Dispatch) => {
   try {
-    const {data} = await axios.get('favorites');
+    const {data} = await axios.get('/ws-api/favorites');
     const formattedData = data.reduce(
       (accumulator: {}, currentValue: TrackType) => {
         return {...accumulator, [currentValue.id]: currentValue};
@@ -86,7 +86,7 @@ export const fetchFavorites = () => async (dispatch: Dispatch) => {
 
 export const addFavorite = (favorite: any) => async (dispatch: Dispatch) => {
   try {
-    const {data} = await axios.post('add-favorite', favorite);
+    const {data} = await axios.post('/ws-api/add-favorite', favorite);
     dispatch(newFavorite(data));
   } catch (error: any) {
     dispatch(toggleSpinner());
@@ -99,7 +99,7 @@ export const deleteFavorite =
   (favoriteId: string | number) => async (dispatch: Dispatch) => {
     try {
       dispatch(updateFavorites(favoriteId));
-      await axios.delete(`remove-favorite/${favoriteId}`);
+      await axios.delete(`/ws-api/remove-favorite/${favoriteId}`);
     } catch (error: any) {
       const errors = error.response.data || 'Something went worng';
       return errors;
