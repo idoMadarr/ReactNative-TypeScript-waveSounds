@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import Animated, {SlideInLeft} from 'react-native-reanimated';
+import Animated, {FadeInLeft} from 'react-native-reanimated';
 import {ChatMessageType} from '../../types/Types';
 
 // Components
@@ -24,7 +24,7 @@ const ChatMessage: React.FC<ChatMessagePropsType> = ({
 
   return (
     <Animated.View
-      entering={SlideInLeft.springify().delay(index * 100)}
+      entering={FadeInLeft.delay(index * 100).springify()}
       style={[
         styles.messageContainer,
         {

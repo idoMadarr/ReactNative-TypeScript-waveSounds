@@ -2,6 +2,8 @@ import React from 'react';
 import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {useAppSelector, useAppDispatch} from '../../redux/hooks';
+import {setUpdate} from '../../redux/slices/authSlice';
 import {PropDimensions} from '../../dimensions/dimensions';
 import Colors from '../../assets/design/palette.json';
 // @ts-ignore:
@@ -15,6 +17,14 @@ const faviconSize = Dimensions.get('window').width * 0.12;
 
 const HomeHeader = () => {
   const navigation = useNavigation<DrawerNavigationProp<ParamListBase>>();
+  const isUpdate = useAppSelector(state => state.authSlice.isUpdate);
+
+  const dispatch = useAppDispatch();
+
+  const onMenu = () => {
+    dispatch(setUpdate(false));
+    navigation.openDrawer();
+  };
 
   return (
     <View style={styles.headerContainer}>
@@ -22,9 +32,8 @@ const HomeHeader = () => {
         <FaviconVector height={faviconSize} width={faviconSize} />
         <TextElement>WaveSounds</TextElement>
       </View>
-      <TouchableOpacity
-        onPress={() => navigation.openDrawer()}
-        style={styles.menu}>
+      <TouchableOpacity onPress={onMenu} style={styles.menu}>
+        {isUpdate && <View style={styles.dotUpdate} />}
         <Icon name={'gear'} size={28} color={Colors.secondary} />
       </TouchableOpacity>
     </View>
@@ -49,6 +58,15 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  dotUpdate: {
+    width: 10,
+    height: 10,
+    backgroundColor: Colors.active,
+    borderRadius: 50,
+    position: 'absolute',
+    top: '20%',
+    right: '20%',
   },
 });
 

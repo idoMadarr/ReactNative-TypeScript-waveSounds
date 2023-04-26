@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList} from 'react-native';
+import {ScrollView} from 'react-native';
 import {ChatMessageType} from '../../types/Types';
 
 // Components
@@ -15,14 +15,16 @@ const ChainChat: React.FC<ChainChatPropsType> = ({
   userSocketId,
 }) => {
   return (
-    <FlatList
-      data={messagesList}
-      keyExtractor={itemData => itemData.id}
-      initialScrollIndex={messagesList.length - 1}
-      renderItem={({item, index}) => (
-        <ChatMessage item={item} userSocketId={userSocketId} index={index} />
-      )}
-    />
+    <ScrollView>
+      {messagesList.map((item, index) => (
+        <ChatMessage
+          key={item.id}
+          item={item}
+          userSocketId={userSocketId}
+          index={index}
+        />
+      ))}
+    </ScrollView>
   );
 };
 

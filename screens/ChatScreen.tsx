@@ -5,7 +5,6 @@ import {
   ImageBackground,
   StyleSheet,
   Dimensions,
-  KeyboardAvoidingView,
 } from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {updateChainChat} from '../redux/slices/authSlice';
@@ -51,8 +50,8 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
       user.socketAddress!,
       new Date().toLocaleString().split(',')[1],
     );
+    await dispatch(updateChainChat(newMessage));
     await socket.emit('message', newMessage);
-    dispatch(updateChainChat(newMessage));
     setMessageState('');
   };
 

@@ -11,6 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {
+  setUpdate,
   updateChainChat,
   updateDrawerStatus,
   updateOnline,
@@ -45,6 +46,7 @@ const HomeScreen = () => {
 
     socket.on('message', (data: ChatMessageType) => {
       dispatch(updateChainChat(data));
+      dispatch(setUpdate(true));
     });
 
     socket.on('update-onlines', async (data: ConnectedOnlineType) => {
