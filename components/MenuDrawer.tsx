@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, SafeAreaView} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
@@ -24,14 +30,15 @@ const MenuDrawer = () => {
     list.push({...onlines[online], socketAddress: online});
   }
 
-  const chatNavigate = (user: ConnectedOnlineType) =>
+  const chatNavigate = (user: ConnectedOnlineType) => {
     // @ts-ignore:
     navigation.navigate('chat', {user});
+  };
 
   let displayActiveUsers = null;
   if (list.length > 0) {
     displayActiveUsers = (
-      <View style={styles.onlineList}>
+      <ScrollView style={styles.onlineList}>
         <TextElement>{`${list.length} Onlines user:`}</TextElement>
         {list.map(user => (
           <TouchableOpacity
@@ -52,7 +59,7 @@ const MenuDrawer = () => {
             </View>
           </TouchableOpacity>
         ))}
-      </View>
+      </ScrollView>
     );
   }
 
@@ -113,7 +120,7 @@ const styles = StyleSheet.create({
   },
   drawerHeader: {
     width: '100%',
-    height: '68%',
+    height: '70%',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginTop: 16,
@@ -123,7 +130,9 @@ const styles = StyleSheet.create({
     borderColor: Colors.placeholder,
   },
   onlineList: {
+    minHeight: '50%',
     width: PropDimensions.favoriteHeaderWidth,
+    marginTop: 16,
   },
   container: {
     height: PropDimensions.favoriteHeight,

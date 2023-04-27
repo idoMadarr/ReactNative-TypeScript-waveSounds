@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   View,
   SafeAreaView,
@@ -29,6 +29,7 @@ type ChatScreenType = NativeStackScreenProps<RootStackParamList, 'chat'>;
 
 const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
   const chainChat = useAppSelector(state => state.authSlice.chainChat);
+  const shareMode = useAppSelector(state => state.authSlice.shareMode);
   const user = route.params!.user as ConnectedOnlineType;
 
   const [messageState, setMessageState] = useState('');
@@ -36,6 +37,24 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext) as any;
   const userSocketId = socket.id;
+
+  useEffect(() => {
+    if (shareMode) {
+      const share = async () => {
+        // Transform this to ShareInstance
+        const shareTrack = new MessageInstance(
+          Math.random().toString(),
+          'someone want to shareTrack with you',
+          socket.id,
+          user.socketAddress!,
+          new Date().toLocaleString().split(',')[1],
+        );
+        await dispatch(updateChainChat(shareTrack));
+        await socket.emit('message', shareTrack);
+      };
+      share();
+    }
+  }, [shareMode]);
 
   const goBack = () => {
     navigation.goBack();

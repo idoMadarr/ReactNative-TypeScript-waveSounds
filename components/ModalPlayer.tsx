@@ -5,8 +5,9 @@ import {addFavorite, deleteFavorite} from '../redux/actions/authAction';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../assets/design/palette.json';
 import {PropDimensions} from '../dimensions/dimensions';
-import {TrackType} from '../types/Types';
+import {ConnectedOnlineType, TrackType} from '../types/Types';
 import LinearGradient from 'react-native-linear-gradient';
+import {setShareMode} from '../redux/slices/authSlice';
 import Slider from '@react-native-community/slider';
 import Lottie from 'lottie-react-native';
 
@@ -33,12 +34,14 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
   setTimeLeft,
   onTrackNavigate,
   setPlayerStatus,
+  closeModal,
 }) => {
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   )!;
   const favoritesObj = useAppSelector(state => state.authSlice.favoritesObj);
+  const onlines = useAppSelector(state => state.authSlice.onlines);
   const [isFavorite, setFavorite] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -55,6 +58,11 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
   const onPause = () => {
     setPlayerStatus(false);
     currentTrack?.pause();
+  };
+
+  const onShare = async () => {
+    closeModal();
+    dispatch(setShareMode(floatingPlayer));
   };
 
   const onSlidingComplete = (current: any) => {
@@ -84,6 +92,11 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     floatingPlayer,
   ]);
 
+  const list: ConnectedOnlineType[] = [];
+  for (const online in onlines) {
+    list.push({...onlines[online], socketAddress: online});
+  }
+
   return (
     <LinearGradient
       colors={[Colors['gradient--modal-start'], Colors['gradient-modal-end']]}
@@ -104,6 +117,13 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
         </View>
       </View>
       <View style={styles.progressContainer}>
+        <TouchableOpacity style={styles.share} onPress={onShare}>
+          <Icon
+            name={'share'}
+            size={28}
+            color={list.length > 0 ? Colors.secondary : Colors.greyish}
+          />
+        </TouchableOpacity>
         {playerStatus && (
           <Animated.View
             entering={FadeInLeft}
@@ -197,8 +217,16 @@ const styles = StyleSheet.create({
   },
   liked: {
     position: 'absolute',
-    bottom: '20%',
-    right: '10%',
+    bottom: '10%',
+    right: '5%',
+    padding: 16,
+  },
+  share: {
+    position: 'absolute',
+    bottom: '10%',
+    left: '5%',
+    padding: 16,
+    zIndex: 100,
   },
   progressContainer: {
     height: '25%',

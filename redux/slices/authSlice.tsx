@@ -13,6 +13,7 @@ interface RootStateApp {
   chainChat: ChatMessageType[];
   favoritesList: TrackType[];
   favoritesObj: Object;
+  shareMode: Object | null;
   isUpdate: boolean;
   drawerStatus: string;
   loading: boolean;
@@ -25,6 +26,7 @@ const initialState: RootStateApp = {
   chainChat: [],
   favoritesList: [],
   favoritesObj: {},
+  shareMode: null,
   isUpdate: false,
   drawerStatus: 'closed',
   loading: false,
@@ -80,6 +82,12 @@ export const authSlice = createSlice({
     },
     updateDrawerStatus: (state, action) => {
       state.drawerStatus = action.payload;
+      if (action.payload === 'closed') {
+        state.shareMode = null;
+      }
+    },
+    setShareMode: (state, action) => {
+      state.shareMode = action.payload;
     },
     setUpdate: (state, action) => {
       state.isUpdate = action.payload;
@@ -100,6 +108,7 @@ export const {
   newFavorite,
   updateFavorites,
   updateDrawerStatus,
+  setShareMode,
   setUpdate,
   toggleSpinner,
 } = authSlice.actions;

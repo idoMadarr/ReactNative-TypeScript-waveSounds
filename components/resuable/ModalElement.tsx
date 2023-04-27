@@ -14,13 +14,10 @@ const ModalElement: React.FC<ModalElementType> = ({children, modalizeRef}) => {
       modalStyle={{backgroundColor: Colors.primary}}
       ref={modalizeRef}
       avoidKeyboardLikeIOS={true}
-      // snapPoint={250}
       closeSnapPointStraightEnabled={false}
       useNativeDriver={true}
       closeOnOverlayTap={true}
-      modalHeight={PropDimensions.maxModalHeight}
-      // withOverlay={false}
-    >
+      modalHeight={PropDimensions.maxModalHeight}>
       {children}
     </Modalize>
   );

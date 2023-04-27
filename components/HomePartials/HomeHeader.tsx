@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
@@ -18,8 +18,17 @@ const faviconSize = Dimensions.get('window').width * 0.12;
 const HomeHeader = () => {
   const navigation = useNavigation<DrawerNavigationProp<ParamListBase>>();
   const isUpdate = useAppSelector(state => state.authSlice.isUpdate);
+  const shareMode = useAppSelector(state => state.authSlice.shareMode);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (shareMode) {
+      setTimeout(() => {
+        navigation.openDrawer();
+      }, 100);
+    }
+  }, [shareMode]);
 
   const onMenu = () => {
     dispatch(setUpdate(false));
