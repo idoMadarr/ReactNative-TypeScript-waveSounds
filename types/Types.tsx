@@ -56,4 +56,8 @@ export interface ChatMessageType {
   sender: string;
   recipient: string;
   timestamp: string;
+  title?: string;
+  artist?: string;
+  image?: string;
+  preview?: string;
 }

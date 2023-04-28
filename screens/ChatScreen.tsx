@@ -13,6 +13,7 @@ import Colors from '../assets/design/palette.json';
 import {SocketContext} from '../utils/socketIO';
 import {ConnectedOnlineType} from '../types/Types';
 import {MessageInstance} from '../models/MessageInstance';
+import {ShareInstance} from '../models/ShareInstance';
 
 // Components
 import ChainChat from '../components/ChatPartials/ChainChat';
@@ -25,11 +26,16 @@ type RootStackParamList = {
   user: ConnectedOnlineType;
 };
 
+// @ts-ignore:
 type ChatScreenType = NativeStackScreenProps<RootStackParamList, 'chat'>;
 
 const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
   const chainChat = useAppSelector(state => state.authSlice.chainChat);
+  const floatingPlayer = useAppSelector(
+    state => state.deezerSlice.floatingPlayer,
+  )!;
   const shareMode = useAppSelector(state => state.authSlice.shareMode);
+  // @ts-ignore:
   const user = route.params!.user as ConnectedOnlineType;
 
   const [messageState, setMessageState] = useState('');
@@ -41,15 +47,18 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
   useEffect(() => {
     if (shareMode) {
       const share = async () => {
-        // Transform this to ShareInstance
-        const shareTrack = new MessageInstance(
+        const shareTrack = new ShareInstance(
           Math.random().toString(),
-          'someone want to shareTrack with you',
+          `${user.username} want to share track with you`,
           socket.id,
           user.socketAddress!,
           new Date().toLocaleString().split(',')[1],
+          floatingPlayer.title,
+          floatingPlayer.artist,
+          floatingPlayer.image,
+          floatingPlayer.preview!,
         );
-        await dispatch(updateChainChat(shareTrack));
+        dispatch(updateChainChat(shareTrack));
         await socket.emit('message', shareTrack);
       };
       share();

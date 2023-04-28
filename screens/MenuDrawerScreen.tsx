@@ -1,67 +1,18 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  ScrollView,
-} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {View, StyleSheet, SafeAreaView} from 'react-native';
 import {useAppSelector} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../assets/design/palette.json';
 import {onLogout} from '../utils/onLogout';
-import {ConnectedOnlineType} from '../types/Types';
-
-// Components
-import TextElement from './resuable/TextElement';
-import ButtonElement from './resuable/ButtonElement';
 import {PropDimensions} from '../dimensions/dimensions';
 
-const MenuDrawer = () => {
+// Components
+import OnlineList from '../components/MenuPartials/OnlineList';
+import TextElement from '../components/resuable/TextElement';
+import ButtonElement from '../components/resuable/ButtonElement';
+
+const MenuDrawerScreen = () => {
   const user = useAppSelector(state => state.authSlice.user)!;
-  const onlines = useAppSelector(state => state.authSlice.onlines);
-
-  const navigation = useNavigation();
-
-  const list: ConnectedOnlineType[] = [];
-  for (const online in onlines) {
-    list.push({...onlines[online], socketAddress: online});
-  }
-
-  const chatNavigate = (user: ConnectedOnlineType) => {
-    // @ts-ignore:
-    navigation.navigate('chat', {user});
-  };
-
-  let displayActiveUsers = null;
-  if (list.length > 0) {
-    displayActiveUsers = (
-      <ScrollView style={styles.onlineList}>
-        <TextElement>{`${list.length} Onlines user:`}</TextElement>
-        {list.map(user => (
-          <TouchableOpacity
-            key={user.userId}
-            onPress={chatNavigate.bind(this, user)}
-            style={[styles.container]}>
-            <View style={styles.left}>
-              <TextElement>{user.username}</TextElement>
-              <TextElement
-                fontSize={'sm'}
-                fontWeight={'bold'}
-                cStyle={{color: Colors.active}}>
-                Active now!
-              </TextElement>
-            </View>
-            <View style={styles.right}>
-              <Icon name={'comments'} size={22} color={Colors.secondary} />
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    );
-  }
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -91,7 +42,7 @@ const MenuDrawer = () => {
               interactions, Gestures handlers, Colors interpolation, and much
               more.
             </TextElement>
-            {displayActiveUsers}
+            <OnlineList />
           </View>
           <ButtonElement
             title={'Logout'}
@@ -129,28 +80,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.placeholder,
   },
-  onlineList: {
-    minHeight: '50%',
-    width: PropDimensions.favoriteHeaderWidth,
-    marginTop: 16,
-  },
-  container: {
-    height: PropDimensions.favoriteHeight,
-    flexDirection: 'row',
-    paddingHorizontal: 8,
-    borderRadius: 5,
-    backgroundColor: Colors['gradient-start'],
-  },
-  left: {
-    width: '80%',
-    justifyContent: 'center',
-  },
-  right: {
-    width: '20%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  },
 });
 
-export default MenuDrawer;
+export default MenuDrawerScreen;
