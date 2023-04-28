@@ -5,5 +5,5 @@ import Config from 'react-native-config';
 const development = Config.localhost;
 const production = Config.production;
 
-export const socket = SocketIO(development!);
+export const socket = SocketIO(production!);
 export const SocketContext = createContext({});
