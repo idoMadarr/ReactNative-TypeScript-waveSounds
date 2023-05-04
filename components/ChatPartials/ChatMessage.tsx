@@ -2,7 +2,6 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Animated, {FadeInLeft} from 'react-native-reanimated';
 import {ChatMessageType} from '../../types/Types';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Components
 import TextElement from '../resuable/TextElement';
@@ -45,12 +44,12 @@ const ChatMessage: React.FC<ChatMessagePropsType> = ({
             resizeMode={'cover'}
             style={styles.image}
           />
-          <Icon
-            name={'play'}
-            size={28}
-            color={Colors.black}
-            style={styles.playIcon}
-          />
+          <TextElement
+            fontWeight={'bold'}
+            fontSize={'sm'}
+            cStyle={{color: Colors['gradient--modal-start']}}>
+            Play Now!
+          </TextElement>
         </TouchableOpacity>
         <View style={{flex: 1}}>
           <TextElement cStyle={styles.black}>{item.message}</TextElement>
@@ -108,11 +107,8 @@ const styles = StyleSheet.create({
     width: 65,
     height: 65,
     backgroundColor: Colors.black,
-    marginHorizontal: 6,
-  },
-  playIcon: {
-    position: 'absolute',
-    top: '25%',
+    marginHorizontal: 10,
+    borderRadius: 10,
   },
 });
 

@@ -30,13 +30,18 @@ type RootStackParamList = {
 type ChatScreenType = NativeStackScreenProps<RootStackParamList, 'chat'>;
 
 const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
-  const chainChat = useAppSelector(state => state.authSlice.chainChat);
+  // @ts-ignore:
+  const user = route.params!.user as ConnectedOnlineType;
+  const currentUser = useAppSelector(state => state.authSlice.user);
+  const chainId = (user.userId + currentUser!.id).split('').sort().join('');
+  const chainChat = useAppSelector(
+    state => state.authSlice.chatDict[chainId] || [],
+  );
+
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   )!;
   const shareMode = useAppSelector(state => state.authSlice.shareMode);
-  // @ts-ignore:
-  const user = route.params!.user as ConnectedOnlineType;
 
   const [messageState, setMessageState] = useState('');
 
@@ -46,22 +51,7 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
 
   useEffect(() => {
     if (shareMode) {
-      const share = async () => {
-        const shareTrack = new ShareInstance(
-          Math.random().toString(),
-          `${user.username} want to share track with you`,
-          socket.id,
-          user.socketAddress!,
-          new Date().toLocaleString().split(',')[1],
-          floatingPlayer.title,
-          floatingPlayer.artist,
-          floatingPlayer.image,
-          floatingPlayer.preview!,
-        );
-        dispatch(updateChainChat(shareTrack));
-        await socket.emit('message', shareTrack);
-      };
-      share();
+      gettingShareTrack();
     }
   }, [shareMode]);
 
@@ -77,10 +67,30 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
       socket.id,
       user.socketAddress!,
       new Date().toLocaleString().split(',')[1],
+      user.userId,
+      currentUser.id,
     );
     await dispatch(updateChainChat(newMessage));
     await socket.emit('message', newMessage);
     setMessageState('');
+  };
+
+  const gettingShareTrack = async () => {
+    const shareTrack = new ShareInstance(
+      Math.random().toString(),
+      `${user.username} want to share track with you`,
+      socket.id,
+      user.socketAddress!,
+      new Date().toLocaleString().split(',')[1],
+      user.userId,
+      currentUser.id,
+      floatingPlayer.title,
+      floatingPlayer.artist,
+      floatingPlayer.image,
+      floatingPlayer.preview!,
+    );
+    dispatch(updateChainChat(shareTrack));
+    await socket.emit('message', shareTrack);
   };
 
   return (

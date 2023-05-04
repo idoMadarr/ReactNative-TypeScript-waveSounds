@@ -18,7 +18,7 @@ const ChainChat: React.FC<ChainChatPropsType> = ({
 }) => {
   const onPlay = (item: ChatMessageType) => {
     const createFloatingTrack = new FloatingPlayerInstance(
-      item.id.toString(),
+      item.messageId.toString(),
       item.title!,
       item.artist!,
       item.image!,
@@ -31,7 +31,7 @@ const ChainChat: React.FC<ChainChatPropsType> = ({
     <ScrollView>
       {messagesList.map((item, index) => (
         <ChatMessage
-          key={item.id}
+          key={index}
           item={item}
           userSocketId={userSocketId}
           index={index}

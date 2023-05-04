@@ -12,7 +12,7 @@ import TextElement from '../components/resuable/TextElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 
 const MenuDrawerScreen = () => {
-  const user = useAppSelector(state => state.authSlice.user)!;
+  const user = useAppSelector(state => state.authSlice.user);
 
   return (
     <SafeAreaView style={styles.screen}>

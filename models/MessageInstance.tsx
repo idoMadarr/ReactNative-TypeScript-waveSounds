@@ -1,21 +1,27 @@
 export class MessageInstance {
-  id;
+  messageId;
   message;
   sender;
   recipient;
   timestamp;
+  userA;
+  userB;
 
   constructor(
-    id: string,
+    messageId: string,
     message: string,
     sender: string,
     recipient: string,
     timestamp: string,
+    userA: number,
+    userB: number,
   ) {
-    this.id = id;
+    this.messageId = messageId;
     this.message = message;
     this.sender = sender;
     this.recipient = recipient;
     this.timestamp = timestamp;
+    this.userA = userA;
+    this.userB = userB;
   }
 }

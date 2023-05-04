@@ -44,8 +44,8 @@ const HomeScreen = () => {
       onLogout();
     });
 
-    socket.on('message', (data: ChatMessageType) => {
-      dispatch(updateChainChat(data));
+    socket.on('message', async (data: ChatMessageType) => {
+      await dispatch(updateChainChat(data));
       dispatch(setUpdate(true));
     });
 

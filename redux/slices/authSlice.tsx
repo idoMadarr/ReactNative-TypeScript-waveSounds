@@ -4,12 +4,14 @@ import {
   TrackType,
   OnlineListType,
   ChatMessageType,
+  ChatDictType,
 } from '../../types/Types';
 
 interface RootStateApp {
   isAuth: boolean;
-  user: UserType | null;
+  user: UserType | any;
   onlines: OnlineListType;
+  chatDict: ChatDictType;
   chainChat: ChatMessageType[];
   favoritesList: TrackType[];
   favoritesObj: Object;
@@ -23,6 +25,7 @@ const initialState: RootStateApp = {
   isAuth: false,
   user: null,
   onlines: {},
+  chatDict: {},
   chainChat: [],
   favoritesList: [],
   favoritesObj: {},
@@ -57,7 +60,16 @@ export const authSlice = createSlice({
       delete state.onlines[Object.keys(action.payload)[1]];
     },
     updateChainChat: (state, action) => {
-      state.chainChat.push(action.payload);
+      const userA = action.payload.userA;
+      const userB = action.payload.userB;
+
+      const chainId = (userA + userB).split('').sort().join('');
+
+      if (state.chatDict[chainId]) {
+        state.chatDict[chainId].push(action.payload);
+        return;
+      }
+      state.chatDict[chainId] = [action.payload];
     },
     resetAuthSlice: state => {
       state.isAuth = false;

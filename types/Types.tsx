@@ -51,13 +51,19 @@ export interface ConnectedOnlineType {
 }
 
 export interface ChatMessageType {
-  id: string;
+  messageId: string;
   message: string;
   sender: string;
   recipient: string;
   timestamp: string;
+  userA?: number;
+  userB?: number;
   title?: string;
   artist?: string;
   image?: string;
   preview?: string;
+}
+
+export interface ChatDictType {
+  [userId: number]: ChatMessageType[];
 }
