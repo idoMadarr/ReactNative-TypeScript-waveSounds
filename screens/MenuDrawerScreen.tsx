@@ -30,17 +30,15 @@ const MenuDrawerScreen = () => {
             <TextElement>
               WaveSounds is a Fullstack digital music application that gives you
               access to millions of songs and other content from creators all
-              over the world. This project is built from the ground up by Ido
-              Adar, and made for representation only service.
+              over the world.
             </TextElement>
             <TextElement>
               This project was built from the ground up with TypeScript on all
               levels. NodeJS as a backend, combined with MongoDB for storing
               user's data & React Native (CLI) for building beautiful & complex
               user interfaces - including Full Authentication Process, Social
-              login, Complex Navigation , Reanimated animations and
-              interactions, Gestures handlers, Colors interpolation, and much
-              more.
+              login, Complex Navigation , Reanimated animations, Gestures
+              handlers, Colors interpolation, Push Notification, and much more.
             </TextElement>
             <OnlineList />
           </View>

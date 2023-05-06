@@ -1,4 +1,5 @@
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {Alert} from 'react-native';
 import Config from 'react-native-config';
 
 // const androidClientId = __DEV__
@@ -7,7 +8,7 @@ import Config from 'react-native-config';
 
 GoogleSignin.configure({
   //  @ts-ignore:
-  androidClientId: Config.oauth_client_dev,
+  androidClientId: Config.oauth_client_prod,
 });
 
 export const getOAuthCredentials = async () => {
@@ -15,15 +16,19 @@ export const getOAuthCredentials = async () => {
 
   try {
     const hasPlayService = await GoogleSignin.hasPlayServices();
+    Alert.alert(hasPlayService.toString());
     if (hasPlayService) {
       await GoogleSignin.signIn()
         .then(async userInfo => {
           const {name, email} = userInfo.user;
           userCredentials = {username: name, email};
+          Alert.alert(JSON.stringify(userCredentials));
         })
         .catch(e => {
+          Alert.alert(JSON.stringify(e));
           console.log('ERROR IS: ' + JSON.stringify(e));
         });
+      Alert.alert(JSON.stringify(userCredentials));
       return userCredentials;
     }
   } catch (error) {
