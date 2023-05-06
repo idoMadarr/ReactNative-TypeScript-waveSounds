@@ -3,6 +3,9 @@ import {combineReducers} from 'redux';
 import deezerSlice from './slices/deezerSlice';
 import authSlice from './slices/authSlice';
 
+// Flipper Debug Configuration
+// const createDebugger = require('redux-flipper').default;
+
 const rootReducer = combineReducers({
   deezerSlice,
   authSlice,
@@ -10,8 +13,8 @@ const rootReducer = combineReducers({
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({serializableCheck: false}),
+  // middleware: getDefaultMiddleware =>
+  //   getDefaultMiddleware({serializableCheck: false}).concat(createDebugger()),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
