@@ -16,22 +16,21 @@ export const getOAuthCredentials = async () => {
 
   try {
     const hasPlayService = await GoogleSignin.hasPlayServices();
-    Alert.alert(hasPlayService.toString());
     if (hasPlayService) {
       await GoogleSignin.signIn()
         .then(async userInfo => {
           const {name, email} = userInfo.user;
           userCredentials = {username: name, email};
-          Alert.alert(JSON.stringify(userCredentials));
+          Alert.alert('notice1', JSON.stringify(userCredentials));
         })
         .catch(e => {
-          Alert.alert(JSON.stringify(e));
-          console.log('ERROR IS: ' + JSON.stringify(e));
+          Alert.alert('notice2', JSON.stringify(e));
         });
-      Alert.alert(JSON.stringify(userCredentials));
+      Alert.alert('notice3', JSON.stringify(userCredentials));
       return userCredentials;
     }
   } catch (error) {
+    Alert.alert('notice4', JSON.stringify(error));
     console.log(error, 'OAuth service error');
   }
 };
