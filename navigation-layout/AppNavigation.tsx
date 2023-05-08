@@ -12,6 +12,7 @@ import {
 } from '../redux/slices/deezerSlice';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {Modalize} from 'react-native-modalize';
+import {PropDimensions} from '../dimensions/dimensions';
 
 // Screens
 import {AuthStack} from './StackNavigation';
@@ -21,6 +22,7 @@ import FloatingPlayer from '../components/FloatingPlayer';
 import ModalElement from '../components/resuable/ModalElement';
 import ModalPlayer from '../components/ModalPlayer';
 import OverlaySpinner from '../components/OverlaySpinner';
+import ModalMessage from '../components/ModalMessage/ModalMessage';
 
 const END_REACH = 30;
 
@@ -29,7 +31,8 @@ const AppNavigation: React.FC = () => {
 
   const [playerStatus, setPlayerStatus] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
-  const modalizeRef = useRef<Modalize>();
+  const modalizePlayerRef = useRef<Modalize>();
+  const modalizeMessageRef = useRef<Modalize>();
 
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
   const currentIndexTrack = useAppSelector(
@@ -37,6 +40,7 @@ const AppNavigation: React.FC = () => {
   );
   const loading = useAppSelector(state => state.authSlice.loading);
   const isAuth = useAppSelector(state => state.authSlice.isAuth);
+  const modalMessage = useAppSelector(state => state.authSlice.modalMessage);
   const modalContext = useAppSelector(state => state.deezerSlice.modalContext);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
@@ -68,6 +72,10 @@ const AppNavigation: React.FC = () => {
 
     return () => clearInterval(timer);
   }, [playerStatus, timeLeft]);
+
+  useEffect(() => {
+    if (modalMessage) modalizeMessageRef.current?.open();
+  }, [modalMessage]);
 
   const onTrackNavigate = (action: number) => {
     let nextTrack = modalContext[currentIndexTrack + action] as any;
@@ -105,9 +113,9 @@ const AppNavigation: React.FC = () => {
     });
   };
 
-  const openModal = () => modalizeRef.current?.open();
+  const openModal = () => modalizePlayerRef.current?.open();
 
-  const closeModal = () => modalizeRef.current?.close();
+  const closeModal = () => modalizePlayerRef.current?.close();
 
   return (
     <NavigationContainer>
@@ -132,7 +140,9 @@ const AppNavigation: React.FC = () => {
           openModal={openModal}
         />
       )}
-      <ModalElement modalizeRef={modalizeRef}>
+      <ModalElement
+        modalizeRef={modalizePlayerRef}
+        modalHeight={PropDimensions.maxModalHeight}>
         <ModalPlayer
           playerStatus={playerStatus}
           setPlayerStatus={setPlayerStatus}
@@ -141,6 +151,11 @@ const AppNavigation: React.FC = () => {
           onTrackNavigate={onTrackNavigate}
           closeModal={closeModal}
         />
+      </ModalElement>
+      <ModalElement
+        modalizeRef={modalizeMessageRef}
+        modalHeight={PropDimensions.messageModalHeight}>
+        <ModalMessage modalMessage={modalMessage} />
       </ModalElement>
     </NavigationContainer>
   );

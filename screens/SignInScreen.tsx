@@ -7,6 +7,7 @@ import {
   TextInputChangeEventData,
   SafeAreaView,
   Dimensions,
+  Keyboard,
 } from 'react-native';
 import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -16,7 +17,6 @@ import {toggleSpinner} from '../redux/slices/authSlice';
 import {useIsFocused} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
 // @ts-ignore:
 import GoogleVector from '../assets/vectors/icon_google.svg';
 // @ts-ignore:
@@ -44,7 +44,6 @@ const defaultState = {
 const defaultErrorState = {
   emailError: '',
   passwordError: '',
-  apiError: [],
 };
 
 type RootStackParamList = {
@@ -58,7 +57,7 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
   const [formErrorState, setFormErrorState] = useState(defaultErrorState);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const {email, password} = formState;
-  const {emailError, passwordError, apiError} = formErrorState;
+  const {emailError, passwordError} = formErrorState;
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
 
@@ -92,23 +91,17 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
   };
 
   const onPress = async () => {
+    Keyboard.dismiss();
     const isValidForm = formValidator();
     if (isValidForm) {
       dispatch(toggleSpinner());
-      const errors = await dispatch(signIn(formState));
-      if (errors) {
-        return setFormErrorState(prevState => ({
-          ...prevState,
-          apiError: errors.errors,
-        }));
-      }
-      // @ts-ignore:
-      navigation.navigate('loading');
+      dispatch(signIn(formState));
     }
   };
 
   const onGoogleOAuth = async () => {
     const credentials = (await getOAuthCredentials()) as any;
+    if (!credentials) return;
     dispatch(toggleSpinner());
     dispatch(googleOAuth(credentials));
   };
@@ -129,10 +122,7 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
         {isFocused && (
           <Animated.View
             entering={FadeInLeft.springify()}
-            style={{
-              height: Dimensions.get('window').height * 0.3,
-              width: PropDimensions.buttonWidth,
-            }}>
+            style={styles.headerContainer}>
             <FaviconVector height={50} width={50} />
             <TextElement
               fontSize={'xl'}
@@ -149,10 +139,7 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
         )}
         {isFocused && (
           <Animated.View entering={FadeInDown}>
-            <View
-              style={{
-                height: Dimensions.get('window').height * 0.4,
-              }}>
+            <View style={styles.fieldsContainer}>
               <InputElement
                 value={email}
                 onChange={updateState.bind(this, 'email')}
@@ -179,19 +166,6 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
                 <TextElement>Dont have account yet? </TextElement>
                 <LinkElement url={'sign-up'}> Sign up</LinkElement>
               </View>
-            </View>
-            <View style={styles.errorList}>
-              {apiError.map((error: ApiError) => (
-                <View style={styles.errorContainer} key={Math.random()}>
-                  <Icon name={'exclamation'} size={18} color={Colors.warning} />
-                  <TextElement
-                    fontSize={'sm'}
-                    cStyle={styles.errorText}
-                    fontWeight={'bold'}>
-                    {error.message}
-                  </TextElement>
-                </View>
-              ))}
             </View>
             <View style={styles.socialLogin}>
               <View style={styles.socialLoginHeader}>
@@ -221,23 +195,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  headerContainer: {
+    width: PropDimensions.buttonWidth,
+  },
+  fieldsContainer: {
+    height: Dimensions.get('window').height * 0.5,
+  },
   linkContainer: {
     marginVertical: 8,
     width: PropDimensions.buttonWidth,
     flexDirection: 'row',
-  },
-  errorList: {
-    alignItems: 'flex-start',
-    minHeight: '8%',
-    width: PropDimensions.buttonWidth,
-  },
-  errorContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  errorText: {
-    marginHorizontal: 8,
-    color: Colors.warning,
   },
   socialLogin: {
     alignItems: 'center',

@@ -18,6 +18,7 @@ interface RootStateApp {
   shareMode: Object | null;
   isUpdate: boolean;
   drawerStatus: string;
+  modalMessage: any | null;
   loading: boolean;
 }
 
@@ -32,6 +33,7 @@ const initialState: RootStateApp = {
   shareMode: null,
   isUpdate: false,
   drawerStatus: 'closed',
+  modalMessage: null,
   loading: false,
 };
 
@@ -104,6 +106,9 @@ export const authSlice = createSlice({
     setUpdate: (state, action) => {
       state.isUpdate = action.payload;
     },
+    setModalMessage: (state, action) => {
+      state.modalMessage = action.payload;
+    },
     toggleSpinner: state => {
       state.loading = !state.loading;
     },
@@ -122,6 +127,7 @@ export const {
   updateDrawerStatus,
   setShareMode,
   setUpdate,
+  setModalMessage,
   toggleSpinner,
 } = authSlice.actions;
 

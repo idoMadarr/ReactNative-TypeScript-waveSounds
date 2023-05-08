@@ -14,6 +14,7 @@ export enum PropDimensions {
   favoriteHeight = Dimensions.get('window').height * 0.08,
   trendsHeight = Dimensions.get('window').height * 0.8,
   maxModalHeight = Dimensions.get('window').height * 0.7,
+  messageModalHeight = Dimensions.get('window').height * 0.15,
   inputContainerHight = Dimensions.get('window').height * 0.1,
   inputHight = Dimensions.get('window').height * 0.06,
   inputWidth = Dimensions.get('window').width * 0.85,

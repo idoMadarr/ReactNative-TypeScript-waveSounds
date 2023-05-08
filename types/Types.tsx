@@ -67,3 +67,8 @@ export interface ChatMessageType {
 export interface ChatDictType {
   [userId: number]: ChatMessageType[];
 }
+
+export interface ModalMessageType {
+  message: string;
+  field?: string;
+}

@@ -5,6 +5,7 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
   SafeAreaView,
+  Keyboard,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppDispatch} from '../redux/hooks';
@@ -41,7 +42,6 @@ const defaultErrorState = {
   emailError: '',
   usernameError: '',
   passwordError: '',
-  apiError: [],
 };
 
 type RootStackParamList = {
@@ -55,7 +55,7 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
   const [formErrorState, setFormErrorState] = useState(defaultErrorState);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const {email, username, password} = formState;
-  const {emailError, usernameError, passwordError, apiError} = formErrorState;
+  const {emailError, usernameError, passwordError} = formErrorState;
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
 
@@ -92,18 +92,11 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
   };
 
   const onPress = async () => {
+    Keyboard.dismiss();
     const isValidForm = formValidator();
     if (isValidForm) {
       dispatch(toggleSpinner());
-      const errors = await dispatch(signUp(formState));
-      if (errors) {
-        return setFormErrorState(prevState => ({
-          ...prevState,
-          apiError: errors.errors,
-        }));
-      }
-      // @ts-ignore:
-      navigation.navigate('loading');
+      dispatch(signUp(formState));
     }
   };
 
@@ -120,19 +113,6 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
           Colors['gradient-mid'],
           Colors['gradient-end'],
         ]}>
-        <View style={styles.errorList}>
-          {apiError.map((error: ApiError) => (
-            <View style={styles.errorContainer} key={Math.random()}>
-              <Icon name={'exclamation'} size={18} color={Colors.warning} />
-              <TextElement
-                fontSize={'sm'}
-                cStyle={styles.errorText}
-                fontWeight={'bold'}>
-                {error.message}
-              </TextElement>
-            </View>
-          ))}
-        </View>
         {isFocused && (
           <Animated.View entering={FadeInDown} style={styles.section}>
             <TextElement cStyle={styles.mainTitle}>
@@ -211,19 +191,6 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     paddingBottom: 8,
-  },
-  errorList: {
-    alignItems: 'flex-start',
-    minHeight: '4%',
-    width: PropDimensions.buttonWidth,
-  },
-  errorContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  errorText: {
-    marginHorizontal: 8,
-    color: Colors.warning,
   },
 });
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "506194767202",
+    "project_id": "wavesounds-463fe",
+    "storage_bucket": "wavesounds-463fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506194767202:android:c7345d0ebee0203410103b",
+        "android_client_info": {
+          "package_name": "com.wavesounds"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506194767202-hh62gm2fjtar7jb3re71tlauevmc7ka6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1CCHxzWtmL0PK-CPPWyp0-2gNfclNPc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506194767202-hh62gm2fjtar7jb3re71tlauevmc7ka6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
