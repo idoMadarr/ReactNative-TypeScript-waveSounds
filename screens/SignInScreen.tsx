@@ -168,7 +168,7 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
               </View>
             </View>
             <View style={styles.socialLogin}>
-              <View style={styles.socialLoginHeader}>
+              {/* <View style={styles.socialLoginHeader}>
                 <View style={styles.line}></View>
                 <TextElement>Or connect with</TextElement>
                 <View style={styles.line}></View>
@@ -177,7 +177,7 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
                 onPress={onGoogleOAuth}
                 style={styles.googleIcon}>
                 <GoogleVector />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </Animated.View>
         )}
