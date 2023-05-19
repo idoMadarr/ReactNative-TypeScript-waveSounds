@@ -3,7 +3,7 @@ import Config from 'react-native-config';
 import store from '../redux/store';
 import {setModalMessage, toggleSpinner} from '../redux/slices/authSlice';
 
-const development = Config.localhost;
+// const development = Config.localhost;
 const production = Config.production;
 
 const axiosInstance = axios.create({
