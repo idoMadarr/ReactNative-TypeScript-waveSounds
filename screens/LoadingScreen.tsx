@@ -1,7 +1,7 @@
-import {useCallback, useContext} from 'react';
+import {useCallback, useContext, useEffect} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
-import {View, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
+import {View, StyleSheet, SafeAreaView, Dimensions, Alert} from 'react-native';
 import {useAppDispatch} from '../redux/hooks';
 import Lottie from 'lottie-react-native';
 import {fetchDeezerChart, fetchSequences} from '../redux/actions/deezerActions';
@@ -10,6 +10,7 @@ import {fetchFavorites, fetchOnlines} from '../redux/actions/authAction';
 import {getFromStorage} from '../utils/asyncStorage';
 import {SocketContext} from '../utils/socketIO';
 import Colors from '../assets/design/palette.json';
+import Crashes from 'appcenter-crashes';
 // @ts-ignore:
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
@@ -40,6 +41,23 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
       initialization();
     }, []),
   );
+
+  // Check if the app crash in the last time in used
+  useEffect(() => {
+    checkPreviousSession();
+  }, []);
+
+  const checkPreviousSession = async () => {
+    const didCrash: boolean = await Crashes.hasCrashedInLastSession();
+
+    if (didCrash) {
+      // const report = await Crashes.lastSessionCrashReport();
+      Alert.alert(
+        'Ops!',
+        `Sorry about that crash, we're working on a solution`,
+      );
+    }
+  };
 
   const initApp = async () => {
     const session = await getFromStorage('userSession');

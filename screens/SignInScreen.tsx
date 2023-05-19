@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {
   View,
-  TouchableOpacity,
+  // TouchableOpacity,
   StyleSheet,
   NativeSyntheticEvent,
   TextInputChangeEventData,
@@ -9,6 +9,7 @@ import {
   Dimensions,
   Keyboard,
 } from 'react-native';
+// import Crashes from 'appcenter-crashes';
 import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useAppDispatch} from '../redux/hooks';
@@ -18,7 +19,7 @@ import {useIsFocused} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
 // @ts-ignore:
-import GoogleVector from '../assets/vectors/icon_google.svg';
+// import GoogleVector from '../assets/vectors/icon_google.svg';
 // @ts-ignore:
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 import {getOAuthCredentials} from '../utils/OAuth';
@@ -30,11 +31,6 @@ import InputElement from '../components/resuable/InputElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 import {PropDimensions} from '../dimensions/dimensions';
 import StatusBarElement from '../components/resuable/StatusBarElement';
-
-interface ApiError {
-  message: string;
-  field: string;
-}
 
 const defaultState = {
   email: '',
@@ -52,7 +48,7 @@ type RootStackParamList = {
 
 type SignInScreenType = NativeStackScreenProps<RootStackParamList, 'sign-in'>;
 
-const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
+const SignInScreen: React.FC<SignInScreenType> = () => {
   const [formState, setFormState] = useState(defaultState);
   const [formErrorState, setFormErrorState] = useState(defaultErrorState);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
@@ -91,6 +87,8 @@ const SignInScreen: React.FC<SignInScreenType> = ({navigation}) => {
   };
 
   const onPress = async () => {
+    // Testing integration for crashes in appcenter
+    // Crashes.generateTestCrash();
     Keyboard.dismiss();
     const isValidForm = formValidator();
     if (isValidForm) {
