@@ -10,8 +10,8 @@ import {initSoundTrack} from '../utils/soundTracker';
 
 // Components
 import AlbumHeader from '../components/AlbumPartials/AlbumHeader';
-import AlbumTracks from '../components/AlbumPartials/AlbumTracks';
 import StatusBarElement from '../components/resuable/StatusBarElement';
+import AlbumTracks from '../components/AlbumPartials/AlbumTracks';
 
 type RootStackParamList = {
   album: any;
