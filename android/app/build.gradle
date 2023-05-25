@@ -1,6 +1,8 @@
 apply plugin: "com.android.application"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 apply from: project(":react-native-config").projectDir.getPath() + "/dotenv.gradle"
+apply plugin: 'kotlin-android' 
+apply plugin: 'kotlin-android-extensions'
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
