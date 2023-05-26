@@ -22,8 +22,8 @@ import Colors from '../assets/design/palette.json';
 // Components
 import TextElement from './resuable/TextElement';
 
-const END_REACH = Dimensions.get('window').width * 0.7;
 const OUT_SCREEN = Dimensions.get('window').width * 1.15;
+const END_REACH = Dimensions.get('window').width * 0.7;
 
 interface FloatingPlayerType {
   playerStatus: boolean;
