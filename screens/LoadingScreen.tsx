@@ -97,7 +97,7 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
         loop
         style={{width: 250}}
       />
-      <TextElement cStyle={styles.wait}>Just few moments...</TextElement>
+      <TextElement cStyle={styles.wait}>Please wait few moments...</TextElement>
     </SafeAreaView>
   );
 };
