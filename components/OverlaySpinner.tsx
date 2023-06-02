@@ -16,7 +16,7 @@ const OverlaySpinner = () => {
           source={require('./../assets/lottie/loader.json')}
           autoPlay
           loop
-          style={{width: 150, alignSelf: 'center'}}
+          style={styles.lottie}
         />
         <TextElement cStyle={styles.wait}>Just few moments</TextElement>
       </Animated.View>
@@ -36,6 +36,11 @@ const styles = StyleSheet.create({
   wait: {
     textAlign: 'center',
     color: Colors.white,
+  },
+  lottie: {
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
   },
 });
 

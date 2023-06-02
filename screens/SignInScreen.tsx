@@ -93,7 +93,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
     const isValidForm = formValidator();
     if (isValidForm) {
       dispatch(toggleSpinner());
-      dispatch(signIn(formState));
+      dispatch(signIn({...formState, email: formState.email.toLowerCase()}));
     }
   };
 

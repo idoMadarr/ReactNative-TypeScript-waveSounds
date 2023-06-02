@@ -137,7 +137,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
                 source={require('../assets/lottie/music.json')}
                 autoPlay
                 loop
-                style={{width: 50, height: 50}}
+                style={styles.lottie}
               />
             </Animated.View>
           )}
@@ -190,6 +190,10 @@ const styles = StyleSheet.create({
   image: {
     width: 35,
     height: 35,
+  },
+  lottie: {
+    width: 50,
+    height: 50,
   },
 });
 

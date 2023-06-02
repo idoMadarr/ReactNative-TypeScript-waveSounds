@@ -30,7 +30,7 @@ const ChatHeader: React.FC<ChatHeaderPropsType> = ({recipient, goBack}) => {
         source={require('../../assets/lottie/chat.json')}
         autoPlay
         loop
-        style={{width: 50}}
+        style={styles.lottie}
       />
     </Animated.View>
   );
@@ -51,6 +51,10 @@ const styles = StyleSheet.create({
   },
   icon: {
     paddingHorizontal: 16,
+  },
+  lottie: {
+    width: 50,
+    height: 50,
   },
 });
 

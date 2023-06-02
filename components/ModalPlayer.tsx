@@ -1,5 +1,5 @@
 import React, {useCallback, useState, useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {addFavorite, deleteFavorite} from '../redux/actions/authAction';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -133,7 +133,7 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
               source={require('../assets/lottie/waves.json')}
               autoPlay
               loop
-              style={{width: PropDimensions.fullWidth}}
+              style={styles.lottie}
             />
           </Animated.View>
         )}
@@ -248,6 +248,10 @@ const styles = StyleSheet.create({
     bottom: -20,
     zIndex: 0,
     width: PropDimensions.fullWidth,
+  },
+  lottie: {
+    width: PropDimensions.fullWidth,
+    height: Dimensions.get('window').height * 0.42,
   },
 });
 

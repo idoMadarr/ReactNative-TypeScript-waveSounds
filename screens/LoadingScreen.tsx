@@ -61,18 +61,15 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
 
   const initApp = async () => {
     const session = await getFromStorage('userSession');
-
     if (!session?.userJwt) {
       // @ts-ignore:
       return navigation.navigate('auth');
     }
-
     await dispatch(fetchFavorites());
     await dispatch(fetchDeezerChart());
     await dispatch(fetchSequences());
     await dispatch(fetchOnlines());
     await dispatch(setAuthentication(session.user));
-
     await socket.connect();
     socket.emit('auth', session);
     // @ts-ignore:
@@ -95,7 +92,7 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
         source={require('../assets/lottie/loader.json')}
         autoPlay
         loop
-        style={{width: 250}}
+        style={styles.lottie}
       />
       <TextElement cStyle={styles.wait}>Please wait few moments...</TextElement>
     </SafeAreaView>
@@ -117,6 +114,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: '40%',
     color: Colors.white,
+  },
+  lottie: {
+    width: 150,
+    height: 150,
   },
 });
 
