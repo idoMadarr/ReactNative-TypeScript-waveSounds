@@ -11,7 +11,7 @@ import {getFromStorage} from '../utils/asyncStorage';
 import {SocketContext} from '../utils/socketIO';
 import Colors from '../assets/design/palette.json';
 import Crashes from 'appcenter-crashes';
-// @ts-ignore:
+import {getFCMToekn} from '../utils/firebase';
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
 // Components
@@ -65,6 +65,8 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
       // @ts-ignore:
       return navigation.navigate('auth');
     }
+
+    getFCMToekn();
     await dispatch(fetchFavorites());
     await dispatch(fetchDeezerChart());
     await dispatch(fetchSequences());

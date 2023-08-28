@@ -15,7 +15,6 @@ import {useIsFocused} from '@react-navigation/native';
 import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
 import Colors from '../assets/design/palette.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
-// @ts-ignore:
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
 // Cpmponents
@@ -26,6 +25,7 @@ import ButtonElement from '../components/resuable/ButtonElement';
 import {PropDimensions} from '../dimensions/dimensions';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {getFromStorage} from '../utils/asyncStorage';
 
 interface ApiError {
   message: string;
@@ -95,8 +95,9 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
     Keyboard.dismiss();
     const isValidForm = formValidator();
     if (isValidForm) {
+      const fcmToken = await getFromStorage('fcm');
       dispatch(toggleSpinner());
-      dispatch(signUp(formState));
+      dispatch(signUp({...formState, fcmToken}));
     }
   };
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   // TouchableOpacity,
@@ -10,6 +10,7 @@ import {
   Keyboard,
 } from 'react-native';
 // import Crashes from 'appcenter-crashes';
+import {requestNotifications} from 'react-native-permissions';
 import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useAppDispatch} from '../redux/hooks';
@@ -18,18 +19,17 @@ import {toggleSpinner} from '../redux/slices/authSlice';
 import {useIsFocused} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
-// @ts-ignore:
 // import GoogleVector from '../assets/vectors/icon_google.svg';
-// @ts-ignore:
+import {getFromStorage} from '../utils/asyncStorage';
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 import {getOAuthCredentials} from '../utils/OAuth';
+import {PropDimensions} from '../dimensions/dimensions';
 
 // Cpmponents
 import LinkElement from '../components/resuable/LinkElement';
 import TextElement from '../components/resuable/TextElement';
 import InputElement from '../components/resuable/InputElement';
 import ButtonElement from '../components/resuable/ButtonElement';
-import {PropDimensions} from '../dimensions/dimensions';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 
 const defaultState = {
@@ -56,6 +56,10 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
   const {emailError, passwordError} = formErrorState;
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    requestNotifications(['alert', 'sound']);
+  }, []);
 
   const updateState = (
     name: string,
@@ -92,8 +96,11 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
     Keyboard.dismiss();
     const isValidForm = formValidator();
     if (isValidForm) {
+      const fcmToken = await getFromStorage('fcm');
       dispatch(toggleSpinner());
-      dispatch(signIn({...formState, email: formState.email.toLowerCase()}));
+      dispatch(
+        signIn({...formState, email: formState.email.toLowerCase(), fcmToken}),
+      );
     }
   };
 

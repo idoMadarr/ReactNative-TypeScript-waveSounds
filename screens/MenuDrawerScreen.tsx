@@ -3,11 +3,13 @@ import {View, StyleSheet, SafeAreaView} from 'react-native';
 import {useAppSelector} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
+import {sendPushDetails} from '../redux/actions/authAction';
 import {onLogout} from '../utils/onLogout';
 import {PropDimensions} from '../dimensions/dimensions';
+import Lottie from 'lottie-react-native';
 
 // Components
-import OnlineList from '../components/MenuPartials/OnlineList';
+// import OnlineList from '../components/MenuPartials/OnlineList';
 import TextElement from '../components/resuable/TextElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 
@@ -24,8 +26,11 @@ const MenuDrawerScreen = () => {
         ]}>
         <View style={styles.drawerWrapper}>
           <View style={styles.drawerHeader}>
-            <TextElement fontWeight={'bold'} cStyle={{color: Colors.active}}>
-              {`Hi ${user.username}`}
+            <TextElement
+              fontSize={'xl'}
+              fontWeight={'bold'}
+              cStyle={{color: Colors.active}}>
+              {`Hi ${user.username.toUpperCase()}`}
             </TextElement>
             <TextElement>
               WaveSounds is a Fullstack digital music application that gives you
@@ -33,15 +38,25 @@ const MenuDrawerScreen = () => {
               over the world.
             </TextElement>
             <TextElement>
-              This project was built from the ground up with TypeScript on all
+              This{' '}
+              <TextElement fontWeight={'bold'} cStyle={{color: Colors.active}}>
+                BETA
+              </TextElement>{' '}
+              project was built from the ground up with TypeScript on all
               levels. NodeJS as a backend, combined with MongoDB for storing
-              user's data & React Native (CLI) for building beautiful & complex
-              user interfaces - including Full Authentication Process, Social
-              login, Complex Navigation , Reanimated animations, Gestures
+              user's data & React Native (febric) (CLI) for building beautiful
+              user interface - including Full Authentication Process, Social
+              login, Complex Navigation, Reanimated animations, Gestures
               handlers, Colors interpolation, Push Notification, and much more.
             </TextElement>
-            <OnlineList />
           </View>
+          <ButtonElement
+            title={'Click For Push Details'}
+            backgroundColor={Colors.transparent}
+            titleColor={Colors.active}
+            customStyle={styles.details}
+            onPress={sendPushDetails}
+          />
           <ButtonElement
             title={'Logout'}
             backgroundColor={Colors.primary}
@@ -49,6 +64,14 @@ const MenuDrawerScreen = () => {
             customStyle={styles.logout}
             onPress={onLogout}
           />
+          <View style={styles.lottieContainer}>
+            <Lottie
+              source={require('../assets/lottie/player.json')}
+              autoPlay
+              loop
+              style={styles.lottie}
+            />
+          </View>
         </View>
       </LinearGradient>
     </SafeAreaView>
@@ -69,14 +92,31 @@ const styles = StyleSheet.create({
   },
   drawerHeader: {
     width: '100%',
-    height: '70%',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginTop: 16,
+    height: '45%',
+    justifyContent: 'space-evenly',
   },
   logout: {
+    width: 150,
+    borderRadius: 50,
     borderWidth: 1,
     borderColor: Colors.placeholder,
+    zIndex: 10,
+  },
+  details: {
+    borderRadius: 50,
+    borderWidth: 0,
+    elevation: 0,
+  },
+  lottieContainer: {
+    width: '100%',
+    height: '30%',
+  },
+  lottie: {
+    position: 'absolute',
+    top: '-50%',
+    left: '-150%',
+    width: '400%',
+    height: '400%',
   },
 });
 

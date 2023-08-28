@@ -2,6 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import {ScrollView, StyleSheet, SafeAreaView} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {useDrawerStatus} from '@react-navigation/drawer';
+import messaging from '@react-native-firebase/messaging';
 import {SocketContext} from '../utils/socketIO';
 import Animated, {
   interpolateColor,
@@ -54,6 +55,15 @@ const HomeScreen = () => {
     });
 
     return () => socket.disconnect();
+  }, []);
+
+  // Listening to Firebase Foreground Notifications
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log(remoteMessage, 'foreground message');
+    });
+
+    return unsubscribe;
   }, []);
 
   // Creating an 'array mock length' cuase we cant interpolate directly from redux state
