@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   // TouchableOpacity,
@@ -33,8 +33,8 @@ import ButtonElement from '../components/resuable/ButtonElement';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 
 const defaultState = {
-  email: '',
-  password: '',
+  email: 'ido@gmail.com',
+  password: 'Aa123456',
 };
 
 const defaultErrorState = {
@@ -56,10 +56,18 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
   const {emailError, passwordError} = formErrorState;
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
+  const inputRef = useRef();
 
   useEffect(() => {
     requestNotifications(['alert', 'sound']);
   }, []);
+
+  useEffect(() => {
+    if (formState.email.includes('.com')) {
+      // ts-ignore:
+      inputRef.current?.focus();
+    }
+  }, [formState.email]);
 
   const updateState = (
     name: string,
@@ -160,6 +168,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
                 errorMessage={passwordError}
                 secureTextEntry={secureTextEntry}
                 setSecureTextEntry={togglePasswordMode}
+                inputRef={inputRef}
               />
               <ButtonElement
                 title={'LOG IN'}

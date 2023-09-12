@@ -34,6 +34,7 @@ interface InputElementType {
   setSecureTextEntry?: Function;
   icon?: string;
   onIcon?(): void;
+  inputRef?: any;
 }
 
 const InputElement: React.FC<InputElementType> = ({
@@ -49,6 +50,7 @@ const InputElement: React.FC<InputElementType> = ({
   onIcon,
   cStyle,
   editable,
+  inputRef,
 }) => {
   useEffect(() => {
     if (value?.length) {
@@ -124,6 +126,7 @@ const InputElement: React.FC<InputElementType> = ({
         editable={editable}
         allowFontScaling={false}
         style={[styles.input, cStyle]}
+        ref={inputRef}
       />
       {displayIcon}
       {displayError}

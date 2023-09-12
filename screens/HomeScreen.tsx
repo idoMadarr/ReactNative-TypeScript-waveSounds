@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {ScrollView, StyleSheet, SafeAreaView} from 'react-native';
+import {ScrollView, StyleSheet, SafeAreaView, Alert} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {useDrawerStatus} from '@react-navigation/drawer';
 import messaging from '@react-native-firebase/messaging';
@@ -60,7 +60,7 @@ const HomeScreen = () => {
   // Listening to Firebase Foreground Notifications
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log(remoteMessage, 'foreground message');
+      Alert.alert('foreground message', JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;

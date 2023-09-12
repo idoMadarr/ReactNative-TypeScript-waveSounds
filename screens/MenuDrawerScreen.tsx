@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 16,
+    paddingTop: 16,
   },
   drawerHeader: {
     width: '100%',
@@ -108,8 +108,9 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   lottieContainer: {
-    width: '100%',
+    width: PropDimensions.fullWidth,
     height: '30%',
+    overflow: 'hidden',
   },
   lottie: {
     position: 'absolute',
