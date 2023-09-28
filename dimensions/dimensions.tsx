@@ -16,7 +16,7 @@ export enum PropDimensions {
   maxModalHeight = Dimensions.get('window').height * 0.7,
   messageModalHeight = Dimensions.get('window').height * 0.15,
   inputContainerHight = Dimensions.get('window').height * 0.1,
-  inputHight = Dimensions.get('window').height * 0.06,
+  inputHight = Dimensions.get('window').height * 0.07,
   inputWidth = Dimensions.get('window').width * 0.85,
   searchWidth = Dimensions.get('window').width * 0.85,
   searchHeight = Dimensions.get('window').height * 0.25,

@@ -3,6 +3,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import AlbumScreen from '../screens/AlbumScreen';
 import ChatScreen from '../screens/ChatScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import HomeHeader from '../components/HomePartials/HomeHeader';
@@ -25,6 +27,16 @@ export const MainStack = () => {
       <MainStack.Screen
         name={'chat'}
         component={ChatScreen}
+        options={{headerShown: false}}
+      />
+      <MainStack.Screen
+        name={'settings'}
+        component={SettingsScreen}
+        options={{headerShown: false}}
+      />
+      <MainStack.Screen
+        name={'profile'}
+        component={ProfileScreen}
         options={{headerShown: false}}
       />
     </MainStack.Navigator>

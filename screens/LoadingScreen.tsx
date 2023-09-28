@@ -17,8 +17,10 @@ import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import TextElement from '../components/resuable/TextElement';
+import LinearGradient from 'react-native-linear-gradient';
+import {PropDimensions} from '../dimensions/dimensions';
 
-const faviconSize = Dimensions.get('window').width * 0.45;
+const faviconSize = Dimensions.get('window').width * 0.25;
 
 type RootStackParamList = {
   loading: any;
@@ -44,7 +46,7 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
 
   // Check if the app crash in the last time in used
   useEffect(() => {
-    checkPreviousSession();
+    // checkPreviousSession();
   }, []);
 
   const checkPreviousSession = async () => {
@@ -80,23 +82,21 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <StatusBarElement
-        barStyle={'light-content'}
-        backgroundColor={Colors.primary}
-      />
-      <View style={styles.title}>
-        <FaviconVector height={faviconSize} width={faviconSize} />
-        <TextElement fontSize={'xl'} fontWeight={'bold'}>
-          waveSounds
-        </TextElement>
-      </View>
-      <Lottie
-        source={require('../assets/lottie/loader.json')}
-        autoPlay
-        loop
-        style={styles.lottie}
-      />
-      <TextElement cStyle={styles.wait}>Please wait few moments...</TextElement>
+      <StatusBarElement barStyle={'light-content'} backgroundColor="#0E1013" />
+      <LinearGradient
+        style={styles.main}
+        colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
+        <View style={styles.title}>
+          <FaviconVector height={faviconSize} width={faviconSize} />
+          <TextElement fontSize={'xl'}>waveSounds</TextElement>
+        </View>
+        <Lottie
+          source={require('../assets/lottie/waves2.json')}
+          autoPlay
+          loop
+          style={styles.lottie}
+        />
+      </LinearGradient>
     </SafeAreaView>
   );
 };
@@ -108,18 +108,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.primary,
   },
-  title: {
-    alignItems: 'center',
-    color: Colors.secondary,
+  main: {
+    flex: 1,
+    width: '100%',
   },
-  wait: {
-    position: 'absolute',
-    bottom: '40%',
-    color: Colors.white,
+  title: {
+    flex: 1,
+    paddingBottom: '30%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   lottie: {
-    width: 150,
-    height: 150,
+    position: 'absolute',
+    top: '45%',
+    height: 200,
+    width: PropDimensions.fullWidth,
   },
 });
 

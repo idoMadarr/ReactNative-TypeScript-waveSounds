@@ -6,15 +6,15 @@ import {
   TextInputChangeEventData,
   SafeAreaView,
   Keyboard,
+  KeyboardAvoidingView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppDispatch} from '../redux/hooks';
 import {toggleSpinner} from '../redux/slices/authSlice';
 import {signUp} from '../redux/actions/authAction';
 import {useIsFocused} from '@react-navigation/native';
-import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
+import Animated, {FadeInUp} from 'react-native-reanimated';
 import Colors from '../assets/design/palette.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 
 // Cpmponents
@@ -22,15 +22,9 @@ import LinkElement from '../components/resuable/LinkElement';
 import TextElement from '../components/resuable/TextElement';
 import InputElement from '../components/resuable/InputElement';
 import ButtonElement from '../components/resuable/ButtonElement';
-import {PropDimensions} from '../dimensions/dimensions';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {getFromStorage} from '../utils/asyncStorage';
-
-interface ApiError {
-  message: string;
-  field: string;
-}
 
 const defaultState = {
   email: '',
@@ -109,64 +103,62 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
       />
       <LinearGradient
         style={styles.mainContainer}
-        colors={[
-          Colors['gradient-end'],
-          Colors['gradient-mid'],
-          Colors['gradient-end'],
-        ]}>
+        colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
         {isFocused && (
-          <Animated.View entering={FadeInDown} style={styles.section}>
-            <TextElement cStyle={styles.mainTitle}>
-              We're more than a distributor. From Unlimited Guides & Master
-              Classes, to showcasing top TuneCore talent across the globe, to
-              the latest breaking news & partnerships.
-            </TextElement>
-            <InputElement
-              value={email}
-              onChange={updateState.bind(this, 'email')}
-              placeholder={'Email'}
-              icon={'envelope-o'}
-              errorMessage={emailError}
-            />
-            <InputElement
-              value={username}
-              onChange={updateState.bind(this, 'username')}
-              placeholder={'Username'}
-              icon={'user-circle-o'}
-              errorMessage={usernameError}
-            />
-            <InputElement
-              value={password}
-              onChange={updateState.bind(this, 'password')}
-              placeholder={'Password'}
-              icon={'eye-slash'}
-              errorMessage={passwordError}
-              secureTextEntry={secureTextEntry}
-              setSecureTextEntry={togglePasswordMode}
-            />
-            <ButtonElement
-              title={'SIGN UP'}
-              titleColor={Colors.black}
-              onPress={onPress}
-              backgroundColor={Colors.active}
-            />
-            <View style={styles.linkContainer}>
-              <TextElement>Already have an account? </TextElement>
-              <LinkElement url={'sign-in'}> Sign In</LinkElement>
+          <Animated.View entering={FadeInUp.springify()}>
+            <KeyboardAvoidingView
+              behavior={'height'}
+              style={styles.formContainer}>
+              <FaviconVector height={100} width={100} />
+              <TextElement
+                cStyle={{textAlign: 'center'}}
+                fontSize={'xl'}
+                fontWeight={'bold'}>
+                Sign up for a free waveSounds account
+              </TextElement>
+              <TextElement cStyle={{textAlign: 'center'}}>
+                WaveSounds is a digital music that gives you access to millions
+                of songs and other content from creators all over the world.
+              </TextElement>
+              <View style={styles.title}>
+                <InputElement
+                  value={email}
+                  onChange={updateState.bind(this, 'email')}
+                  placeholder={'Email'}
+                  icon={'envelope-o'}
+                  errorMessage={emailError}
+                />
+                <InputElement
+                  value={username}
+                  onChange={updateState.bind(this, 'username')}
+                  placeholder={'Username'}
+                  icon={'user-circle-o'}
+                  errorMessage={usernameError}
+                />
+                <InputElement
+                  value={password}
+                  onChange={updateState.bind(this, 'password')}
+                  placeholder={'Password'}
+                  icon={'eye-slash'}
+                  errorMessage={passwordError}
+                  secureTextEntry={secureTextEntry}
+                  setSecureTextEntry={togglePasswordMode}
+                />
+                <ButtonElement
+                  title={'Continue'}
+                  titleColor={Colors.black}
+                  onPress={onPress}
+                  backgroundColor={Colors.active}
+                />
+              </View>
+            </KeyboardAvoidingView>
+            <View style={styles.mainContainer}>
+              <LinkElement url={'sign-in'}>
+                Already have an account?
+              </LinkElement>
             </View>
           </Animated.View>
         )}
-        <Animated.View entering={FadeInLeft.springify()} style={styles.section}>
-          <TextElement>
-            WaveSounds Doesn't Stop... We'll get your music on more than 150
-            digital music stores and social platforms, including Apple Music,
-            TikTok, YouTube, Tidal, Tencent and more. Keep 100% ownership of
-            your music and stay in control of your career.
-          </TextElement>
-          <View style={{alignItems: 'center'}}>
-            <FaviconVector height={80} width={80} />
-          </View>
-        </Animated.View>
       </LinearGradient>
     </SafeAreaView>
   );
@@ -177,21 +169,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mainContainer: {
-    height: '100%',
-    width: '100%',
-    justifyContent: 'center',
+    flex: 1,
     alignItems: 'center',
   },
-  linkContainer: {
-    marginVertical: 8,
-    width: PropDimensions.buttonWidth,
-    flexDirection: 'row',
+  formContainer: {
+    height: '94%',
+    width: '85%',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
-  section: {
-    width: PropDimensions.buttonWidth,
-  },
-  mainTitle: {
-    paddingBottom: 8,
+  title: {
+    marginVertical: 32,
   },
 });
 

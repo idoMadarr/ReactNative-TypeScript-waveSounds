@@ -1,5 +1,7 @@
 {
-  "primary": "#242424",
+  "primary": "#0E1013",
+  "primary-shadow": "#202124",
+  "bg_input": "#121212",
   "secondary": "#E2DDD1",
   "warning": "#fc1919",
   "greyish": "#525050",

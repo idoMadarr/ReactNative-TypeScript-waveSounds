@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {useEffect, useState} from 'react';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
@@ -10,18 +10,29 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {PropDimensions} from '../dimensions/dimensions';
-import Colors from '../assets/design/palette.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {tabs} from '../fixtures/tabs.json';
 import TextElement from './resuable/TextElement';
+import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
+import ProfileIcon from '../assets/vectors/profile.svg';
+import SearchIcon from '../assets/vectors/search.svg';
+import SettingIcon from '../assets/vectors/setting.svg';
+import StarIcon from '../assets/vectors/star.svg';
+import Colors from '../assets/design/palette.json';
+
+const iconList = [
+  <SearchIcon />,
+  <ProfileIcon />,
+  null,
+  <StarIcon />,
+  <SettingIcon />,
+];
 
 const DEFAULT_TAB = tabs[1].route;
-const DEFAULT_OFFSET = PropDimensions.fullWidth / 3;
+const DEFAULT_OFFSET = PropDimensions.fullWidth / 2.56;
 
 interface TabType {
   id: number;
   route: string;
-  icon: string;
   focus: string;
   setFocus: Function;
 }
@@ -38,7 +49,7 @@ const TabBar: React.FC = () => {
   };
 
   const setTranslateX = (index: number) => {
-    return (PropDimensions.fullWidth / 3) * index;
+    return (PropDimensions.fullWidth / 5) * index;
   };
 
   const offsetAnimation = useAnimatedStyle(() => {
@@ -49,12 +60,11 @@ const TabBar: React.FC = () => {
 
   return (
     <View style={styles.tabContainer}>
-      {tabs.map(({id, route, icon}) => (
+      {tabs.map(({id, route}) => (
         <Tab
           key={id}
           id={id}
           route={route}
-          icon={icon}
           focus={focus}
           setFocus={translateXAnimate}
         />
@@ -64,7 +74,7 @@ const TabBar: React.FC = () => {
   );
 };
 
-const Tab: React.FC<TabType> = ({id, route, icon, focus, setFocus}) => {
+const Tab: React.FC<TabType> = ({id, route, focus, setFocus}) => {
   const scale = useSharedValue(1);
   const isFocus = route === focus;
 
@@ -86,43 +96,46 @@ const Tab: React.FC<TabType> = ({id, route, icon, focus, setFocus}) => {
 
   return (
     <TouchableOpacity onPress={onPress.bind(this, route)} style={styles.tab}>
-      <Animated.View style={scaleAnimation}>
-        <Icon
-          name={icon}
-          size={20}
-          color={isFocus ? Colors.active : Colors.secondary}
-        />
-      </Animated.View>
-      <TextElement fontSize={'sm'} cStyle={{marginTop: 2}}>
-        {route}
-      </TextElement>
+      {route !== 'home' ? (
+        <Fragment>
+          <Animated.View style={scaleAnimation}>{iconList[id]}</Animated.View>
+          <TextElement
+            fontSize={'sm'}
+            cStyle={{marginTop: 2, color: Colors.placeholder}}>
+            {`${route[0].toUpperCase()} ${route.slice(1)}`}
+          </TextElement>
+        </Fragment>
+      ) : (
+        <View style={{paddingBottom: 8}}>
+          <FaviconVector height={80} width={80} />
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   tabContainer: {
-    height: 60,
+    height: 80,
     alignSelf: 'center',
     width: PropDimensions.fullWidth,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: Colors['gradient-start'],
-    elevation: 5,
+    backgroundColor: Colors.primary,
   },
   tab: {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
     paddingTop: '2%',
-    width: '33%',
+    width: '20%',
   },
   indicator: {
     width: 50,
     position: 'absolute',
     top: 0,
-    left: (PropDimensions.tabWidth * 0.33 - 50) / 2,
+    left: (PropDimensions.tabWidth * 0.2 - 50) / 2,
     borderRadius: 25,
     height: 2,
     backgroundColor: Colors.active,

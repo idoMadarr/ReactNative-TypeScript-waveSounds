@@ -13,6 +13,7 @@ import {
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {Modalize} from 'react-native-modalize';
 import {PropDimensions} from '../dimensions/dimensions';
+import {navigationRef} from '../utils/rootNavigation';
 
 // Screens
 import {AuthStack} from './StackNavigation';
@@ -118,7 +119,7 @@ const AppNavigation: React.FC = () => {
   const closeModal = () => modalizePlayerRef.current?.close();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <AppNavigator.Navigator screenOptions={{headerShown: false}}>
         <AppNavigator.Screen name={'loading'} component={LoadingScreen} />
         {isAuth ? (
