@@ -34,8 +34,8 @@ import ButtonElement from '../components/resuable/ButtonElement';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 
 const defaultState = {
-  email: 'ido@gmail.com',
-  password: 'Aa123456',
+  email: '',
+  password: '',
 };
 
 const defaultErrorState = {

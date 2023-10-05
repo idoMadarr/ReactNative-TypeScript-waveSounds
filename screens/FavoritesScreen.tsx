@@ -5,12 +5,12 @@ import Colors from '../assets/design/palette.json';
 import LinearGradient from 'react-native-linear-gradient';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {initSoundTrack} from '../utils/soundTracker';
+import {TrackType} from '../types/Types';
 
 // Components
 import FavoriteHeader from '../components/FavoritesPartials/FavoriteHeader';
 import FavoritesList from '../components/FavoritesPartials/FavoritesList';
 import StatusBarElement from '../components/resuable/StatusBarElement';
-import {TrackType} from '../types/Types';
 
 const FavoritesScreen = () => {
   const favorites = useAppSelector(state => state.authSlice.favoritesList);
@@ -30,15 +30,11 @@ const FavoritesScreen = () => {
     <SafeAreaView style={[styles.screen]}>
       <StatusBarElement
         barStyle={'light-content'}
-        backgroundColor={Colors['gradient-start']}
+        backgroundColor={Colors.primary}
       />
       <LinearGradient
         style={styles.main}
-        colors={[
-          Colors['gradient-start'],
-          Colors['gradient-end'],
-          Colors['gradient-mid'],
-        ]}>
+        colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
         <FavoriteHeader counter={favorites.length} />
         <FavoritesList favorites={favorites} onPlay={onPlay} />
       </LinearGradient>

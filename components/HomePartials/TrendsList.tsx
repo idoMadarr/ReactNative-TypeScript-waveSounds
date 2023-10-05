@@ -32,7 +32,7 @@ const TrendsList: React.FC<TrendsListType> = ({trends}) => {
 
   return (
     <Fragment>
-      {trends.map(({id, artist, title, image, preview}, index) => (
+      {trends.map(({id, artist, title, image, preview}) => (
         <TrendCard
           key={id}
           artist={artist}
@@ -47,7 +47,6 @@ const TrendsList: React.FC<TrendsListType> = ({trends}) => {
             artist,
             preview!,
           )}
-          darkMode={index % 2 !== 0}
         />
       ))}
     </Fragment>

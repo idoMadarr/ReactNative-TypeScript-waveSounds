@@ -31,7 +31,13 @@ type ChatScreenType = NativeStackScreenProps<RootStackParamList, 'chat'>;
 
 const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
   // @ts-ignore:
-  const user = route.params!.user as ConnectedOnlineType;
+  // const user = route.params!.user as ConnectedOnlineType;
+  const user = {
+    userId: 234,
+    username: 'dany',
+    online: true,
+    socketAddress: undefined,
+  };
   const currentUser = useAppSelector(state => state.authSlice.user);
   const chainId = (user.userId + currentUser!.id).split('').sort().join('');
   const chainChat = useAppSelector(

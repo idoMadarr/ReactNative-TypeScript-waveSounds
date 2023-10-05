@@ -1,8 +1,8 @@
-import React, {Fragment} from 'react';
+import React from 'react';
+import {StyleSheet} from 'react-native';
 import Animated, {SlideInLeft} from 'react-native-reanimated';
 import Colors from '../../assets/design/palette.json';
 import {PropDimensions} from '../../dimensions/dimensions';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Components
 import TextElement from '../resuable/TextElement';
@@ -19,22 +19,33 @@ const SearchHeader: React.FC<SearchHeaderType> = ({
   optimizeSearchFunc,
 }) => {
   return (
-    <View>
+    <View style={styles.searchContainer}>
       <TextElement
+        fontSize={'xl'}
         cStyle={{color: Colors.white, width: PropDimensions.inputWidth}}>
-        Exploer our music streaming app that gives you access to over 90 million
-        tracks worldwide and other audio content
+        Search
       </TextElement>
       <Animated.View entering={SlideInLeft}>
         <InputElement
           value={searchState}
           onChange={optimizeSearchFunc}
-          placeholder={'Search'}>
-          <Icon name={'search'} size={28} color={Colors.primary} />
-        </InputElement>
+          placeholder={'Search for any song or artist'}
+          cStyle={styles.searchInput}
+          icon={'search'}
+        />
       </Animated.View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  searchContainer: {
+    paddingTop: 24,
+  },
+  searchInput: {
+    zIndex: 100,
+    backgroundColor: Colors.dark,
+  },
+});
 
 export default SearchHeader;

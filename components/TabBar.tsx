@@ -12,22 +12,15 @@ import Animated, {
 import {PropDimensions} from '../dimensions/dimensions';
 import {tabs} from '../fixtures/tabs.json';
 import TextElement from './resuable/TextElement';
-import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 import ProfileIcon from '../assets/vectors/profile.svg';
 import SearchIcon from '../assets/vectors/search.svg';
 import SettingIcon from '../assets/vectors/setting.svg';
 import StarIcon from '../assets/vectors/star.svg';
+import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
+import FaviconVectorGrey from '../assets/vectors/waveSounds-favicon-grey.svg';
 import Colors from '../assets/design/palette.json';
 
-const iconList = [
-  <SearchIcon />,
-  <ProfileIcon />,
-  null,
-  <StarIcon />,
-  <SettingIcon />,
-];
-
-const DEFAULT_TAB = tabs[1].route;
+const DEFAULT_TAB = tabs[2].route;
 const DEFAULT_OFFSET = PropDimensions.fullWidth / 2.56;
 
 interface TabType {
@@ -81,7 +74,6 @@ const Tab: React.FC<TabType> = ({id, route, focus, setFocus}) => {
   const scaleAnimation = useAnimatedStyle(() => {
     return {
       transform: [{scale: withSpring(scale.value)}],
-      color: isFocus ? Colors.active : Colors.secondary,
     };
   });
 
@@ -94,6 +86,14 @@ const Tab: React.FC<TabType> = ({id, route, focus, setFocus}) => {
     if (route !== 'menu') scale.value = 1.4;
   };
 
+  const iconList = [
+    <SearchIcon color={isFocus ? Colors.active : Colors.light} />,
+    <ProfileIcon color={isFocus ? Colors.active : Colors.light} />,
+    null,
+    <StarIcon color={isFocus ? Colors.active : Colors.light} />,
+    <SettingIcon color={isFocus ? Colors.active : Colors.light} />,
+  ];
+
   return (
     <TouchableOpacity onPress={onPress.bind(this, route)} style={styles.tab}>
       {route !== 'home' ? (
@@ -101,13 +101,20 @@ const Tab: React.FC<TabType> = ({id, route, focus, setFocus}) => {
           <Animated.View style={scaleAnimation}>{iconList[id]}</Animated.View>
           <TextElement
             fontSize={'sm'}
-            cStyle={{marginTop: 2, color: Colors.placeholder}}>
-            {`${route[0].toUpperCase()} ${route.slice(1)}`}
+            cStyle={{
+              marginTop: 2,
+              color: isFocus ? Colors.active : Colors.placeholder,
+            }}>
+            {`${route[0].toUpperCase()}${route.slice(1)}`}
           </TextElement>
         </Fragment>
       ) : (
         <View style={{paddingBottom: 8}}>
-          <FaviconVector height={80} width={80} />
+          {isFocus ? (
+            <FaviconVector height={80} width={80} />
+          ) : (
+            <FaviconVectorGrey height={80} width={80} />
+          )}
         </View>
       )}
     </TouchableOpacity>
@@ -122,7 +129,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.tabs,
   },
   tab: {
     alignItems: 'center',

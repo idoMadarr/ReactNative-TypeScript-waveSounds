@@ -33,7 +33,6 @@ const OnlineList = () => {
 
   return (
     <ScrollView style={styles.onlineList}>
-      <TextElement>{`${list.length} Onlines user:`}</TextElement>
       {list.map(user => (
         <OnlineItem
           key={user.userId}
@@ -47,7 +46,7 @@ const OnlineList = () => {
 
 const styles = StyleSheet.create({
   onlineList: {
-    minHeight: '50%',
+    alignSelf: 'center',
     width: PropDimensions.favoriteHeaderWidth,
     marginTop: 16,
   },

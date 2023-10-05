@@ -94,7 +94,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [{translateX: offset.value}],
-      backgroundColor: isTocuhed.value ? '#666565bd' : '#525050bd',
+      backgroundColor: isTocuhed.value ? '#161616bd' : '#040404bd',
       opacity: 1,
     };
   });
@@ -166,11 +166,11 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    height: 50,
+    height: 60,
     alignSelf: 'center',
     width: PropDimensions.fullWidth,
     position: 'absolute',
-    bottom: 60,
+    bottom: 75,
     left: 0,
     zIndex: 100,
     flexDirection: 'row',
@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
   image: {
     width: 35,
     height: 35,
+    borderRadius: 6,
   },
   lottie: {
     width: 50,

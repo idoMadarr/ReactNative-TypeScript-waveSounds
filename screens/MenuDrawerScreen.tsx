@@ -24,7 +24,7 @@ const MenuDrawerScreen = () => {
           Colors['gradient--modal-start'],
           Colors['gradient-modal-end'],
         ]}>
-        <View style={styles.drawerWrapper}>
+        {/* <View style={styles.drawerWrapper}>
           <View style={styles.drawerHeader}>
             <TextElement
               fontSize={'xl'}
@@ -72,7 +72,7 @@ const MenuDrawerScreen = () => {
               style={styles.lottie}
             />
           </View>
-        </View>
+        </View> */}
       </LinearGradient>
     </SafeAreaView>
   );

@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import TextElement from '../resuable/TextElement';
 import {useAppSelector} from '../../redux/hooks';
+import PlayIcon from '../../assets/vectors/play.svg';
+import StarIcon from '../../assets/vectors/star.svg';
 import Colors from '../../assets/design/palette.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface AlbumTrackType {
   id: string;
@@ -31,7 +32,7 @@ const AlbumTrack: React.FC<AlbumTrackType> = ({
   }
 
   if (indexIndicator == index && !isFavorite) {
-    dynamicColor = Colors.primary;
+    dynamicColor = Colors.active;
   }
 
   return (
@@ -41,23 +42,17 @@ const AlbumTrack: React.FC<AlbumTrackType> = ({
         styles.TrackContainer,
         {
           backgroundColor:
-            indexIndicator == index ? Colors.greyish : Colors.transparent,
+            indexIndicator == index ? Colors.dark : Colors.transparent,
         },
       ]}>
-      <View>
-        <TextElement
-          numberOfLines={1}
-          cStyle={index % 2 === 0 ? styles.active : styles.passive}>
+      <View style={styles.titleSection}>
+        <PlayIcon />
+        <TextElement numberOfLines={1} cStyle={styles.title}>
           {title}
         </TextElement>
       </View>
-      <TouchableOpacity onPress={onFavorite} style={styles.favorite}>
-        <Icon
-          name={'star'}
-          size={18}
-          style={{marginHorizontal: 6}}
-          color={dynamicColor}
-        />
+      <TouchableOpacity onPress={onFavorite}>
+        <StarIcon color={dynamicColor} />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -67,22 +62,17 @@ const styles = StyleSheet.create({
   TrackContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 5,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderColor: '#5757573a',
-    borderRadius: 5,
-  },
-  active: {
-    width: Dimensions.get('window').width * 0.7,
-    color: Colors.active,
-  },
-  passive: {
-    width: Dimensions.get('window').width * 0.7,
-    color: Colors.white,
-  },
-  favorite: {
     paddingHorizontal: 8,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  titleSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    color: Colors.placeholder,
+    marginHorizontal: 6,
   },
 });
 

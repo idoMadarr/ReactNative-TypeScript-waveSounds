@@ -1,20 +1,26 @@
 import React from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ImageBackground,
+} from 'react-native';
 import Animated, {FadeInLeft} from 'react-native-reanimated';
-import FastImage from 'react-native-fast-image';
 import {PropDimensions} from '../../dimensions/dimensions';
 import Colors from '../../assets/design/palette.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import PlayIcon from '../../assets/vectors/play.svg';
+import NoteIcon from '../../assets/vectors/note.svg';
+import StarIcon from '../../assets/vectors/star.svg';
 
 // Components
 import TextElement from '../resuable/TextElement';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface TrendCardType {
   artist: string;
   title: string;
   release: string;
   image: string;
-  darkMode: boolean;
   onPlay(): void;
 }
 
@@ -23,57 +29,56 @@ const TrendCard: React.FC<TrendCardType> = ({
   title,
   release,
   image,
-  darkMode,
   onPlay,
 }) => {
-  const textColor = darkMode ? Colors.white : Colors.black;
-  const cardColor = darkMode ? Colors.greyish : Colors.light;
-  const buttonColor = darkMode ? Colors.light : Colors.greyish;
-  const buttonTextColor = !darkMode ? Colors.light : Colors.greyish;
-
   return (
     <View style={styles.item}>
-      <Animated.View
-        entering={FadeInLeft}
-        style={[styles.card, {backgroundColor: cardColor}]}>
-        <View style={styles.header}>
-          <TextElement
-            fontSize={'lg'}
-            fontWeight={'bold'}
-            cStyle={{color: textColor, ...styles.center}}>
-            {title}
-          </TextElement>
-          <TextElement
-            fontWeight={'bold'}
-            cStyle={{color: textColor, ...styles.center}}>
-            {`* ${artist} *`}
-          </TextElement>
-        </View>
-        <View style={styles.imageContainer}>
-          <FastImage
-            source={{uri: image}}
-            resizeMode={'cover'}
-            style={styles.image}
-          />
-        </View>
-        <Icon name={'star'} size={42} color={buttonColor} style={styles.icon} />
-        <TouchableOpacity
-          onPress={onPlay}
-          activeOpacity={0.8}
-          style={[styles.button, {backgroundColor: buttonColor}]}>
-          <TextElement fontWeight={'bold'} cStyle={{color: buttonTextColor}}>
-            Play now
-          </TextElement>
-        </TouchableOpacity>
-        <TextElement
-          cStyle={{color: textColor}}
-          fontSize={'sm'}>{`Realese on ${release}`}</TextElement>
+      <Animated.View entering={FadeInLeft} style={styles.card}>
+        <ImageBackground style={styles.bgCard} source={{uri: image}}>
+          <LinearGradient
+            colors={[Colors.transparent, '#000000be', Colors.black]}
+            style={styles.flex}>
+            <View style={styles.contentContainer}>
+              <View style={{alignItems: 'center'}}>
+                <TextElement
+                  numberOfLines={2}
+                  fontSize={'xl'}
+                  fontWeight={'bold'}
+                  cStyle={styles.center}>
+                  {title}
+                </TextElement>
+                <TextElement
+                  fontWeight={'bold'}
+                  cStyle={{color: Colors.greyish}}>
+                  {`* ${artist} *`}
+                </TextElement>
+              </View>
+              <View style={styles.controller}>
+                <TouchableOpacity>
+                  {/* <NoteIcon width={36} height={36} /> */}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={onPlay} style={styles.playButton}>
+                  <PlayIcon />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  {/* <StarIcon width={36} height={36} /> */}
+                </TouchableOpacity>
+              </View>
+              <TextElement
+                cStyle={styles.center}
+                fontSize={'sm'}>{`Realese on ${release}`}</TextElement>
+            </View>
+          </LinearGradient>
+        </ImageBackground>
       </Animated.View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   item: {
     alignItems: 'center',
     width: PropDimensions.fullWidth,
@@ -81,44 +86,38 @@ const styles = StyleSheet.create({
   card: {
     width: PropDimensions.cardWidth,
     height: PropDimensions.cardHeight,
-    borderRadius: 50,
-    borderTopEndRadius: 0,
-    borderBottomLeftRadius: 10,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    elevation: 5,
-    shadowOffset: {width: 2, height: 5},
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    padding: 16,
+    borderRadius: 15,
+    elevation: 3,
+    backgroundColor: Colors.black,
+    overflow: 'hidden',
   },
-  header: {
+  bgCard: {
+    width: '100%',
+    height: '90%',
+  },
+  contentContainer: {
+    height: '65%',
+    justifyContent: 'space-around',
+    position: 'absolute',
+    bottom: '-12%',
+    alignSelf: 'center',
+  },
+  controller: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  playButton: {
+    marginHorizontal: 24,
+    backgroundColor: Colors.dark,
+    width: 65,
+    height: 65,
+    borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
   center: {
     textAlign: 'center',
-  },
-  imageContainer: {
-    width: '90%',
-    height: '50%',
-    elevation: 5,
-    overflow: 'hidden',
-    borderRadius: 15,
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-  button: {
-    padding: 10,
-    paddingHorizontal: 20,
-    borderRadius: 25,
-  },
-  icon: {
-    position: 'absolute',
-    top: '-3%',
-    right: '-5%',
   },
 });
 

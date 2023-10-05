@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {ScrollView, StyleSheet, SafeAreaView, Alert} from 'react-native';
+import {ScrollView, StyleSheet, SafeAreaView, Alert, View} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {useDrawerStatus} from '@react-navigation/drawer';
 import messaging from '@react-native-firebase/messaging';
@@ -26,6 +26,7 @@ import {ConnectedOnlineType, ChatMessageType} from '../types/Types';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
+import TextElement from '../components/resuable/TextElement';
 
 const HomeScreen = () => {
   const trends = useAppSelector(state => state.deezerSlice.trends!);
@@ -80,7 +81,7 @@ const HomeScreen = () => {
       translateX.value,
       InterpolationMock.map((_, i) => PropDimensions.fullWidth * i),
       InterpolationMock.map((_, i) =>
-        i % 2 === 0 ? Colors.secondary : Colors.primary,
+        i % 2 === 0 ? Colors.dark : Colors.primary,
       ),
     ) as string;
     return {backgroundColor};
@@ -96,10 +97,13 @@ const HomeScreen = () => {
         bounces={false}
         showsVerticalScrollIndicator={false}
         snapToOffsets={[0, PropDimensions.trendsHeight]}
-        contentContainerStyle={{alignItems: 'center'}}
+        contentContainerStyle={styles.center}
         snapToEnd={false}
         decelerationRate={'fast'}>
         <Animated.View style={[style, styles.trendsContainer]}>
+          <View style={styles.recommendedContainer}>
+            <TextElement fontSize={'lg'}>Recommended for you</TextElement>
+          </View>
           <Animated.ScrollView
             horizontal
             onScroll={onHorizontalScroll}
@@ -110,6 +114,14 @@ const HomeScreen = () => {
             decelerationRate={'fast'}>
             {isFocused && <TrendsList trends={trends} />}
           </Animated.ScrollView>
+          {/* <View style={styles.trackerContainer}>
+            {trends.map(item => (
+              <View
+                key={item.id}
+                style={[styles.tracker, {backgroundColor: Colors.placeholder}]}
+              />
+            ))}
+          </View> */}
         </Animated.View>
         <SectionList />
       </ScrollView>
@@ -125,7 +137,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   trendsContainer: {
+    paddingTop: '15%',
     height: PropDimensions.trendsHeight,
+  },
+  recommendedContainer: {
+    position: 'absolute',
+    top: '6%',
+    width: PropDimensions.inputWidth,
+    alignSelf: 'center',
+  },
+  trackerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingBottom: '4%',
+  },
+  tracker: {
+    width: 14,
+    height: 14,
+    borderRadius: 50,
+    marginHorizontal: 6,
   },
 });
 

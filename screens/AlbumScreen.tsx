@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {ImageBackground, SafeAreaView, StyleSheet} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useAppSelector} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
@@ -43,28 +43,27 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
     <SafeAreaView style={styles.screen}>
       <StatusBarElement
         barStyle={'light-content'}
-        backgroundColor={Colors['gradient-start']}
+        backgroundColor={Colors.black}
       />
-      <LinearGradient
-        colors={[
-          Colors['gradient-start'],
-          Colors['gradient-end'],
-          Colors['gradient-mid'],
-        ]}>
-        <AlbumHeader
-          title={albumData.title}
-          label={albumData.label}
-          imageCover={albumData.image}
-          name={albumData.artist}
-          releaseDate={albumData.releaseDate}
-          pressBack={pressBack}
-        />
-        <AlbumTracks
-          tracks={albumData.tracks}
-          onPlay={onPlay}
-          indexIndicator={currentIndexTrack}
-        />
-      </LinearGradient>
+      <ImageBackground style={styles.bgCard} source={{uri: albumData.image}}>
+        <LinearGradient
+          colors={[Colors.black, '#000000d6', Colors.black]}
+          style={styles.screen}>
+          <AlbumHeader
+            title={albumData.title}
+            label={albumData.label}
+            imageCover={albumData.image}
+            name={albumData.artist}
+            releaseDate={albumData.releaseDate}
+            pressBack={pressBack}
+          />
+          <AlbumTracks
+            tracks={albumData.tracks}
+            onPlay={onPlay}
+            indexIndicator={currentIndexTrack}
+          />
+        </LinearGradient>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -72,6 +71,10 @@ const AlbumScreen: React.FC<AlbumScreenType> = ({navigation, route}) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+  },
+  bgCard: {
+    width: '100%',
+    height: '100%',
   },
 });
 

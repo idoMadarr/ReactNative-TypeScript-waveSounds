@@ -14,11 +14,7 @@ const SectionList = () => {
 
   return (
     <LinearGradient
-      colors={[
-        Colors['gradient-start'],
-        Colors['gradient-mid'],
-        Colors['gradient-end'],
-      ]}>
+      colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
       {sequenceTree.map(({name, albums}) => (
         <View key={name} style={styles.sequenceContainer}>
           <View style={styles.sectionContainer}>
@@ -43,6 +39,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: 'center',
     flexDirection: 'row',
+    backgroundColor: Colors.dark,
   },
   categoryTitle: {
     padding: 8,

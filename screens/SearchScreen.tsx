@@ -74,15 +74,11 @@ const SearchScreen = () => {
     <SafeAreaView style={styles.screen}>
       <StatusBarElement
         barStyle={'light-content'}
-        backgroundColor={Colors['gradient-start']}
+        backgroundColor={Colors.primary}
       />
       <LinearGradient
         style={styles.main}
-        colors={[
-          Colors['gradient-start'],
-          Colors['gradient-end'],
-          Colors['gradient-mid'],
-        ]}>
+        colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
         <SearchHeader
           optimizeSearchFunc={optimizeSearchFunc}
           searchState={searchState}

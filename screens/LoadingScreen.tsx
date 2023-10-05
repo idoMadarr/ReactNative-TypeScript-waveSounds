@@ -91,7 +91,7 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
           <TextElement fontSize={'xl'}>waveSounds</TextElement>
         </View>
         <Lottie
-          source={require('../assets/lottie/waves2.json')}
+          source={require('../assets/lottie/waves.json')}
           autoPlay
           loop
           style={styles.lottie}

@@ -4,7 +4,7 @@ import Animated, {FadeInDown, FadeOut, Layout} from 'react-native-reanimated';
 import {PropDimensions} from '../../dimensions/dimensions';
 import {TrackType} from '../../types/Types';
 import Colors from '../../assets/design/palette.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import MinusIcon from '../../assets/vectors/minus_circle.svg';
 import TextElement from '../resuable/TextElement';
 
 interface FavoriteItemPropsType {
@@ -31,7 +31,7 @@ const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
         styles.container,
         {
           backgroundColor:
-            indexIndicator == index ? Colors.greyish : Colors.transparent,
+            indexIndicator == index ? Colors.primary : Colors.transparent,
         },
       ]}>
       <TouchableOpacity onPress={onSelect} style={styles.left}>
@@ -50,7 +50,7 @@ const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
         </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={onRemove} style={styles.controller}>
-        <Icon name={'minus'} size={12} color={Colors.secondary} />
+        <MinusIcon />
       </TouchableOpacity>
     </Animated.View>
   );

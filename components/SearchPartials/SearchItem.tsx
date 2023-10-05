@@ -4,7 +4,7 @@ import Animated, {FadeInDown} from 'react-native-reanimated';
 import FastImage from 'react-native-fast-image';
 import {PropDimensions} from '../../dimensions/dimensions';
 import Colors from '../../assets/design/palette.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import PlayWhiteIcon from '../../assets/vectors/play_white.svg';
 
 // Components
 import TextElement from '../resuable/TextElement';
@@ -41,7 +41,7 @@ const SearchItem: React.FC<SearchItemType> = ({
             </TextElement>
           </View>
         </View>
-        <Icon name={'play'} size={20} color={Colors.white} />
+        <PlayWhiteIcon />
       </TouchableOpacity>
     </Animated.View>
   );
@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     paddingHorizontal: 8,
-    borderRadius: 5,
   },
   details: {
     width: '100%',
@@ -72,8 +71,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   image: {
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
+    borderRadius: 8,
     marginRight: '8%',
   },
 });
