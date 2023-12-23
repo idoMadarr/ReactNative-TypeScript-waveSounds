@@ -67,12 +67,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   titleSection: {
+    overflow: 'hidden',
     flexDirection: 'row',
     alignItems: 'center',
   },
   title: {
+    width: '80%',
     color: Colors.placeholder,
-    marginHorizontal: 6,
   },
 });
 

@@ -2,44 +2,46 @@ import React from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '../../redux/hooks';
-import {ConnectedOnlineType} from '../../types/Types';
 import {PropDimensions} from '../../dimensions/dimensions';
 
 // Components
 import OnlineItem from './OnlineItem';
-import TextElement from '../resuable/TextElement';
+
+const defaultUser = [
+  {
+    id: Math.random().toString(),
+    email: 'idox3x@gmail.com',
+    username: 'Ido Madar',
+    socketId: null,
+  },
+];
 
 const OnlineList = () => {
   const onlines = useAppSelector(state => state.authSlice.onlines);
+  const currentUser = useAppSelector(state => state.authSlice.user);
 
   const navigation = useNavigation();
 
-  const defaultUser: ConnectedOnlineType = {
-    userId: Math.random(),
-    username: 'Yossi Madar',
-    online: false,
-    socketAddress: 'asd12a3a1s5d6',
-  };
-
-  const list: ConnectedOnlineType[] = [defaultUser];
-  for (const online in onlines) {
-    list.push({...onlines[online], socketAddress: online});
-  }
-
-  const chatNavigate = (user: ConnectedOnlineType) => {
+  const chatNavigate = (onlineUser: any) => {
     // @ts-ignore:
-    navigation.navigate('chat', {user});
+    navigation.navigate('chat', {user: onlineUser});
   };
+
+  const displayOnlines = onlines.length ? onlines : defaultUser;
 
   return (
     <ScrollView style={styles.onlineList}>
-      {list.map(user => (
-        <OnlineItem
-          key={user.userId}
-          user={user}
-          onChat={chatNavigate.bind(this, user)}
-        />
-      ))}
+      {displayOnlines.map(onlineUser => {
+        if (onlineUser.email === currentUser.email) return;
+
+        return (
+          <OnlineItem
+            key={onlineUser.email}
+            user={onlineUser}
+            onChat={chatNavigate.bind(this, onlineUser)}
+          />
+        );
+      })}
     </ScrollView>
   );
 };

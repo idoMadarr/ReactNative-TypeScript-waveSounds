@@ -42,8 +42,8 @@ const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
             style={styles.image}
           />
         </View>
-        <View>
-          <TextElement>{favorite.title}</TextElement>
+        <View style={styles.title}>
+          <TextElement numberOfLines={1}>{favorite.title}</TextElement>
           <TextElement fontSize={'sm'} cStyle={{color: Colors.placeholder}}>
             {favorite.artist}
           </TextElement>
@@ -63,27 +63,30 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#5757573a',
     marginBottom: 5,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     flexDirection: 'row',
     paddingHorizontal: 8,
     borderRadius: 5,
   },
   left: {
-    width: '80%',
+    width: '90%',
     flexDirection: 'row',
     alignItems: 'center',
   },
   imageContainer: {
     width: 40,
     height: 40,
-    marginRight: '8%',
+    marginRight: '2%',
+  },
+  title: {
+    width: '82%',
   },
   image: {
     width: '100%',
     height: '100%',
   },
   controller: {
-    width: '20%',
+    width: '10%',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'flex-end',

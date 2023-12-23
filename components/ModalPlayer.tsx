@@ -11,7 +11,7 @@ import {addFavorite, deleteFavorite} from '../redux/actions/authAction';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../assets/design/palette.json';
 import {PropDimensions} from '../dimensions/dimensions';
-import {ConnectedOnlineType, TrackType} from '../types/Types';
+import {TrackType} from '../types/Types';
 import LinearGradient from 'react-native-linear-gradient';
 import {setShareMode} from '../redux/slices/authSlice';
 import Slider from '@react-native-community/slider';
@@ -98,11 +98,6 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     floatingPlayer,
   ]);
 
-  const list: ConnectedOnlineType[] = [];
-  for (const online in onlines) {
-    list.push({...onlines[online], socketAddress: online});
-  }
-
   return (
     <ImageBackground
       style={styles.modalContainer}
@@ -130,7 +125,7 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
             <Icon
               name={'share'}
               size={28}
-              color={list.length > 0 ? Colors.secondary : Colors.greyish}
+              color={onlines.length > 0 ? Colors.secondary : Colors.greyish}
             />
           </TouchableOpacity>
           {playerStatus && (

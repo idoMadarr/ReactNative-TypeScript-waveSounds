@@ -39,15 +39,11 @@ export interface UserType {
   createAt: string;
 }
 
-export interface OnlineListType {
-  [socketId: string]: ConnectedOnlineType;
-}
-
 export interface ConnectedOnlineType {
-  userId: number;
+  id: string;
+  email: string;
   username: string;
-  online: boolean;
-  socketAddress?: string;
+  socketId: string | null;
 }
 
 export interface ChatMessageType {

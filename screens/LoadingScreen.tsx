@@ -75,7 +75,7 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
     await dispatch(fetchOnlines());
     await dispatch(setAuthentication(session.user));
     await socket.connect();
-    socket.emit('auth', session);
+    socket.emit('auth', session.user);
     // @ts-ignore:
     navigation.navigate('app');
   };

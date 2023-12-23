@@ -14,19 +14,19 @@ interface OnlineUserPropsType {
 }
 
 const OnlineItem: React.FC<OnlineUserPropsType> = ({user, onChat}) => {
-  const isActive = user.online;
-
-  const TocuableType = isActive ? TouchableOpacity : (View as any);
+  const TocuableType = user.socketId ? TouchableOpacity : (View as any);
 
   return (
-    <TocuableType onPress={onChat} style={[styles.container]}>
+    <TocuableType onPress={onChat} style={[styles.container, {}]}>
       <View style={styles.left}>
-        <TextElement>{user.username}</TextElement>
+        <TextElement cStyle={user.socketId ? styles.white : styles.offline}>
+          {user.username}
+        </TextElement>
         <TextElement
           fontSize={'sm'}
           fontWeight={'bold'}
-          cStyle={{color: isActive ? Colors.active : Colors.placeholder}}>
-          {isActive ? 'Active now!' : 'Offline'}
+          cStyle={user.socketId ? styles.active : styles.offline}>
+          {user.socketId ? 'Active' : 'Offline'}
         </TextElement>
       </View>
       <View style={styles.right}>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   container: {
     height: PropDimensions.favoriteHeight,
     flexDirection: 'row',
-    paddingHorizontal: 8,
+    paddingHorizontal: '6%',
     marginVertical: 2,
     borderRadius: 5,
     backgroundColor: Colors['gradient-start'],
@@ -54,6 +54,15 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'flex-end',
+  },
+  active: {
+    color: Colors.active,
+  },
+  offline: {
+    color: Colors.placeholder,
+  },
+  white: {
+    color: Colors.white,
   },
 });
 

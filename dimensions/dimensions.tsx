@@ -20,5 +20,5 @@ export enum PropDimensions {
   inputWidth = Dimensions.get('window').width * 0.85,
   searchWidth = Dimensions.get('window').width * 0.85,
   searchHeight = Dimensions.get('window').height * 0.25,
-  chatHeaderHeight = Dimensions.get('window').height * 0.1,
+  chatHeaderHeight = Dimensions.get('window').height * 0.12,
 }

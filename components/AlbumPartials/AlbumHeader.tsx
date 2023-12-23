@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Components
 import TextElement from '../resuable/TextElement';
+import {PropDimensions} from '../../dimensions/dimensions';
 
 const ALBUM_SIZE = Dimensions.get('window').width * 0.18;
 
@@ -33,7 +34,7 @@ const AlbumHeader: React.FC<AlbumHeaderType> = ({
         <TouchableOpacity onPress={pressBack} style={styles.icon}>
           <Icon name={'angle-left'} size={32} color={Colors.secondary} />
         </TouchableOpacity>
-        <View>
+        <View style={styles.headerTitle}>
           <TextElement
             fontSize={'lg'}
             fontWeight={'bold'}
@@ -57,8 +58,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: Dimensions.get('window').height * 0.16,
+    width: PropDimensions.inputWidth,
+    alignSelf: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 24,
+  },
+  headerTitle: {
+    width: '88%',
   },
   imageContainer: {
     width: ALBUM_SIZE,
@@ -70,6 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   sectionHeader: {
+    width: '75%',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -77,7 +83,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   icon: {
-    paddingRight: '20%',
+    paddingRight: '8%',
   },
 });
 

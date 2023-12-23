@@ -51,11 +51,12 @@ const HomeScreen = () => {
       dispatch(setUpdate(true));
     });
 
-    socket.on('update-onlines', async (data: ConnectedOnlineType) => {
-      dispatch(updateOnline(data));
-    });
-
-    return () => socket.disconnect();
+    socket.on(
+      'update-onlines',
+      async (data: {type: string; user: ConnectedOnlineType}) => {
+        dispatch(updateOnline(data));
+      },
+    );
   }, []);
 
   // Listening to Firebase Foreground Notifications

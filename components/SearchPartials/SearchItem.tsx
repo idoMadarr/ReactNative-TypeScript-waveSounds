@@ -31,8 +31,8 @@ const SearchItem: React.FC<SearchItemType> = ({
       <TouchableOpacity onPress={playSoundTrack} style={styles.details}>
         <View style={styles.row}>
           <FastImage source={{uri: image}} style={styles.image} />
-          <View>
-            <TextElement numberOfLines={2}>{title}</TextElement>
+          <View style={styles.title}>
+            <TextElement numberOfLines={1}>{title}</TextElement>
             <TextElement
               fontSize={'sm'}
               cStyle={styles.artist}
@@ -68,13 +68,17 @@ const styles = StyleSheet.create({
     color: Colors.placeholder,
   },
   row: {
+    width: '90%',
     flexDirection: 'row',
+  },
+  title: {
+    width: '80%',
   },
   image: {
     width: 44,
     height: 44,
     borderRadius: 8,
-    marginRight: '8%',
+    marginRight: '2%',
   },
 });
 

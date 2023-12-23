@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 import {
   UserType,
   TrackType,
-  OnlineListType,
+  ConnectedOnlineType,
   ChatMessageType,
   ChatDictType,
 } from '../../types/Types';
@@ -10,7 +10,7 @@ import {
 interface RootStateApp {
   isAuth: boolean;
   user: UserType | any;
-  onlines: OnlineListType;
+  onlines: ConnectedOnlineType[];
   chatDict: ChatDictType;
   chainChat: ChatMessageType[];
   favoritesList: TrackType[];
@@ -25,7 +25,7 @@ interface RootStateApp {
 const initialState: RootStateApp = {
   isAuth: false,
   user: null,
-  onlines: {},
+  onlines: [],
   chatDict: {},
   chainChat: [],
   favoritesList: [],
@@ -51,15 +51,14 @@ export const authSlice = createSlice({
     },
     updateOnline: (state, action) => {
       const method = action.payload.type;
+      const currentUser = action.payload.user;
       if (method === 'add') {
-        // @ts-ignore:
-        state.onlines = {
-          ...state.onlines,
-          [Object.keys(action.payload)[1]]: Object.values(action.payload)[1],
-        };
+        state.onlines.push(currentUser);
         return;
       }
-      delete state.onlines[Object.keys(action.payload)[1]];
+      state.onlines = state.onlines.filter(
+        user => user.email !== currentUser.email,
+      );
     },
     updateChainChat: (state, action) => {
       const userA = action.payload.userA;

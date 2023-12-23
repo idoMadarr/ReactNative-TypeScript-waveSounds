@@ -13,8 +13,8 @@ export class MessageInstance {
     sender: string,
     recipient: string,
     timestamp: string,
-    userA: number,
-    userB: number,
+    userA: string,
+    userB: string,
   ) {
     this.messageId = messageId;
     this.message = message;
