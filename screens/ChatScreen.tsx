@@ -5,7 +5,7 @@ import {
   ImageBackground,
   StyleSheet,
   Dimensions,
-  KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {updateChainChat} from '../redux/slices/authSlice';
@@ -66,6 +66,7 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
 
   const onSend = async () => {
     if (!messageState.trim().length) return;
+    Keyboard.dismiss();
     const newMessage = new MessageInstance(
       Math.random().toString(),
       messageState,
@@ -112,26 +113,21 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
         <View style={styles.chatContainer}>
           <ChainChat messagesList={chainChat} userSocketId={userSocketId} />
         </View>
-        <KeyboardAvoidingView
-          behavior={'position'}
-          keyboardVerticalOffset={-80}
-          style={styles.keyboardAvoidingView}>
-          <View style={styles.controller}>
-            <InputElement
-              value={messageState}
-              onChange={setMessageState}
-              placeholder={'Message ...'}
-              cStyle={styles.input}
-            />
-            <ButtonElement
-              title={'SEND'}
-              titleColor={Colors.black}
-              backgroundColor={Colors.active}
-              customStyle={styles.button}
-              onPress={onSend}
-            />
-          </View>
-        </KeyboardAvoidingView>
+        <View style={styles.controller}>
+          <InputElement
+            value={messageState}
+            onChange={setMessageState}
+            placeholder={'Message ...'}
+            cStyle={styles.input}
+          />
+          <ButtonElement
+            title={'Send'}
+            titleColor={Colors.black}
+            backgroundColor={Colors.active}
+            customStyle={styles.button}
+            onPress={onSend}
+          />
+        </View>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -143,32 +139,31 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   chatContainer: {
-    height: Dimensions.get('window').height * 0.8,
+    height: '88%',
     width: '85%',
     alignSelf: 'center',
   },
   chatBackground: {
-    height: Dimensions.get('window').height * 0.9,
-    opacity: 0.9,
-    paddingBottom: 8,
-  },
-  keyboardAvoidingView: {
     flex: 1,
-    justifyContent: 'space-between',
   },
   controller: {
-    width: '90%',
+    opacity: 0.9,
+    position: 'absolute',
+    width: '95%',
+    height: PropDimensions.inputHight,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignSelf: 'center',
+    bottom: '2%',
   },
   input: {
-    width: Dimensions.get('window').width * 0.75,
+    width: Dimensions.get('window').width * 0.8,
     backgroundColor: Colors.gesture,
     paddingLeft: 20,
     color: Colors.black,
     borderRadius: 25,
     fontWeight: 'bold',
+    elevation: 3,
   },
   button: {
     width: PropDimensions.inputHight,

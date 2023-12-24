@@ -1,15 +1,29 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, SafeAreaView, StyleSheet, Dimensions} from 'react-native';
 import Colors from '../assets/design/palette.json';
 import Lottie from 'lottie-react-native';
+import {useAppDispatch} from '../redux/hooks';
+import {fetchOnlines} from '../redux/actions/authAction';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import {PropDimensions} from '../dimensions/dimensions';
 import OnlineList from '../components/MenuPartials/OnlineList';
 import TextElement from '../components/resuable/TextElement';
+import {toggleSpinner} from '../redux/slices/authSlice';
 
 const CommunityScreen = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    getOnlines();
+  }, []);
+
+  const getOnlines = async () => {
+    dispatch(toggleSpinner());
+    dispatch(fetchOnlines());
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBarElement

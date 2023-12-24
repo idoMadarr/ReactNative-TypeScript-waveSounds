@@ -27,7 +27,7 @@ const OnlineList = () => {
     navigation.navigate('chat', {user: onlineUser});
   };
 
-  const displayOnlines = onlines.length ? onlines : defaultUser;
+  const displayOnlines = onlines.length > 1 ? onlines : defaultUser;
 
   return (
     <ScrollView style={styles.onlineList}>

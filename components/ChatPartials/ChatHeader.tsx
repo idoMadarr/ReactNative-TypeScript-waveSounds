@@ -43,10 +43,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    zIndex: 10,
   },
   headerLeft: {
     flexDirection: 'row',

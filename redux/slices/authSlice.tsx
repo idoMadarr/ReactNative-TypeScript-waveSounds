@@ -48,17 +48,34 @@ export const authSlice = createSlice({
     },
     setOnlines: (state, action) => {
       state.onlines = action.payload;
+      state.loading = false;
     },
     updateOnline: (state, action) => {
       const method = action.payload.type;
       const currentUser = action.payload.user;
+
       if (method === 'add') {
         state.onlines.push(currentUser);
         return;
       }
-      state.onlines = state.onlines.filter(
-        user => user.email !== currentUser.email,
-      );
+
+      if (method === 'update') {
+        const updateOnlines = state.onlines.map(online => {
+          if (online.id === currentUser.id) {
+            return {...online, socketId: currentUser.socketId};
+          }
+          return online;
+        });
+
+        state.onlines = updateOnlines;
+        return;
+      }
+
+      if (method === 'remove') {
+        state.onlines = state.onlines.filter(
+          user => user.email !== currentUser.email,
+        );
+      }
     },
     updateChainChat: (state, action) => {
       const userA = action.payload.userA;

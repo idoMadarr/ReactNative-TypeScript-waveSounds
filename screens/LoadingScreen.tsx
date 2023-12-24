@@ -6,7 +6,7 @@ import {useAppDispatch} from '../redux/hooks';
 import Lottie from 'lottie-react-native';
 import {fetchDeezerChart, fetchSequences} from '../redux/actions/deezerActions';
 import {setAuthentication} from '../redux/slices/authSlice';
-import {fetchFavorites, fetchOnlines} from '../redux/actions/authAction';
+import {fetchFavorites} from '../redux/actions/authAction';
 import {getFromStorage} from '../utils/asyncStorage';
 import {SocketContext} from '../utils/socketIO';
 import Colors from '../assets/design/palette.json';
@@ -72,7 +72,6 @@ const LoadingScreen: React.FC<LoadingScreenType> = ({navigation}) => {
     await dispatch(fetchFavorites());
     await dispatch(fetchDeezerChart());
     await dispatch(fetchSequences());
-    await dispatch(fetchOnlines());
     await dispatch(setAuthentication(session.user));
     await socket.connect();
     socket.emit('auth', session.user);
