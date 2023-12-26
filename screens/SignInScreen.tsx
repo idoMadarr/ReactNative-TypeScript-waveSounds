@@ -177,7 +177,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
             </KeyboardAvoidingView>
             <View style={styles.mainContainer}>
               <LinkElement url={'forgot-password'}>
-                Recover Password
+                {/* Recover Password */}
               </LinkElement>
               <View style={styles.orContainer}>
                 <View style={styles.line} />

@@ -21,7 +21,7 @@ const ChatHeader: React.FC<ChatHeaderPropsType> = ({recipient, goBack}) => {
           <Icon name={'angle-left'} size={32} color={Colors.secondary} />
         </TouchableOpacity>
         <View>
-          <TextElement>{`Starting chat with ${recipient}`}</TextElement>
+          <TextElement numberOfLines={1}>{recipient}</TextElement>
           <TextElement fontSize={'sm'}>Online</TextElement>
         </View>
       </View>
@@ -45,6 +45,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerLeft: {
+    width: '80%',
+    overflow: 'hidden',
     flexDirection: 'row',
     alignItems: 'center',
   },

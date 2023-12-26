@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, SafeAreaView} from 'react-native';
+import {View, StyleSheet, SafeAreaView, TouchableOpacity} from 'react-native';
 import {useAppSelector} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
@@ -7,6 +7,7 @@ import {sendPushDetails} from '../redux/actions/authAction';
 import {onLogout} from '../utils/onLogout';
 import {PropDimensions} from '../dimensions/dimensions';
 import Lottie from 'lottie-react-native';
+import LogoutIcon from '../assets/vectors/logout.svg';
 
 // Components
 // import OnlineList from '../components/MenuPartials/OnlineList';
@@ -17,6 +18,15 @@ import StatusBarElement from '../components/resuable/StatusBarElement';
 const ProfileScreen = () => {
   const user = useAppSelector(state => state.authSlice.user);
 
+  const techList = [
+    'Full Authentication Process',
+    'Social login with Google API',
+    'Push Notification via Firebase',
+    'Complex Navigation architecture',
+    'Reanimated animations & Gestures handlers',
+    'Reanimated animations',
+  ];
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBarElement
@@ -26,42 +36,45 @@ const ProfileScreen = () => {
       <LinearGradient
         colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
         <View style={styles.drawerWrapper}>
-          <View style={styles.drawerHeader}>
-            <TextElement
-              fontSize={'xl'}
-              fontWeight={'bold'}
-              cStyle={{color: Colors.active}}>
-              {`Hi ${user.username.toUpperCase()}`}
+          <View style={styles.headerContainer}>
+            <View style={styles.header}>
+              <TextElement
+                fontSize={'xl'}
+                fontWeight={'bold'}
+                cStyle={{color: Colors.active}}>
+                {`Hi ${user.username.toUpperCase()}`}
+              </TextElement>
+              <TouchableOpacity
+                onPress={onLogout}
+                style={{alignItems: 'center'}}>
+                <LogoutIcon style={{color: Colors.white}} />
+                <TextElement fontSize={'sm'}>Logout</TextElement>
+              </TouchableOpacity>
+            </View>
+            <TextElement>
+              The project was built from the ground up with TypeScript on all
+              levels. NodeJS as a backend, combined with Redis and MongoDB for
+              storing user's data & React Native (CLI) for building beautiful
+              user interface.
             </TextElement>
-            <TextElement cStyle={{color: Colors.greyish}}>
-              WaveSounds is a Fullstack digital music application that gives you
-              access to millions of songs and other content from creators all
-              over the world.
-            </TextElement>
-            <TextElement cStyle={{color: Colors.greyish}}>
-              This <TextElement fontWeight={'bold'}>BETA</TextElement> project
-              was built from the ground up with TypeScript on all levels. NodeJS
-              as a backend, combined with MongoDB for storing user's data &
-              React Native (febric) (CLI) for building beautiful user interface
-              - including Full Authentication Process, Social login, Complex
-              Navigation, Reanimated animations, Gestures handlers, Colors
-              interpolation, Push Notification, and much more.
-            </TextElement>
+            <View style={{marginVertical: '2%'}}>
+              {techList.map(item => (
+                <View key={item} style={styles.listItem}>
+                  <View style={styles.dot} />
+                  <TextElement fontSize={'sm'} cStyle={styles.greish}>
+                    {item}
+                  </TextElement>
+                </View>
+              ))}
+            </View>
+            <ButtonElement
+              title={'Click For Push Details'}
+              backgroundColor={Colors.transparent}
+              titleColor={Colors.active}
+              customStyle={styles.details}
+              onPress={sendPushDetails}
+            />
           </View>
-          <ButtonElement
-            title={'Click For Push Details'}
-            backgroundColor={Colors.transparent}
-            titleColor={Colors.active}
-            customStyle={styles.details}
-            onPress={sendPushDetails}
-          />
-          <ButtonElement
-            title={'Logout'}
-            backgroundColor={Colors.primary}
-            titleColor={Colors.placeholder}
-            customStyle={styles.logout}
-            onPress={onLogout}
-          />
           <View style={styles.lottieContainer}>
             <Lottie
               source={require('../assets/lottie/player.json')}
@@ -88,10 +101,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 16,
   },
-  drawerHeader: {
+  headerContainer: {
     width: '100%',
-    height: '45%',
     justifyContent: 'space-evenly',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '4%',
   },
   logout: {
     borderWidth: 1,
@@ -105,8 +123,11 @@ const styles = StyleSheet.create({
   },
   lottieContainer: {
     width: PropDimensions.fullWidth,
-    height: '30%',
+    height: '35%',
     overflow: 'hidden',
+  },
+  greish: {
+    color: Colors.greyish,
   },
   lottie: {
     position: 'absolute',
@@ -114,6 +135,17 @@ const styles = StyleSheet.create({
     left: '-150%',
     width: '400%',
     height: '400%',
+  },
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    backgroundColor: Colors.active,
+    borderRadius: 50,
+    marginRight: '2%',
   },
 });
 

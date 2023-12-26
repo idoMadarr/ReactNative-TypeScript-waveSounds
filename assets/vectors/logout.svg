@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16.661">
+  <g id="button-power" transform="translate(0 0.5)">
+    <rect id="Rectangle_7186" data-name="Rectangle 7186" width="16" height="16" transform="translate(0 0.161)" fill="none"/>
+    <g id="Group_15283" data-name="Group 15283" transform="translate(1.499)">
+      <path id="Path_47277" data-name="Path 47277" d="M12.83,3A7,7,0,1,1,4.17,3" transform="translate(-1.5 -0.5)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+      <line id="Line_1339" data-name="Line 1339" y2="7" transform="translate(7)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+    </g>
+  </g>
+</svg>
