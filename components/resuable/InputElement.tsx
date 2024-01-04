@@ -32,6 +32,7 @@ interface InputElementType {
   setSecureTextEntry?: Function;
   icon?: string;
   onIcon?(): void;
+  onPressOut?(): void;
   inputRef?: any;
 }
 
@@ -46,6 +47,7 @@ const InputElement: React.FC<InputElementType> = ({
   maxLength,
   icon,
   onIcon,
+  onPressOut,
   cStyle,
   editable,
   inputRef,
@@ -84,7 +86,10 @@ const InputElement: React.FC<InputElementType> = ({
   };
 
   const displayIcon = icon && (
-    <Pressable onPressIn={onPressIcon} style={styles.iconContainer}>
+    <Pressable
+      onPressIn={onPressIcon}
+      onPressOut={onPressOut}
+      style={styles.iconContainer}>
       <Icon name={icon} size={22} color={Colors.placeholder} />
     </Pressable>
   );

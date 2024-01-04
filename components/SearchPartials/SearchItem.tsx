@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   },
   title: {
     width: '80%',
+    alignItems: 'flex-start',
   },
   image: {
     width: 44,

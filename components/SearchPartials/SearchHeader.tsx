@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import Colors from '../../assets/design/palette.json';
 import {PropDimensions} from '../../dimensions/dimensions';
@@ -11,6 +11,7 @@ interface SearchHeaderType {
   searchState: string;
   optimizeSearchFunc: Function;
   startRecognizing(): void;
+  stopRecognizing(): void;
   isRecording: boolean;
 }
 
@@ -18,9 +19,18 @@ const SearchHeader: React.FC<SearchHeaderType> = ({
   searchState,
   optimizeSearchFunc,
   startRecognizing,
+  stopRecognizing,
   isRecording,
 }) => {
   const inputRef: any = useRef();
+  const [iconType, setIconType] = useState('microphone');
+
+  useEffect(() => {
+    if (searchState.length) {
+      return setIconType('search');
+    }
+    setIconType('microphone');
+  }, [searchState]);
 
   return (
     <View style={styles.searchContainer}>
@@ -36,11 +46,15 @@ const SearchHeader: React.FC<SearchHeaderType> = ({
         placeholder={'Search for any song or artist'}
         cStyle={{
           ...styles.searchInput,
-          borderWidth: 1,
           borderColor: isRecording ? Colors.active : Colors.primary,
         }}
-        onIcon={startRecognizing}
-        icon={'microphone'}
+        icon={iconType}
+        onIcon={() => {
+          if (iconType === 'microphone') {
+            startRecognizing();
+          }
+        }}
+        onPressOut={stopRecognizing}
       />
     </View>
   );
@@ -48,9 +62,10 @@ const SearchHeader: React.FC<SearchHeaderType> = ({
 
 const styles = StyleSheet.create({
   searchContainer: {
-    paddingTop: 24,
+    marginTop: '10%',
   },
   searchInput: {
+    borderWidth: 1,
     backgroundColor: Colors.dark,
   },
 });

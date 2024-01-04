@@ -6,8 +6,7 @@ import store from '../redux/store';
 
 GoogleSignin.configure({
   //  @ts-ignore:
-  androidClientId:
-    '1029253442024-qphf84d6ekjjfs60lo788ncpnjs5f5it.apps.googleusercontent.com',
+  androidClientId: Config.oauth_client_prod,
 });
 
 export const getOAuthCredentials = async () => {

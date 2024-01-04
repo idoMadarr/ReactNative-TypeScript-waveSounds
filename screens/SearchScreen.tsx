@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {FlatList, StyleSheet, SafeAreaView} from 'react-native';
+import {FlatList, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
 import Analytics from 'appcenter-analytics';
 import {fetchSerchResults} from '../redux/actions/deezerActions';
 import {setSearchResults} from '../redux/slices/deezerSlice';
@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import Colors from '../assets/design/palette.json';
 import {TrackType} from '../types/Types';
+import Lottie from 'lottie-react-native';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {PropDimensions} from '../dimensions/dimensions';
 import {initSoundTrack} from '../utils/soundTracker';
@@ -27,19 +28,17 @@ const SearchScreen = () => {
   );
   const username = useAppSelector(state => state.authSlice.user.username);
 
-  const [searchState, setSearchState] = useState(DEFAULT_SEARCH);
+  const [searchState, setSearchState] = useState('');
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    optimizeSearchFunc(DEFAULT_SEARCH);
+    updateSearch(DEFAULT_SEARCH);
   }, []);
 
   useEffect(() => {
-    if (state.results.length) {
-      console.log(state.results![0], 'asd');
-
-      // setSearchState(state.results![0]);
+    if (state.results?.length) {
+      updateSearch(state.results![0]);
     }
   }, [state.results]);
 
@@ -55,7 +54,7 @@ const SearchScreen = () => {
 
   const debounce = (func: Function) => {
     let timer: any;
-    return (args: any) => {
+    return (args: string) => {
       setSearchState(args);
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
@@ -67,7 +66,7 @@ const SearchScreen = () => {
 
   const optimizeSearchFunc = useCallback(debounce(updateSearch), []);
 
-  const playSoundTrack = (item: TrackType) => {
+  const playSoundTrack = useCallback((item: TrackType) => {
     const {id, title, artist, preview, image} = item;
 
     const createFloatingTrack = new FloatingPlayerInstance(
@@ -79,7 +78,7 @@ const SearchScreen = () => {
     );
 
     initSoundTrack(preview!, searchResults, createFloatingTrack);
-  };
+  }, []);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -93,10 +92,19 @@ const SearchScreen = () => {
         <SearchHeader
           isRecording={state.isRecording}
           startRecognizing={startRecognizing}
+          stopRecognizing={stopRecognizing}
           optimizeSearchFunc={optimizeSearchFunc}
           searchState={searchState}
         />
-        {searchResults.length > 1 && (
+        {state.isRecording && (
+          <Lottie
+            source={require('../assets/lottie/recording.json')}
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
+        )}
+        {searchResults.length > 1 && !state.isRecording && (
           <FlatList
             keyExtractor={itemData => itemData.id.toString()}
             data={searchResults}
@@ -131,6 +139,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
+  },
+  lottie: {
+    position: 'absolute',
+    top: '45%',
+    height: Dimensions.get('window').width * 0.25,
+    width: Dimensions.get('window').width * 0.25,
   },
 });
 
