@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext, useEffect, useMemo, useRef} from 'react';
 import {
   View,
   SafeAreaView,
@@ -9,32 +9,35 @@ import {
 } from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {updateChainChat} from '../redux/slices/authSlice';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Colors from '../assets/design/palette.json';
 import {SocketContext} from '../utils/socketIO';
-import {ConnectedOnlineType} from '../types/Types';
 import {MessageInstance} from '../models/MessageInstance';
 import {ShareInstance} from '../models/ShareInstance';
-import {navigate} from '../utils/rootNavigation';
+import {PropDimensions} from '../dimensions/dimensions';
+import {goBack, route} from '../utils/rootNavigation';
+import {useVoiceRecognition} from '../utils/useVoiceRecognition';
+import {ConnectedOnlineType} from '../types/Types';
 
 // Components
+import RecorderElement from '../components/resuable/RecorderElement';
 import ChainChat from '../components/ChatPartials/ChainChat';
 import ChatHeader from '../components/ChatPartials/ChatHeader';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 import InputElement from '../components/resuable/InputElement';
-import {PropDimensions} from '../dimensions/dimensions';
 
-type RootStackParamList = {
-  user: ConnectedOnlineType;
+const defaultasd = {
+  id: 'asd3r',
+  email: 'ido@blabla.com',
+  username: 'eli danon',
+  socketId: 'asdasd',
 };
 
-// @ts-ignore:
-type ChatScreenType = NativeStackScreenProps<RootStackParamList, 'chat'>;
-
-const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
+const ChatScreen = ({}) => {
   // @ts-ignore:
-  const user = route.params!.user as ConnectedOnlineType;
+  const user = route()!.params?.user || (defaultasd as ConnectedOnlineType);
+
+  const {state, startRecognizing, stopRecognizing} = useVoiceRecognition();
 
   const currentUser = useAppSelector(state => state.authSlice.user);
   const chainId: string = (user.id + currentUser!.id).split('').sort().join('');
@@ -42,13 +45,13 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
     // @ts-ignore:
     state => state.authSlice.chatDict[chainId] || [],
   );
-
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   )!;
   const shareMode = useAppSelector(state => state.authSlice.shareMode);
 
   const [messageState, setMessageState] = useState('');
+  const inputRef = useRef() as any;
 
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext) as any;
@@ -60,9 +63,12 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
     }
   }, [shareMode]);
 
-  const goBack = () => {
-    navigate('tabs', {screen: 'community'});
-  };
+  useEffect(() => {
+    if (state.results.length) {
+      inputRef.current?.focus();
+      setMessageState(state.results![0]);
+    }
+  }, [state.results]);
 
   const onSend = async () => {
     if (!messageState.trim().length) return;
@@ -115,6 +121,7 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
         </View>
         <View style={styles.controller}>
           <InputElement
+            inputRef={inputRef}
             value={messageState}
             onChange={setMessageState}
             placeholder={'Message ...'}
@@ -126,6 +133,11 @@ const ChatScreen: React.FC<ChatScreenType> = ({navigation, route}) => {
             backgroundColor={Colors.active}
             customStyle={styles.button}
             onPress={onSend}
+          />
+          <RecorderElement
+            isRecording={state.isRecording}
+            startRecognizing={startRecognizing}
+            stopRecognizing={stopRecognizing}
           />
         </View>
       </ImageBackground>
@@ -139,8 +151,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   chatContainer: {
-    height: '88%',
     width: '85%',
+    height: '88%',
     alignSelf: 'center',
   },
   chatBackground: {
@@ -148,16 +160,15 @@ const styles = StyleSheet.create({
   },
   controller: {
     opacity: 0.9,
-    position: 'absolute',
-    width: '95%',
+    width: '100%',
+    paddingHorizontal: '2%',
     height: PropDimensions.inputHight,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignSelf: 'center',
-    bottom: '2%',
   },
   input: {
-    width: Dimensions.get('window').width * 0.8,
+    width: Dimensions.get('window').width * 0.65,
     backgroundColor: Colors.gesture,
     paddingLeft: 20,
     color: Colors.black,

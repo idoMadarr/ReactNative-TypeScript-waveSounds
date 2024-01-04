@@ -4,10 +4,6 @@ import Config from 'react-native-config';
 import {setModalMessage} from '../redux/slices/authSlice';
 import store from '../redux/store';
 
-// const androidClientId = __DEV__
-//   ? Config.oauth_client_dev
-//   : Config.oauth_client_prod;
-
 GoogleSignin.configure({
   //  @ts-ignore:
   androidClientId:

@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '../../redux/hooks';
 import {PropDimensions} from '../../dimensions/dimensions';
+import {navigate} from '../../utils/rootNavigation';
 
 // Components
 import OnlineItem from './OnlineItem';
@@ -20,11 +20,8 @@ const OnlineList = () => {
   const onlines = useAppSelector(state => state.authSlice.onlines);
   const currentUser = useAppSelector(state => state.authSlice.user);
 
-  const navigation = useNavigation();
-
   const chatNavigate = (onlineUser: any) => {
-    // @ts-ignore:
-    navigation.navigate('chat', {user: onlineUser});
+    navigate('main', {screen: 'chat', user: onlineUser});
   };
 
   const displayOnlines = onlines.length > 1 ? onlines : defaultUser;

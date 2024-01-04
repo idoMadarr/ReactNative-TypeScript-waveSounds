@@ -17,8 +17,8 @@ interface RootStateApp {
   favoritesObj: Object;
   shareMode: Object | null;
   isUpdate: boolean;
-  drawerStatus: string;
   modalMessage: any | null;
+  microphonePermission: boolean;
   loading: boolean;
 }
 
@@ -32,8 +32,8 @@ const initialState: RootStateApp = {
   favoritesObj: {},
   shareMode: null,
   isUpdate: false,
-  drawerStatus: 'closed',
   modalMessage: null,
+  microphonePermission: false,
   loading: false,
 };
 
@@ -110,12 +110,6 @@ export const authSlice = createSlice({
         favorite => favorite.id !== action.payload,
       );
     },
-    updateDrawerStatus: (state, action) => {
-      state.drawerStatus = action.payload;
-      if (action.payload === 'closed') {
-        state.shareMode = null;
-      }
-    },
     setShareMode: (state, action) => {
       state.shareMode = action.payload;
     },
@@ -124,6 +118,9 @@ export const authSlice = createSlice({
     },
     setModalMessage: (state, action) => {
       state.modalMessage = action.payload;
+    },
+    setMicrophonePermission: (state, action) => {
+      state.microphonePermission = action.payload;
     },
     toggleSpinner: state => {
       state.loading = !state.loading;
@@ -140,10 +137,10 @@ export const {
   setFavorites,
   newFavorite,
   updateFavorites,
-  updateDrawerStatus,
   setShareMode,
   setUpdate,
   setModalMessage,
+  setMicrophonePermission,
   toggleSpinner,
 } = authSlice.actions;
 

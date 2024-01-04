@@ -1,6 +1,6 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import TabNavigation from './TabNavigation';
-import MenuDrawerScreen from '../screens/MenuDrawerScreen';
+// import MenuDrawerScreen from '../screens/MenuDrawerScreen';
 import Colors from '../assets/design/palette.json';
 
 const DrawerNavigation = () => {
@@ -8,7 +8,7 @@ const DrawerNavigation = () => {
 
   return (
     <DrawerNavigator.Navigator
-      drawerContent={() => <MenuDrawerScreen />}
+      // drawerContent={() => <MenuDrawerScreen />}
       screenOptions={{
         drawerType: 'slide',
         headerShown: false,

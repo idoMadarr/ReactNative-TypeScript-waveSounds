@@ -7,10 +7,8 @@ import {
   TextInputChangeEventData,
   SafeAreaView,
   Keyboard,
-  KeyboardAvoidingView,
 } from 'react-native';
 // import Crashes from 'appcenter-crashes';
-import {requestNotifications} from 'react-native-permissions';
 import Animated, {FadeInDown} from 'react-native-reanimated';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useAppDispatch} from '../redux/hooks';
@@ -58,17 +56,17 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
   const {email, password} = formState;
   const {emailError, passwordError} = formErrorState;
   const dispatch = useAppDispatch();
-  const inputRef: any = useRef();
+  const inputEmailRef: any = useRef();
+  const inputPasswordRef: any = useRef();
 
   useEffect(() => {
-    requestNotifications(['alert', 'sound']);
-  }, []);
-
-  useEffect(() => {
-    if (formState.email.includes('.com')) {
-      inputRef.current?.focus();
+    if (email.includes('.com')) {
+      inputPasswordRef.current?.focus();
     }
-  }, [formState.email]);
+    if (password.length === 8) {
+      Keyboard.dismiss();
+    }
+  }, [email, password]);
 
   const updateState = (
     name: string,
@@ -107,9 +105,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
     if (isValidForm) {
       const fcmToken = await getFromStorage('fcm');
       dispatch(toggleSpinner());
-      dispatch(
-        signIn({...formState, email: formState.email.toLowerCase(), fcmToken}),
-      );
+      dispatch(signIn({...formState, email: email.toLowerCase(), fcmToken}));
     }
   };
 
@@ -135,9 +131,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
         colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
         {isFocused && (
           <Animated.View entering={FadeInDown.springify()}>
-            <KeyboardAvoidingView
-              behavior={'height'}
-              style={styles.formContainer}>
+            <View style={styles.formContainer}>
               <FaviconVector height={100} width={100} />
               <TextElement fontSize={'xl'} fontWeight={'bold'}>
                 Any song, Anywhere
@@ -152,12 +146,14 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
                   </TextElement>
                 </TouchableOpacity>
                 <InputElement
+                  inputRef={inputEmailRef}
                   value={email}
                   onChange={updateState.bind(this, 'email')}
                   placeholder={'Email Address'}
                   errorMessage={emailError}
                 />
                 <InputElement
+                  inputRef={inputPasswordRef}
                   value={password}
                   onChange={updateState.bind(this, 'password')}
                   placeholder={'Password'}
@@ -165,7 +161,6 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
                   errorMessage={passwordError}
                   secureTextEntry={secureTextEntry}
                   setSecureTextEntry={togglePasswordMode}
-                  inputRef={inputRef}
                 />
                 <ButtonElement
                   title={'Log In'}
@@ -174,7 +169,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
                   backgroundColor={Colors.active}
                 />
               </View>
-            </KeyboardAvoidingView>
+            </View>
             <View style={styles.mainContainer}>
               <LinkElement url={'forgot-password'}>
                 {/* Recover Password */}

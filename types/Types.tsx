@@ -68,3 +68,14 @@ export interface ModalMessageType {
   message: string;
   field?: string;
 }
+
+export interface MicRecordType {
+  recognized: string;
+  pitch: string;
+  error: string;
+  end: string;
+  started: boolean;
+  results: string[];
+  partialsResults: string[];
+  isRecording: boolean;
+}

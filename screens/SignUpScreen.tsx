@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,7 +6,6 @@ import {
   TextInputChangeEventData,
   SafeAreaView,
   Keyboard,
-  KeyboardAvoidingView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppDispatch} from '../redux/hooks';
@@ -14,8 +13,10 @@ import {toggleSpinner} from '../redux/slices/authSlice';
 import {signUp} from '../redux/actions/authAction';
 import {useIsFocused} from '@react-navigation/native';
 import Animated, {FadeInUp} from 'react-native-reanimated';
-import Colors from '../assets/design/palette.json';
+import {getFromStorage} from '../utils/asyncStorage';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
+import Colors from '../assets/design/palette.json';
 
 // Cpmponents
 import LinkElement from '../components/resuable/LinkElement';
@@ -23,8 +24,7 @@ import TextElement from '../components/resuable/TextElement';
 import InputElement from '../components/resuable/InputElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 import StatusBarElement from '../components/resuable/StatusBarElement';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {getFromStorage} from '../utils/asyncStorage';
+import {useRef} from 'react';
 
 const defaultState = {
   email: '',
@@ -52,6 +52,10 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
   const {emailError, usernameError, passwordError} = formErrorState;
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
+
+  const inputEmailRef: any = useRef();
+  const inputUsernameRef: any = useRef();
+  const inputPasswordRef: any = useRef();
 
   const updateState = (
     name: string,
@@ -106,9 +110,7 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
         colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
         {isFocused && (
           <Animated.View entering={FadeInUp.springify()}>
-            <KeyboardAvoidingView
-              behavior={'height'}
-              style={styles.formContainer}>
+            <View style={styles.formContainer}>
               <FaviconVector height={100} width={100} />
               <TextElement
                 cStyle={{textAlign: 'center'}}
@@ -122,6 +124,7 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
               </TextElement>
               <View style={styles.title}>
                 <InputElement
+                  inputRef={inputEmailRef}
                   value={email}
                   onChange={updateState.bind(this, 'email')}
                   placeholder={'Email'}
@@ -129,6 +132,7 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
                   errorMessage={emailError}
                 />
                 <InputElement
+                  inputRef={inputUsernameRef}
                   value={username}
                   onChange={updateState.bind(this, 'username')}
                   placeholder={'Username'}
@@ -136,6 +140,7 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
                   errorMessage={usernameError}
                 />
                 <InputElement
+                  inputRef={inputPasswordRef}
                   value={password}
                   onChange={updateState.bind(this, 'password')}
                   placeholder={'Password'}
@@ -151,7 +156,7 @@ const SignInScreen: React.FC<SignUpScreenType> = ({navigation}) => {
                   backgroundColor={Colors.active}
                 />
               </View>
-            </KeyboardAvoidingView>
+            </View>
             <View style={styles.mainContainer}>
               <LinkElement url={'sign-in'}>
                 Already have an account?

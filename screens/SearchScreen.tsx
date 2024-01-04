@@ -10,15 +10,18 @@ import {TrackType} from '../types/Types';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {PropDimensions} from '../dimensions/dimensions';
 import {initSoundTrack} from '../utils/soundTracker';
+import {useVoiceRecognition} from '../utils/useVoiceRecognition';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import SearchHeader from '../components/SearchPartials/SearchHeader';
 import SearchItem from '../components/SearchPartials/SearchItem';
 
-const DEFAULT_SEARCH = 'poets of the fall';
+const DEFAULT_SEARCH = 'Post malone';
 
 const SearchScreen = () => {
+  const {state, startRecognizing, stopRecognizing} = useVoiceRecognition();
+
   const searchResults = useAppSelector(
     state => state.deezerSlice.searchResults,
   );
@@ -31,6 +34,14 @@ const SearchScreen = () => {
   useEffect(() => {
     optimizeSearchFunc(DEFAULT_SEARCH);
   }, []);
+
+  useEffect(() => {
+    if (state.results.length) {
+      console.log(state.results![0], 'asd');
+
+      // setSearchState(state.results![0]);
+    }
+  }, [state.results]);
 
   const updateSearch = async (value: string) => {
     if (value === '') return;
@@ -80,6 +91,8 @@ const SearchScreen = () => {
         style={styles.main}
         colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
         <SearchHeader
+          isRecording={state.isRecording}
+          startRecognizing={startRecognizing}
           optimizeSearchFunc={optimizeSearchFunc}
           searchState={searchState}
         />

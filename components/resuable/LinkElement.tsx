@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import Colors from '../../assets/design/palette.json';
-import {useNavigation} from '@react-navigation/native';
+import {navigate} from '../../utils/rootNavigation';
 
 // Components
 import TextElement from './TextElement';
@@ -12,13 +12,8 @@ interface LinkElementType {
 }
 
 const LinkElement: React.FC<LinkElementType> = ({children, url}) => {
-  const navigation = useNavigation();
-
-  //   @ts-ignore:
-  const onPress = () => navigation.navigate(url);
-
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={() => navigate(url)}>
       <TextElement cStyle={styles.linkColor}>{children}</TextElement>
     </TouchableOpacity>
   );

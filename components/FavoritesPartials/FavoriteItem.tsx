@@ -65,8 +65,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     justifyContent: 'space-between',
     flexDirection: 'row',
-    paddingHorizontal: 8,
-    borderRadius: 5,
+    paddingHorizontal: '4%',
   },
   left: {
     width: '90%',
@@ -76,14 +75,15 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: 40,
     height: 40,
-    marginRight: '2%',
+    marginRight: '5%',
   },
   title: {
-    width: '82%',
+    width: '80%',
   },
   image: {
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
   controller: {
     width: '10%',

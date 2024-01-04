@@ -1,7 +1,6 @@
 import React, {useContext, useEffect} from 'react';
 import {ScrollView, StyleSheet, SafeAreaView, Alert, View} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
-import {useDrawerStatus} from '@react-navigation/drawer';
 import messaging from '@react-native-firebase/messaging';
 import {SocketContext} from '../utils/socketIO';
 import Animated, {
@@ -14,7 +13,6 @@ import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {
   setUpdate,
   updateChainChat,
-  updateDrawerStatus,
   updateOnline,
 } from '../redux/slices/authSlice';
 import TrendsList from '../components/HomePartials/TrendsList';
@@ -27,19 +25,19 @@ import {ConnectedOnlineType, ChatMessageType} from '../types/Types';
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import TextElement from '../components/resuable/TextElement';
+import {askPermissions} from '../utils/permissions';
 
 const HomeScreen = () => {
   const trends = useAppSelector(state => state.deezerSlice.trends!);
 
   const translateX = useSharedValue(0);
   const isFocused = useIsFocused();
-  const drawerStatus = useDrawerStatus();
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext) as any;
 
   useEffect(() => {
-    dispatch(updateDrawerStatus(drawerStatus));
-  }, [drawerStatus]);
+    askPermissions();
+  }, []);
 
   useEffect(() => {
     socket.on('logout', async () => {

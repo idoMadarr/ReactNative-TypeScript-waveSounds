@@ -9,8 +9,6 @@ import Animated, {FadeInLeft} from 'react-native-reanimated';
 import {PropDimensions} from '../../dimensions/dimensions';
 import Colors from '../../assets/design/palette.json';
 import PlayIcon from '../../assets/vectors/play.svg';
-import NoteIcon from '../../assets/vectors/note.svg';
-import StarIcon from '../../assets/vectors/star.svg';
 
 // Components
 import TextElement from '../resuable/TextElement';
@@ -53,17 +51,9 @@ const TrendCard: React.FC<TrendCardType> = ({
                   {`* ${artist} *`}
                 </TextElement>
               </View>
-              <View style={styles.controller}>
-                <TouchableOpacity>
-                  {/* <NoteIcon width={36} height={36} /> */}
-                </TouchableOpacity>
-                <TouchableOpacity onPress={onPlay} style={styles.playButton}>
-                  <PlayIcon />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  {/* <StarIcon width={36} height={36} /> */}
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity onPress={onPlay} style={styles.playButton}>
+                <PlayIcon />
+              </TouchableOpacity>
               <TextElement
                 cStyle={styles.center}
                 fontSize={'sm'}>{`Realese on ${release}`}</TextElement>
@@ -96,6 +86,7 @@ const styles = StyleSheet.create({
     height: '90%',
   },
   contentContainer: {
+    width: '85%',
     height: '65%',
     justifyContent: 'space-around',
     position: 'absolute',
@@ -108,6 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   playButton: {
+    alignSelf: 'center',
     marginHorizontal: 24,
     backgroundColor: Colors.dark,
     width: 65,

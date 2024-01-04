@@ -42,7 +42,7 @@ const AlbumTrack: React.FC<AlbumTrackType> = ({
         styles.TrackContainer,
         {
           backgroundColor:
-            indexIndicator == index ? Colors.dark : Colors.transparent,
+            indexIndicator == index ? Colors.selected_dark : Colors.transparent,
         },
       ]}>
       <View style={styles.titleSection}>

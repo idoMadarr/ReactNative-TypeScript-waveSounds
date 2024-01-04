@@ -39,7 +39,6 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
   openModal,
 }) => {
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
-  const drawerStatus = useAppSelector(state => state.authSlice.drawerStatus);
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   )!;
@@ -104,11 +103,7 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
       <Animated.View
         entering={FadeInDown}
         exiting={FadeOutUp}
-        style={[
-          styles.mainContainer,
-          animatedStyles,
-          {display: drawerStatus === 'closed' ? 'flex' : 'none'},
-        ]}>
+        style={[styles.mainContainer, animatedStyles]}>
         <View style={styles.side}>
           <FastImage
             source={{uri: floatingPlayer.image}}

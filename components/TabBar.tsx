@@ -1,8 +1,8 @@
 import React, {Fragment} from 'react';
 import {useEffect, useState} from 'react';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {ParamListBase} from '@react-navigation/native';
+import {navigate} from '../utils/rootNavigation';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -33,12 +33,11 @@ interface TabType {
 const TabBar: React.FC = () => {
   const [focus, setFocus] = useState(DEFAULT_TAB);
   const offset = useSharedValue(DEFAULT_OFFSET);
-  const navigation = useNavigation<DrawerNavigationProp<ParamListBase>>();
 
   const translateXAnimate = (route: string, index: number) => {
     setFocus(route);
     offset.value = setTranslateX(index);
-    navigation.navigate(route as never);
+    navigate(route as never);
   };
 
   const setTranslateX = (index: number) => {

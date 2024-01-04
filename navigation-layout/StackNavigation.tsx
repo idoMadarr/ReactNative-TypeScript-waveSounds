@@ -11,7 +11,6 @@ export const MainStack = () => {
 
   return (
     <MainStack.Navigator screenOptions={{headerShown: false}}>
-      <MainStack.Screen name={'home'} component={HomeScreen} />
       <MainStack.Screen name={'album'} component={AlbumScreen} />
       <MainStack.Screen name={'chat'} component={ChatScreen} />
     </MainStack.Navigator>

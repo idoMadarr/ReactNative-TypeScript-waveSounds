@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, StyleSheet, Dimensions} from 'react-native';
+import {FlatList, StyleSheet, Dimensions, View} from 'react-native';
 import {TrackType} from '../../types/Types';
 import {useAppDispatch} from '../../redux/hooks';
 import {addFavorite} from '../../redux/actions/authAction';

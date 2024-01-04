@@ -1,11 +1,17 @@
 import React, {useEffect} from 'react';
-import {View, TextInput, StyleSheet, Dimensions, Pressable} from 'react-native';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {PropDimensions} from '../../dimensions/dimensions';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../assets/design/palette.json';
@@ -68,6 +74,7 @@ const InputElement: React.FC<InputElementType> = ({
   const focusAnimation = () => {
     opacity.value = 0;
     scale.value = 1.5;
+    inputRef.current?.focus();
   };
 
   const blurAnimation = () => {
@@ -77,7 +84,7 @@ const InputElement: React.FC<InputElementType> = ({
   };
 
   const displayIcon = icon && (
-    <Pressable onPress={onPressIcon} style={styles.iconContainer}>
+    <Pressable onPressIn={onPressIcon} style={styles.iconContainer}>
       <Icon name={icon} size={22} color={Colors.placeholder} />
     </Pressable>
   );

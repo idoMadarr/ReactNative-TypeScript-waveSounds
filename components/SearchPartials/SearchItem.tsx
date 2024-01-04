@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     justifyContent: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 8,
+    paddingHorizontal: '4%',
   },
   details: {
     width: '100%',
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 8,
-    marginRight: '2%',
+    marginRight: '5%',
   },
 });
 
