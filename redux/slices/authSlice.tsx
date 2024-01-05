@@ -11,6 +11,7 @@ interface RootStateApp {
   isAuth: boolean;
   user: UserType | any;
   onlines: ConnectedOnlineType[];
+  currentRecipient: ConnectedOnlineType | null;
   chatDict: ChatDictType;
   chainChat: ChatMessageType[];
   favoritesList: TrackType[];
@@ -26,6 +27,7 @@ const initialState: RootStateApp = {
   isAuth: false,
   user: null,
   onlines: [],
+  currentRecipient: null,
   chatDict: {},
   chainChat: [],
   favoritesList: [],
@@ -76,6 +78,9 @@ export const authSlice = createSlice({
           user => user.email !== currentUser.email,
         );
       }
+    },
+    setCurrentRecipient: (state, action) => {
+      state.currentRecipient = action.payload;
     },
     updateChainChat: (state, action) => {
       const userA = action.payload.userA;
@@ -130,6 +135,7 @@ export const authSlice = createSlice({
 
 export const {
   setAuthentication,
+  setCurrentRecipient,
   setOnlines,
   updateOnline,
   updateChainChat,

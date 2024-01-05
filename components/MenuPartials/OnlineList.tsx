@@ -1,7 +1,9 @@
 import React from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
-import {useAppSelector} from '../../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
+import {setCurrentRecipient} from '../../redux/slices/authSlice';
 import {PropDimensions} from '../../dimensions/dimensions';
+import {ConnectedOnlineType} from '../../types/Types';
 import {navigate} from '../../utils/rootNavigation';
 
 // Components
@@ -17,11 +19,14 @@ const defaultUser = [
 ];
 
 const OnlineList = () => {
+  const dispatch = useAppDispatch();
+
   const onlines = useAppSelector(state => state.authSlice.onlines);
   const currentUser = useAppSelector(state => state.authSlice.user);
 
-  const chatNavigate = (onlineUser: any) => {
-    navigate('main', {screen: 'chat', user: onlineUser});
+  const chatNavigate = async (onlineUser: ConnectedOnlineType) => {
+    await dispatch(setCurrentRecipient(onlineUser));
+    navigate('main', {screen: 'chat'});
   };
 
   const displayOnlines = onlines.length > 1 ? onlines : defaultUser;

@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect, useMemo, useRef} from 'react';
+import React, {useState, useContext, useEffect, useRef} from 'react';
 import {
   View,
   SafeAreaView,
@@ -14,9 +14,8 @@ import {SocketContext} from '../utils/socketIO';
 import {MessageInstance} from '../models/MessageInstance';
 import {ShareInstance} from '../models/ShareInstance';
 import {PropDimensions} from '../dimensions/dimensions';
-import {goBack, route} from '../utils/rootNavigation';
+import {goBack} from '../utils/rootNavigation';
 import {useVoiceRecognition} from '../utils/useVoiceRecognition';
-import {ConnectedOnlineType} from '../types/Types';
 
 // Components
 import RecorderElement from '../components/resuable/RecorderElement';
@@ -26,21 +25,18 @@ import StatusBarElement from '../components/resuable/StatusBarElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 import InputElement from '../components/resuable/InputElement';
 
-const defaultasd = {
-  id: 'asd3r',
-  email: 'ido@blabla.com',
-  username: 'eli danon',
-  socketId: 'asdasd',
-};
-
 const ChatScreen = ({}) => {
-  // @ts-ignore:
-  const user = route()!.params?.user || (defaultasd as ConnectedOnlineType);
-
   const {state, startRecognizing, stopRecognizing} = useVoiceRecognition();
 
+  const currentRecipient = useAppSelector(
+    state => state.authSlice.currentRecipient!,
+  );
   const currentUser = useAppSelector(state => state.authSlice.user);
-  const chainId: string = (user.id + currentUser!.id).split('').sort().join('');
+
+  const chainId: string = (currentRecipient.id + currentUser!.id)
+    .split('')
+    .sort()
+    .join('');
   const chainChat = useAppSelector(
     // @ts-ignore:
     state => state.authSlice.chatDict[chainId] || [],
@@ -77,9 +73,9 @@ const ChatScreen = ({}) => {
       Math.random().toString(),
       messageState,
       socket.id,
-      user.socketId!,
+      currentRecipient.socketId!,
       new Date().toLocaleString().split(',')[1],
-      user.id,
+      currentRecipient.id,
       currentUser.id,
     );
     await dispatch(updateChainChat(newMessage));
@@ -90,11 +86,11 @@ const ChatScreen = ({}) => {
   const gettingShareTrack = async () => {
     const shareTrack = new ShareInstance(
       Math.random().toString(),
-      `${user.username} want to share track with you`,
+      `${currentRecipient.username} want to share track with you`,
       socket.id,
-      user.socketId!,
+      currentRecipient.socketId!,
       new Date().toLocaleString().split(',')[1],
-      user.id,
+      currentRecipient.id,
       currentUser.id,
       floatingPlayer.title,
       floatingPlayer.artist,
@@ -111,7 +107,7 @@ const ChatScreen = ({}) => {
         barStyle={'light-content'}
         backgroundColor={Colors.primary}
       />
-      <ChatHeader recipient={user.username} goBack={goBack} />
+      <ChatHeader recipient={currentRecipient.username} goBack={goBack} />
       <ImageBackground
         source={require('../assets/images/WhatsApp-Wallpaper-HD.jpeg')}
         resizeMode={'stretch'}
