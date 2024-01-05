@@ -66,19 +66,22 @@ const SearchScreen = () => {
 
   const optimizeSearchFunc = useCallback(debounce(updateSearch), []);
 
-  const playSoundTrack = useCallback((item: TrackType) => {
-    const {id, title, artist, preview, image} = item;
+  const playSoundTrack = useCallback(
+    (item: TrackType) => {
+      const {id, title, artist, preview, image} = item;
 
-    const createFloatingTrack = new FloatingPlayerInstance(
-      id,
-      title,
-      artist,
-      image,
-      preview!,
-    );
+      const createFloatingTrack = new FloatingPlayerInstance(
+        id,
+        title,
+        artist,
+        image,
+        preview!,
+      );
 
-    initSoundTrack(preview!, searchResults, createFloatingTrack);
-  }, []);
+      initSoundTrack(preview!, searchResults, createFloatingTrack);
+    },
+    [searchResults],
+  );
 
   return (
     <SafeAreaView style={styles.screen}>
