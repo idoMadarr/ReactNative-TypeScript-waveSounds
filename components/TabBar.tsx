@@ -122,7 +122,7 @@ const Tab: React.FC<TabType> = ({id, route, focus, setFocus}) => {
 
 const styles = StyleSheet.create({
   tabContainer: {
-    height: 80,
+    height: PropDimensions.tabHight,
     alignSelf: 'center',
     width: PropDimensions.fullWidth,
     flexDirection: 'row',

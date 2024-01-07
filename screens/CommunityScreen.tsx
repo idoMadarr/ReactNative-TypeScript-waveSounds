@@ -4,13 +4,13 @@ import Colors from '../assets/design/palette.json';
 import Lottie from 'lottie-react-native';
 import {useAppDispatch} from '../redux/hooks';
 import {fetchOnlines} from '../redux/actions/authAction';
+import {toggleSpinner} from '../redux/slices/authSlice';
+import {PropDimensions} from '../dimensions/dimensions';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
-import {PropDimensions} from '../dimensions/dimensions';
 import OnlineList from '../components/MenuPartials/OnlineList';
 import TextElement from '../components/resuable/TextElement';
-import {toggleSpinner} from '../redux/slices/authSlice';
 
 const CommunityScreen = () => {
   const dispatch = useAppDispatch();

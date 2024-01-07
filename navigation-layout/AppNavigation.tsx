@@ -10,13 +10,13 @@ import {
   setFloatingPlayer,
   updateCurrentIndexTrack,
 } from '../redux/slices/deezerSlice';
+import {AuthStack, MainStack} from './StackNavigation';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {Modalize} from 'react-native-modalize';
 import {PropDimensions} from '../dimensions/dimensions';
 import {navigationRef} from '../utils/rootNavigation';
 
 // Screens
-import {AuthStack, MainStack} from './StackNavigation';
 import DrawerNavigation from './DrawerNavigation';
 import LoadingScreen from '../screens/LoadingScreen';
 import FloatingPlayer from '../components/FloatingPlayer';

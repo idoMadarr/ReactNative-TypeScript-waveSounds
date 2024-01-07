@@ -3,6 +3,7 @@ import {Dimensions} from 'react-native';
 export enum PropDimensions {
   fullWidth = Dimensions.get('window').width,
   tabWidth = Dimensions.get('window').width,
+  tabHight = Dimensions.get('window').height * 0.1,
   buttonWidth = Dimensions.get('window').width * 0.85,
   buttonHight = Dimensions.get('window').height * 0.06,
   fullHight = Dimensions.get('window').height,

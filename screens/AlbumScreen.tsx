@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ImageBackground, SafeAreaView, StyleSheet} from 'react-native';
-import {useAppSelector} from '../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
+import {setCurrentAlbum} from '../redux/slices/deezerSlice';
 import {TrackType} from '../types/Types';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {initSoundTrack} from '../utils/soundTracker';
@@ -14,10 +15,18 @@ import AlbumTracks from '../components/AlbumPartials/AlbumTracks';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 
 const AlbumScreen = () => {
+  const dispatch = useAppDispatch();
+
   const currentIndexTrack = useAppSelector(
     state => state.deezerSlice.currentIndexTrack,
   );
   const albumData = useAppSelector(state => state.deezerSlice.currentAlbum!);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setCurrentAlbum(null));
+    };
+  }, []);
 
   const onPlay = (item: TrackType) => {
     const createFloatingTrack = new FloatingPlayerInstance(

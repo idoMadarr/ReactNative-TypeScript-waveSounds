@@ -8,7 +8,7 @@ import {
   Keyboard,
 } from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
-import {updateChainChat} from '../redux/slices/authSlice';
+import {setCurrentRecipient, updateChainChat} from '../redux/slices/authSlice';
 import Colors from '../assets/design/palette.json';
 import {SocketContext} from '../utils/socketIO';
 import {MessageInstance} from '../models/MessageInstance';
@@ -52,6 +52,12 @@ const ChatScreen = ({}) => {
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext) as any;
   const userSocketId = socket.id;
+
+  useEffect(() => {
+    return () => {
+      dispatch(setCurrentRecipient(null));
+    };
+  }, []);
 
   useEffect(() => {
     if (shareMode) {
