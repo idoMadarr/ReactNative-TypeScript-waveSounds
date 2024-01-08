@@ -129,18 +129,21 @@ const ChatScreen = ({}) => {
             placeholder={'Message ...'}
             cStyle={styles.input}
           />
-          <ButtonElement
-            title={'Send'}
-            titleColor={Colors.black}
-            backgroundColor={Colors.active}
-            customStyle={styles.button}
-            onPress={onSend}
-          />
-          <RecorderElement
-            isRecording={state.isRecording}
-            startRecognizing={startRecognizing}
-            stopRecognizing={stopRecognizing}
-          />
+          {messageState.length ? (
+            <ButtonElement
+              title={'Send'}
+              titleColor={Colors.black}
+              backgroundColor={Colors.active}
+              customStyle={styles.button}
+              onPress={onSend}
+            />
+          ) : (
+            <RecorderElement
+              isRecording={state.isRecording}
+              startRecognizing={startRecognizing}
+              stopRecognizing={stopRecognizing}
+            />
+          )}
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -170,7 +173,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   input: {
-    width: Dimensions.get('window').width * 0.65,
+    width: Dimensions.get('window').width * 0.8,
     backgroundColor: Colors.gesture,
     paddingLeft: 20,
     color: Colors.black,

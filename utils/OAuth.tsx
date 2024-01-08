@@ -20,8 +20,6 @@ export const getOAuthCredentials = async () => {
         userCredentials = {username: name, email};
       })
       .catch(e => {
-        Alert.alert('notice2', JSON.stringify(e));
-
         store.dispatch(setModalMessage([{message: e.message}]));
       });
     return userCredentials;

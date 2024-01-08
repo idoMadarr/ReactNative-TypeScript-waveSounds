@@ -143,8 +143,8 @@ android {
         applicationId "com.wavesounds"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 56
-        versionName "5.0.6"
+        versionCode 57
+        versionName "5.0.7"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         resValue "string", "build_config_package", "com.wavesounds"
 
