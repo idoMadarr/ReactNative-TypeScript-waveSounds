@@ -63,7 +63,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
     if (email.includes('.com')) {
       inputPasswordRef.current?.focus();
     }
-    if (password.length === 8) {
+    if (password.length === 8 && email.includes('.com')) {
       Keyboard.dismiss();
     }
   }, [email, password]);
