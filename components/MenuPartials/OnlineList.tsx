@@ -1,53 +1,56 @@
 import React from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {useAppSelector} from '../../redux/hooks';
-import {ConnectedOnlineType} from '../../types/Types';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
+import {setCurrentRecipient} from '../../redux/slices/authSlice';
 import {PropDimensions} from '../../dimensions/dimensions';
+import {ConnectedOnlineType} from '../../types/Types';
+import {navigate} from '../../utils/rootNavigation';
 
 // Components
 import OnlineItem from './OnlineItem';
-import TextElement from '../resuable/TextElement';
+
+const defaultUser = [
+  {
+    id: Math.random().toString(),
+    email: 'idox3x@gmail.com',
+    username: 'Ido Madar',
+    socketId: null,
+  },
+];
 
 const OnlineList = () => {
+  const dispatch = useAppDispatch();
+
   const onlines = useAppSelector(state => state.authSlice.onlines);
+  const currentUser = useAppSelector(state => state.authSlice.user);
 
-  const navigation = useNavigation();
-
-  const defaultUser: ConnectedOnlineType = {
-    userId: Math.random(),
-    username: 'Yossi Madar',
-    online: false,
-    socketAddress: 'asd12a3a1s5d6',
+  const chatNavigate = async (onlineUser: ConnectedOnlineType) => {
+    await dispatch(setCurrentRecipient(onlineUser));
+    navigate('main', {screen: 'chat'});
   };
 
-  const list: ConnectedOnlineType[] = [defaultUser];
-  for (const online in onlines) {
-    list.push({...onlines[online], socketAddress: online});
-  }
-
-  const chatNavigate = (user: ConnectedOnlineType) => {
-    // @ts-ignore:
-    navigation.navigate('chat', {user});
-  };
+  const displayOnlines = onlines.length > 1 ? onlines : defaultUser;
 
   return (
     <ScrollView style={styles.onlineList}>
-      <TextElement>{`${list.length} Onlines user:`}</TextElement>
-      {list.map(user => (
-        <OnlineItem
-          key={user.userId}
-          user={user}
-          onChat={chatNavigate.bind(this, user)}
-        />
-      ))}
+      {displayOnlines.map(onlineUser => {
+        if (onlineUser.email === currentUser.email) return;
+
+        return (
+          <OnlineItem
+            key={onlineUser.email}
+            user={onlineUser}
+            onChat={chatNavigate.bind(this, onlineUser)}
+          />
+        );
+      })}
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   onlineList: {
-    minHeight: '50%',
+    alignSelf: 'center',
     width: PropDimensions.favoriteHeaderWidth,
     marginTop: 16,
   },

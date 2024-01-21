@@ -4,16 +4,14 @@ import {
   TextInput,
   StyleSheet,
   Dimensions,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {PropDimensions} from '../../dimensions/dimensions';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../assets/design/palette.json';
@@ -34,6 +32,8 @@ interface InputElementType {
   setSecureTextEntry?: Function;
   icon?: string;
   onIcon?(): void;
+  onPressOut?(): void;
+  inputRef?: any;
 }
 
 const InputElement: React.FC<InputElementType> = ({
@@ -47,8 +47,10 @@ const InputElement: React.FC<InputElementType> = ({
   maxLength,
   icon,
   onIcon,
+  onPressOut,
   cStyle,
   editable,
+  inputRef,
 }) => {
   useEffect(() => {
     if (value?.length) {
@@ -74,6 +76,7 @@ const InputElement: React.FC<InputElementType> = ({
   const focusAnimation = () => {
     opacity.value = 0;
     scale.value = 1.5;
+    inputRef.current?.focus();
   };
 
   const blurAnimation = () => {
@@ -83,8 +86,11 @@ const InputElement: React.FC<InputElementType> = ({
   };
 
   const displayIcon = icon && (
-    <Pressable onPress={onPressIcon} style={styles.iconContainer}>
-      <Icon name={icon} size={28} color={Colors.primary} />
+    <Pressable
+      onPressIn={onPressIcon}
+      onPressOut={onPressOut}
+      style={styles.iconContainer}>
+      <Icon name={icon} size={22} color={Colors.placeholder} />
     </Pressable>
   );
 
@@ -92,8 +98,7 @@ const InputElement: React.FC<InputElementType> = ({
     <Animated.View style={[animatedStyle, styles.placeholderContainer]}>
       <TouchableOpacity onPress={focusAnimation} activeOpacity={0.9}>
         <TextElement
-          cStyle={{zIndex: 500, color: Colors.black}}
-          fontSize={'sm'}>
+          cStyle={{zIndex: 500, color: Colors.placeholder, fontSize: 16}}>
           {placeholder}
         </TextElement>
       </TouchableOpacity>
@@ -124,6 +129,7 @@ const InputElement: React.FC<InputElementType> = ({
         editable={editable}
         allowFontScaling={false}
         style={[styles.input, cStyle]}
+        ref={inputRef}
       />
       {displayIcon}
       {displayError}
@@ -137,10 +143,11 @@ const styles = StyleSheet.create({
   },
   input: {
     width: PropDimensions.inputWidth,
-    paddingHorizontal: 8,
     height: PropDimensions.inputHight,
-    borderRadius: 5,
-    backgroundColor: Colors.secondary,
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    backgroundColor: Colors.bg_input,
+    color: Colors.white,
   },
   error: {
     paddingLeft: 5,
@@ -156,8 +163,8 @@ const styles = StyleSheet.create({
   },
   placeholderContainer: {
     position: 'absolute',
-    top: '20%',
-    left: '2%',
+    top: '22%',
+    left: '4%',
     justifyContent: 'center',
     zIndex: 100,
   },

@@ -4,7 +4,7 @@ import Animated, {FadeInDown, FadeOut, Layout} from 'react-native-reanimated';
 import {PropDimensions} from '../../dimensions/dimensions';
 import {TrackType} from '../../types/Types';
 import Colors from '../../assets/design/palette.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import MinusIcon from '../../assets/vectors/minus_circle.svg';
 import TextElement from '../resuable/TextElement';
 
 interface FavoriteItemPropsType {
@@ -31,7 +31,7 @@ const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
         styles.container,
         {
           backgroundColor:
-            indexIndicator == index ? Colors.greyish : Colors.transparent,
+            indexIndicator == index ? Colors.primary : Colors.transparent,
         },
       ]}>
       <TouchableOpacity onPress={onSelect} style={styles.left}>
@@ -42,15 +42,15 @@ const FavoriteItem: React.FC<FavoriteItemPropsType> = ({
             style={styles.image}
           />
         </View>
-        <View>
-          <TextElement>{favorite.title}</TextElement>
+        <View style={styles.title}>
+          <TextElement numberOfLines={1}>{favorite.title}</TextElement>
           <TextElement fontSize={'sm'} cStyle={{color: Colors.placeholder}}>
             {favorite.artist}
           </TextElement>
         </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={onRemove} style={styles.controller}>
-        <Icon name={'minus'} size={12} color={Colors.secondary} />
+        <MinusIcon />
       </TouchableOpacity>
     </Animated.View>
   );
@@ -63,27 +63,31 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#5757573a',
     marginBottom: 5,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     flexDirection: 'row',
-    paddingHorizontal: 8,
-    borderRadius: 5,
+    paddingHorizontal: '4%',
   },
   left: {
-    width: '80%',
+    width: '90%',
     flexDirection: 'row',
     alignItems: 'center',
   },
   imageContainer: {
     width: 40,
     height: 40,
-    marginRight: '8%',
+    marginRight: '5%',
+  },
+  title: {
+    width: '80%',
+    alignItems: 'flex-start',
   },
   image: {
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
   controller: {
-    width: '20%',
+    width: '10%',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'flex-end',

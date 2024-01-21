@@ -4,8 +4,8 @@ import Colors from '../../assets/design/palette.json';
 
 interface ModalElementType {
   children: JSX.Element | JSX.Element[] | string;
-  modalizeRef: any;
   modalHeight: number;
+  modalizeRef: any;
 }
 
 const ModalElement: React.FC<ModalElementType> = ({

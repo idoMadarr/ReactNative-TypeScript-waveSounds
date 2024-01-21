@@ -5,6 +5,7 @@ import {setModalMessage, toggleSpinner} from '../redux/slices/authSlice';
 
 const development = Config.localhost;
 const production = Config.production;
+const testDevice = Config.real_device_localhost;
 
 const axiosInstance = axios.create({
   baseURL: production,

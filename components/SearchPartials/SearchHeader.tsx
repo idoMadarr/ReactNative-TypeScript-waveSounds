@@ -1,40 +1,73 @@
-import React, {Fragment} from 'react';
-import Animated, {SlideInLeft} from 'react-native-reanimated';
+import React, {useEffect, useRef, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import Colors from '../../assets/design/palette.json';
 import {PropDimensions} from '../../dimensions/dimensions';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Components
 import TextElement from '../resuable/TextElement';
 import InputElement from '../resuable/InputElement';
-import {View} from 'react-native';
 
 interface SearchHeaderType {
   searchState: string;
-  optimizeSearchFunc: any;
+  optimizeSearchFunc: Function;
+  startRecognizing(): void;
+  stopRecognizing(): void;
+  isRecording: boolean;
 }
 
 const SearchHeader: React.FC<SearchHeaderType> = ({
   searchState,
   optimizeSearchFunc,
+  startRecognizing,
+  stopRecognizing,
+  isRecording,
 }) => {
+  const inputRef: any = useRef();
+  const [iconType, setIconType] = useState('microphone');
+
+  useEffect(() => {
+    if (searchState.length) {
+      return setIconType('search');
+    }
+    setIconType('microphone');
+  }, [searchState]);
+
   return (
-    <View>
+    <View style={styles.searchContainer}>
       <TextElement
+        fontSize={'xl'}
         cStyle={{color: Colors.white, width: PropDimensions.inputWidth}}>
-        Exploer our music streaming app that gives you access to over 90 million
-        tracks worldwide and other audio content
+        Search
       </TextElement>
-      <Animated.View entering={SlideInLeft}>
-        <InputElement
-          value={searchState}
-          onChange={optimizeSearchFunc}
-          placeholder={'Search'}>
-          <Icon name={'search'} size={28} color={Colors.primary} />
-        </InputElement>
-      </Animated.View>
+      <InputElement
+        inputRef={inputRef}
+        value={searchState}
+        onChange={optimizeSearchFunc}
+        placeholder={'Search for any song or artist'}
+        cStyle={{
+          ...styles.searchInput,
+          borderColor: isRecording ? Colors.active : Colors.primary,
+        }}
+        icon={iconType}
+        onIcon={() => {
+          if (iconType === 'microphone') {
+            startRecognizing();
+          }
+        }}
+        onPressOut={stopRecognizing}
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  searchContainer: {
+    marginTop: '10%',
+  },
+  searchInput: {
+    borderWidth: 1,
+    backgroundColor: Colors.dark,
+  },
+});
 
 export default SearchHeader;

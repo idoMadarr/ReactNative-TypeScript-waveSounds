@@ -2,18 +2,23 @@
   "tabs": [
     {
       "id": 0,
-      "route": "search",
-      "icon": "search"
+      "route": "search"
     },
     {
       "id": 1,
-      "route": "home",
-      "icon": "home"
+      "route": "profile"
     },
     {
       "id": 2,
-      "route": "favorites",
-      "icon": "star"
+      "route": "home"
+    },
+    {
+      "id": 3,
+      "route": "favorites"
+    },
+    {
+      "id": 4,
+      "route": "community"
     }
   ]
 }

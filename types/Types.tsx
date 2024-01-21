@@ -39,15 +39,11 @@ export interface UserType {
   createAt: string;
 }
 
-export interface OnlineListType {
-  [socketId: string]: ConnectedOnlineType;
-}
-
 export interface ConnectedOnlineType {
-  userId: number;
+  id: string;
+  email: string;
   username: string;
-  online: boolean;
-  socketAddress?: string;
+  socketId: string | null;
 }
 
 export interface ChatMessageType {
@@ -71,4 +67,15 @@ export interface ChatDictType {
 export interface ModalMessageType {
   message: string;
   field?: string;
+}
+
+export interface MicRecordType {
+  recognized: string;
+  pitch: string;
+  error: string;
+  end: string;
+  started: boolean;
+  results: string[];
+  partialsResults: string[];
+  isRecording: boolean;
 }

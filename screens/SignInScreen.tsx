@@ -1,16 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
-  // TouchableOpacity,
+  TouchableOpacity,
   StyleSheet,
   NativeSyntheticEvent,
   TextInputChangeEventData,
   SafeAreaView,
-  Dimensions,
   Keyboard,
 } from 'react-native';
 // import Crashes from 'appcenter-crashes';
-import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
+import Animated, {FadeInDown} from 'react-native-reanimated';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useAppDispatch} from '../redux/hooks';
 import {googleOAuth, signIn} from '../redux/actions/authAction';
@@ -18,18 +17,18 @@ import {toggleSpinner} from '../redux/slices/authSlice';
 import {useIsFocused} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
-// @ts-ignore:
-// import GoogleVector from '../assets/vectors/icon_google.svg';
-// @ts-ignore:
+import GoogleVector from '../assets/vectors/google-auth.svg';
+import {getFromStorage} from '../utils/asyncStorage';
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
 import {getOAuthCredentials} from '../utils/OAuth';
+import {PropDimensions} from '../dimensions/dimensions';
+import {navigate} from '../utils/rootNavigation';
 
 // Cpmponents
 import LinkElement from '../components/resuable/LinkElement';
 import TextElement from '../components/resuable/TextElement';
 import InputElement from '../components/resuable/InputElement';
 import ButtonElement from '../components/resuable/ButtonElement';
-import {PropDimensions} from '../dimensions/dimensions';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 
 const defaultState = {
@@ -49,13 +48,25 @@ type RootStackParamList = {
 type SignInScreenType = NativeStackScreenProps<RootStackParamList, 'sign-in'>;
 
 const SignInScreen: React.FC<SignInScreenType> = () => {
+  const isFocused = useIsFocused();
+
   const [formState, setFormState] = useState(defaultState);
   const [formErrorState, setFormErrorState] = useState(defaultErrorState);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const {email, password} = formState;
   const {emailError, passwordError} = formErrorState;
-  const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
+  const inputEmailRef: any = useRef();
+  const inputPasswordRef: any = useRef();
+
+  useEffect(() => {
+    if (email.includes('.com')) {
+      inputPasswordRef.current?.focus();
+    }
+    if (password.length === 8 && email.includes('.com')) {
+      Keyboard.dismiss();
+    }
+  }, [email, password]);
 
   const updateState = (
     name: string,
@@ -92,8 +103,9 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
     Keyboard.dismiss();
     const isValidForm = formValidator();
     if (isValidForm) {
+      const fcmToken = await getFromStorage('fcm');
       dispatch(toggleSpinner());
-      dispatch(signIn(formState));
+      dispatch(signIn({...formState, email: email.toLowerCase(), fcmToken}));
     }
   };
 
@@ -104,6 +116,10 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
     dispatch(googleOAuth(credentials));
   };
 
+  const signupNavigate = () => {
+    navigate('auth', {screen: 'sign-up'});
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBarElement
@@ -112,70 +128,65 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
       />
       <LinearGradient
         style={styles.mainContainer}
-        colors={[
-          Colors['gradient-end'],
-          Colors['gradient-mid'],
-          Colors['gradient-end'],
-        ]}>
+        colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
         {isFocused && (
-          <Animated.View
-            entering={FadeInLeft.springify()}
-            style={styles.headerContainer}>
-            <FaviconVector height={50} width={50} />
-            <TextElement
-              fontSize={'xl'}
-              fontWeight={'bold'}
-              cStyle={{color: Colors.white}}>
-              WaveSounds
-            </TextElement>
-            <TextElement>
-              WaveSounds is a digital music that gives you access to millions of
-              songs and other content from creators all over the world. Basic
-              functions such as playing music are totally free.
-            </TextElement>
-          </Animated.View>
-        )}
-        {isFocused && (
-          <Animated.View entering={FadeInDown}>
-            <View style={styles.fieldsContainer}>
-              <InputElement
-                value={email}
-                onChange={updateState.bind(this, 'email')}
-                placeholder={'Email'}
-                icon={'envelope-o'}
-                errorMessage={emailError}
-              />
-              <InputElement
-                value={password}
-                onChange={updateState.bind(this, 'password')}
-                placeholder={'Password'}
-                icon={'eye-slash'}
-                errorMessage={passwordError}
-                secureTextEntry={secureTextEntry}
-                setSecureTextEntry={togglePasswordMode}
-              />
-              <ButtonElement
-                title={'LOG IN'}
-                titleColor={Colors.black}
-                onPress={onPress}
-                backgroundColor={Colors.active}
-              />
-              <View style={styles.linkContainer}>
-                <TextElement>Dont have account yet? </TextElement>
-                <LinkElement url={'sign-up'}> Sign up</LinkElement>
+          <Animated.View entering={FadeInDown.springify()}>
+            <View style={styles.formContainer}>
+              <FaviconVector height={100} width={100} />
+              <TextElement fontSize={'xl'} fontWeight={'bold'}>
+                Any song, Anywhere
+              </TextElement>
+              <View>
+                <TouchableOpacity
+                  onPress={onGoogleOAuth}
+                  style={styles.googleIcon}>
+                  <GoogleVector />
+                  <TextElement fontWeight={'bold'} cStyle={styles.socialLogin}>
+                    Continue with Google
+                  </TextElement>
+                </TouchableOpacity>
+                <InputElement
+                  inputRef={inputEmailRef}
+                  value={email}
+                  onChange={updateState.bind(this, 'email')}
+                  placeholder={'Email Address'}
+                  errorMessage={emailError}
+                />
+                <InputElement
+                  inputRef={inputPasswordRef}
+                  value={password}
+                  onChange={updateState.bind(this, 'password')}
+                  placeholder={'Password'}
+                  icon={'eye-slash'}
+                  errorMessage={passwordError}
+                  secureTextEntry={secureTextEntry}
+                  setSecureTextEntry={togglePasswordMode}
+                />
+                <ButtonElement
+                  title={'Log In'}
+                  titleColor={Colors.black}
+                  onPress={onPress}
+                  backgroundColor={Colors.active}
+                />
               </View>
             </View>
-            <View style={styles.socialLogin}>
-              {/* <View style={styles.socialLoginHeader}>
-                <View style={styles.line}></View>
-                <TextElement>Or connect with</TextElement>
-                <View style={styles.line}></View>
+            <View style={styles.mainContainer}>
+              <LinkElement url={'forgot-password'}>
+                {/* Recover Password */}
+              </LinkElement>
+              <View style={styles.orContainer}>
+                <View style={styles.line} />
+                <TextElement cStyle={{color: Colors.greyish}}>OR</TextElement>
+                <View style={styles.line} />
               </View>
-              <TouchableOpacity
-                onPress={onGoogleOAuth}
-                style={styles.googleIcon}>
-                <GoogleVector />
-              </TouchableOpacity> */}
+              <TextElement>New to waveSounds?</TextElement>
+              <ButtonElement
+                title={'Create an account'}
+                titleColor={Colors.active}
+                onPress={signupNavigate}
+                backgroundColor={Colors.transparent}
+                customStyle={{borderWidth: 1, borderColor: Colors.active}}
+              />
             </View>
           </Animated.View>
         )}
@@ -189,38 +200,40 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mainContainer: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: 8,
   },
-  headerContainer: {
-    width: PropDimensions.buttonWidth,
+  formContainer: {
+    flex: 1,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    paddingBottom: 8,
   },
-  fieldsContainer: {
-    height: Dimensions.get('window').height * 0.5,
-  },
-  linkContainer: {
-    marginVertical: 8,
-    width: PropDimensions.buttonWidth,
+  orContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: PropDimensions.inputWidth,
+    marginVertical: 16,
   },
   socialLogin: {
-    alignItems: 'center',
-  },
-  socialLoginHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    color: Colors.black,
+    marginHorizontal: 8,
   },
   line: {
-    width: '25%',
-    marginHorizontal: 6,
-    borderBottomWidth: 1,
-    borderColor: Colors.greyish,
+    width: '45%',
+    height: 1,
+    backgroundColor: Colors.greyish,
   },
   googleIcon: {
-    width: 50,
-    marginVertical: 12,
-    alignSelf: 'center',
+    width: PropDimensions.inputWidth,
+    height: PropDimensions.inputHight,
+    backgroundColor: Colors.white,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    marginVertical: 24,
   },
 });
 

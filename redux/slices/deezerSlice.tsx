@@ -1,11 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {TrackType, OptionsTrackType, SequenceType} from '../../types/Types';
+import {
+  TrackType,
+  OptionsTrackType,
+  SequenceType,
+  AlbumType,
+} from '../../types/Types';
 
 interface RootStateApp {
   trends: TrackType[];
   artists: any;
   sequenceTree: SequenceType[];
   floatingPlayer: TrackType | null;
+  currentAlbum: AlbumType | null;
   currentTrack: OptionsTrackType | null;
   currentIndexTrack: number;
   searchResults: TrackType[];
@@ -17,6 +23,7 @@ const initialState: RootStateApp = {
   artists: [],
   sequenceTree: [],
   floatingPlayer: null,
+  currentAlbum: null,
   currentTrack: null,
   currentIndexTrack: 0,
   searchResults: [],
@@ -33,6 +40,9 @@ export const deezerSlice = createSlice({
     },
     setSequence: (state, action) => {
       state.sequenceTree.push(action.payload);
+    },
+    setCurrentAlbum: (state, action) => {
+      state.currentAlbum = action.payload;
     },
     setFloatingPlayer: (state, action) => {
       state.floatingPlayer = action.payload;
@@ -72,6 +82,7 @@ export const {
   setDeezerChart,
   setSequence,
   setFloatingPlayer,
+  setCurrentAlbum,
   setCurrentTrack,
   setCurrentIndexTrack,
   updateCurrentIndexTrack,

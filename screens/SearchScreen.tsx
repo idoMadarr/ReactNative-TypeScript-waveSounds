@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {FlatList, StyleSheet, SafeAreaView} from 'react-native';
+import {FlatList, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
 import Analytics from 'appcenter-analytics';
 import {fetchSerchResults} from '../redux/actions/deezerActions';
 import {setSearchResults} from '../redux/slices/deezerSlice';
@@ -7,30 +7,40 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import Colors from '../assets/design/palette.json';
 import {TrackType} from '../types/Types';
+import Lottie from 'lottie-react-native';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {PropDimensions} from '../dimensions/dimensions';
 import {initSoundTrack} from '../utils/soundTracker';
+import {useVoiceRecognition} from '../utils/useVoiceRecognition';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import SearchHeader from '../components/SearchPartials/SearchHeader';
 import SearchItem from '../components/SearchPartials/SearchItem';
 
-const DEFAULT_SEARCH = 'poets of the fall';
+const DEFAULT_SEARCH = 'Post malone';
 
 const SearchScreen = () => {
+  const {state, startRecognizing, stopRecognizing} = useVoiceRecognition();
+
   const searchResults = useAppSelector(
     state => state.deezerSlice.searchResults,
   );
   const username = useAppSelector(state => state.authSlice.user.username);
 
-  const [searchState, setSearchState] = useState(DEFAULT_SEARCH);
+  const [searchState, setSearchState] = useState('');
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    optimizeSearchFunc(DEFAULT_SEARCH);
+    updateSearch(DEFAULT_SEARCH);
   }, []);
+
+  useEffect(() => {
+    if (state.results?.length) {
+      updateSearch(state.results![0]);
+    }
+  }, [state.results]);
 
   const updateSearch = async (value: string) => {
     if (value === '') return;
@@ -44,7 +54,7 @@ const SearchScreen = () => {
 
   const debounce = (func: Function) => {
     let timer: any;
-    return (args: any) => {
+    return (args: string) => {
       setSearchState(args);
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
@@ -56,38 +66,48 @@ const SearchScreen = () => {
 
   const optimizeSearchFunc = useCallback(debounce(updateSearch), []);
 
-  const playSoundTrack = (item: TrackType) => {
-    const {id, title, artist, preview, image} = item;
+  const playSoundTrack = useCallback(
+    (item: TrackType) => {
+      const {id, title, artist, preview, image} = item;
 
-    const createFloatingTrack = new FloatingPlayerInstance(
-      id,
-      title,
-      artist,
-      image,
-      preview!,
-    );
+      const createFloatingTrack = new FloatingPlayerInstance(
+        id,
+        title,
+        artist,
+        image,
+        preview!,
+      );
 
-    initSoundTrack(preview!, searchResults, createFloatingTrack);
-  };
+      initSoundTrack(preview!, searchResults, createFloatingTrack);
+    },
+    [searchResults],
+  );
 
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBarElement
         barStyle={'light-content'}
-        backgroundColor={Colors['gradient-start']}
+        backgroundColor={Colors.primary}
       />
       <LinearGradient
         style={styles.main}
-        colors={[
-          Colors['gradient-start'],
-          Colors['gradient-end'],
-          Colors['gradient-mid'],
-        ]}>
+        colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
         <SearchHeader
+          isRecording={state.isRecording}
+          startRecognizing={startRecognizing}
+          stopRecognizing={stopRecognizing}
           optimizeSearchFunc={optimizeSearchFunc}
           searchState={searchState}
         />
-        {searchResults.length > 1 && (
+        {state.isRecording && (
+          <Lottie
+            source={require('../assets/lottie/recording.json')}
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
+        )}
+        {searchResults.length > 1 && !state.isRecording && (
           <FlatList
             keyExtractor={itemData => itemData.id.toString()}
             data={searchResults}
@@ -122,6 +142,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
+  },
+  lottie: {
+    position: 'absolute',
+    top: '45%',
+    height: Dimensions.get('window').width * 0.25,
+    width: Dimensions.get('window').width * 0.25,
   },
 });
 

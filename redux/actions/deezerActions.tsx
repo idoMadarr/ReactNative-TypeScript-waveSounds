@@ -1,9 +1,14 @@
 import {Dispatch} from '@reduxjs/toolkit';
 import axios from 'axios';
 import Config from 'react-native-config';
-import {setDeezerChart, setSequence} from '../slices/deezerSlice';
+import {
+  setCurrentAlbum,
+  setDeezerChart,
+  setSequence,
+} from '../slices/deezerSlice';
 import {sequenceMap} from '../../fixtures/sequence-map.json';
 import {toggleSpinner} from '../slices/authSlice';
+import {navigate} from '../../utils/rootNavigation';
 
 export const fetchDeezerChart = () => async (dispatch: Dispatch) => {
   const {data} = await axios.get(`${Config.deezer_api}chart`);
@@ -61,7 +66,8 @@ export const fetchAlbum = (albumId: string) => async (dispatch: Dispatch) => {
     })),
   };
   dispatch(toggleSpinner());
-  return formattedData;
+  await dispatch(setCurrentAlbum(formattedData));
+  navigate('main', {screen: 'album'});
 };
 
 export const fetchSerchResults =

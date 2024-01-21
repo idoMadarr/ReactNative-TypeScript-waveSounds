@@ -3,6 +3,7 @@ apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 apply from: project(":react-native-config").projectDir.getPath() + "/dotenv.gradle"
 apply plugin: 'kotlin-android' 
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -142,8 +143,8 @@ android {
         applicationId "com.wavesounds"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 20
-        versionName "2.0.0"
+        versionCode 57
+        versionName "5.0.7"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         resValue "string", "build_config_package", "com.wavesounds"
 
@@ -326,4 +327,3 @@ def isNewArchitectureEnabled() {
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
 
-apply plugin: 'com.google.gms.google-services'

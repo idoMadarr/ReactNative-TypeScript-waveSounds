@@ -12,13 +12,15 @@ const OverlaySpinner = () => {
   return (
     <SafeAreaView style={styles.screen}>
       <Animated.View entering={FadeIn} exiting={FadeOut}>
+        <TextElement fontSize={'lg'} cStyle={styles.wait}>
+          Just few moments
+        </TextElement>
         <Lottie
           source={require('./../assets/lottie/loader.json')}
           autoPlay
           loop
-          style={{width: 150, alignSelf: 'center'}}
+          style={styles.lottie}
         />
-        <TextElement cStyle={styles.wait}>Just few moments</TextElement>
       </Animated.View>
     </SafeAreaView>
   );
@@ -31,11 +33,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    backgroundColor: '#242424d0',
+    backgroundColor: '#000000d3',
   },
   wait: {
     textAlign: 'center',
     color: Colors.white,
+  },
+  lottie: {
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
   },
 });
 

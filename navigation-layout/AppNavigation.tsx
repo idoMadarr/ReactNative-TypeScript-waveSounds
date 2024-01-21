@@ -10,12 +10,13 @@ import {
   setFloatingPlayer,
   updateCurrentIndexTrack,
 } from '../redux/slices/deezerSlice';
+import {AuthStack, MainStack} from './StackNavigation';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {Modalize} from 'react-native-modalize';
 import {PropDimensions} from '../dimensions/dimensions';
+import {navigationRef} from '../utils/rootNavigation';
 
 // Screens
-import {AuthStack} from './StackNavigation';
 import DrawerNavigation from './DrawerNavigation';
 import LoadingScreen from '../screens/LoadingScreen';
 import FloatingPlayer from '../components/FloatingPlayer';
@@ -74,7 +75,9 @@ const AppNavigation: React.FC = () => {
   }, [playerStatus, timeLeft]);
 
   useEffect(() => {
-    if (modalMessage) modalizeMessageRef.current?.open();
+    if (modalMessage) {
+      openMessageModal();
+    }
   }, [modalMessage]);
 
   const onTrackNavigate = (action: number) => {
@@ -117,13 +120,18 @@ const AppNavigation: React.FC = () => {
 
   const closeModal = () => modalizePlayerRef.current?.close();
 
+  const openMessageModal = () => modalizeMessageRef.current?.open();
+
+  const closeMessageModal = () => modalizeMessageRef.current?.close();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <AppNavigator.Navigator screenOptions={{headerShown: false}}>
         <AppNavigator.Screen name={'loading'} component={LoadingScreen} />
         {isAuth ? (
           <AppNavigator.Group>
             <AppNavigator.Screen name={'app'} component={DrawerNavigation} />
+            <AppNavigator.Screen name={'main'} component={MainStack} />
           </AppNavigator.Group>
         ) : (
           <AppNavigator.Group>
@@ -155,7 +163,10 @@ const AppNavigation: React.FC = () => {
       <ModalElement
         modalizeRef={modalizeMessageRef}
         modalHeight={PropDimensions.messageModalHeight}>
-        <ModalMessage modalMessage={modalMessage} />
+        <ModalMessage
+          closeMessageModal={closeMessageModal}
+          modalMessage={modalMessage}
+        />
       </ModalElement>
     </NavigationContainer>
   );

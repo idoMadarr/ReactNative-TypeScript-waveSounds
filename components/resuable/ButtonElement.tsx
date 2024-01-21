@@ -56,10 +56,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: PropDimensions.buttonWidth,
     height: PropDimensions.buttonHight,
-    borderRadius: 8,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 4,
   },
 });
 

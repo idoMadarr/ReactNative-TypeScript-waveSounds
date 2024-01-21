@@ -1,29 +1,21 @@
-import React, {useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import React, {useEffect, useRef} from 'react';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  Animated,
+  Easing,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import Animated, {
-  FadeIn,
-  FadeInDown,
-  FadeOut,
-  FadeOutUp,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {cleanFloatingPlayer} from '../redux/slices/deezerSlice';
 import {PropDimensions} from '../dimensions/dimensions';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Lottie from 'lottie-react-native';
 import Colors from '../assets/design/palette.json';
 
 // Components
 import TextElement from './resuable/TextElement';
-
-const OUT_SCREEN = Dimensions.get('window').width * 1.15;
-const END_REACH = Dimensions.get('window').width * 0.7;
 
 interface FloatingPlayerType {
   playerStatus: boolean;
@@ -32,27 +24,62 @@ interface FloatingPlayerType {
   openModal(): void;
 }
 
+const INIT_PLAYER_POSITION = Dimensions.get('window').height * 0.2;
+const BOTTOM_PLAYER_POSITION = Dimensions.get('window').height * 0.09;
+
 const FloatingPlayer: React.FC<FloatingPlayerType> = ({
   playerStatus,
   setPlayerStatus,
   setTimeLeft,
   openModal,
 }) => {
+  const dispatch = useAppDispatch();
+
   const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
-  const drawerStatus = useAppSelector(state => state.authSlice.drawerStatus);
+  const currentAlbum = useAppSelector(state => state.deezerSlice.currentAlbum);
+  const currentRecipient = useAppSelector(
+    state => state.authSlice.currentRecipient,
+  );
+
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   )!;
-
-  const dispatch = useAppDispatch();
-
-  const offset = useSharedValue(0);
-  const start = useSharedValue(0);
-  const isTocuhed = useSharedValue(false);
+  const floatingPlayerYIndex = useRef(
+    new Animated.Value(INIT_PLAYER_POSITION),
+  ).current;
+  const floatingPlayerOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     setPlayerStatus(true);
-  }, [floatingPlayer]);
+    verticalAnimatedPlayer(true);
+  }, []);
+
+  useEffect(() => {
+    if (currentAlbum) {
+      verticalAnimation(floatingPlayerYIndex, BOTTOM_PLAYER_POSITION);
+    } else {
+      verticalAnimation(floatingPlayerYIndex, 0);
+    }
+    if (currentRecipient) {
+      verticalAnimation(floatingPlayerOpacity, 0);
+    } else {
+      verticalAnimation(floatingPlayerOpacity, 1);
+    }
+  }, [currentAlbum, currentRecipient]);
+
+  const verticalAnimatedPlayer = (status: boolean) => {
+    verticalAnimation(floatingPlayerYIndex, status ? 0 : INIT_PLAYER_POSITION);
+    verticalAnimation(floatingPlayerOpacity, status ? 1 : 0);
+  };
+
+  const verticalAnimation = (ref: any, value: number) => {
+    Animated.timing(ref, {
+      toValue: value,
+      useNativeDriver: true,
+      easing: Easing.ease,
+      duration: 300,
+    }).start();
+  };
 
   const onPause = () => {
     setPlayerStatus(false);
@@ -64,132 +91,106 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
     currentTrack?.play();
   };
 
-  const onGestureClose = () => {
-    currentTrack?.stop();
-    setPlayerStatus(false);
+  const onClose = () => {
+    verticalAnimatedPlayer(false);
     setTimeLeft(0);
+    setPlayerStatus(false);
     setTimeout(() => {
+      currentTrack?.stop();
       dispatch(cleanFloatingPlayer());
-    }, 100);
+    }, 300);
   };
 
-  const gesture = Gesture.Pan()
-    .runOnJS(true)
-    .onBegin(() => {
-      isTocuhed.value = true;
-    })
-    .onUpdate(event => {
-      offset.value = event.translationX + start.value;
-    })
-    .onEnd(e => {
-      isTocuhed.value = false;
-      if (e.translationX > END_REACH) {
-        offset.value = withTiming(OUT_SCREEN);
-        onGestureClose();
-      } else {
-        offset.value = withSpring(0);
-      }
-    });
-
-  const animatedStyles = useAnimatedStyle(() => {
-    return {
-      transform: [{translateX: offset.value}],
-      backgroundColor: isTocuhed.value ? '#666565bd' : '#525050bd',
-      opacity: 1,
-    };
-  });
-
   return (
-    <GestureDetector gesture={gesture}>
-      <Animated.View
-        entering={FadeInDown}
-        exiting={FadeOutUp}
-        style={[
-          styles.mainContainer,
-          animatedStyles,
-          {display: drawerStatus === 'closed' ? 'flex' : 'none'},
-        ]}>
-        <View style={styles.side}>
-          <FastImage
-            source={{uri: floatingPlayer.image}}
-            resizeMode={'cover'}
-            style={styles.image}
+    <Animated.View
+      style={[
+        styles.mainContainer,
+        {
+          opacity: floatingPlayerOpacity,
+          transform: [{translateY: floatingPlayerYIndex}],
+        },
+      ]}>
+      <TouchableOpacity onPress={openModal} style={styles.side}>
+        <FastImage
+          source={{uri: floatingPlayer.image}}
+          resizeMode={'cover'}
+          style={styles.image}
+        />
+        <View style={styles.details}>
+          <TextElement
+            fontSize={'sm'}
+            numberOfLines={1}
+            cStyle={{color: Colors.white}}>
+            {floatingPlayer.title}
+          </TextElement>
+          <TextElement
+            fontSize={'sm'}
+            fontWeight={'bold'}
+            cStyle={{color: Colors.white}}>
+            {floatingPlayer.artist}
+          </TextElement>
+        </View>
+      </TouchableOpacity>
+      <View style={styles.controller}>
+        <TouchableOpacity
+          onPress={playerStatus ? onPause : onPlay}
+          style={styles.icon}>
+          <Icon
+            name={playerStatus ? 'pause' : 'play'}
+            size={28}
+            color={Colors.secondary}
           />
-          <View style={styles.details}>
-            <TextElement
-              fontSize={'sm'}
-              numberOfLines={1}
-              cStyle={{color: Colors.white, width: 200}}>
-              {floatingPlayer.title}
-            </TextElement>
-            <TextElement
-              fontSize={'sm'}
-              fontWeight={'bold'}
-              cStyle={{color: Colors.white}}>
-              {floatingPlayer.artist}
-            </TextElement>
-          </View>
-        </View>
-        <View style={[styles.side, {justifyContent: 'flex-end'}]}>
-          {playerStatus && (
-            <Animated.View entering={FadeIn} exiting={FadeOut}>
-              <Lottie
-                source={require('../assets/lottie/music.json')}
-                autoPlay
-                loop
-                style={{width: 50, height: 50}}
-              />
-            </Animated.View>
-          )}
-          <TouchableOpacity onPress={openModal}>
-            <Icon
-              name={'expand'}
-              size={28}
-              color={Colors.secondary}
-              style={styles.details}
-            />
-          </TouchableOpacity>
-          {playerStatus ? (
-            <TouchableOpacity onPress={onPause}>
-              <Icon name={'pause'} size={28} color={Colors.secondary} />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={onPlay}>
-              <Icon name={'play'} size={28} color={Colors.secondary} />
-            </TouchableOpacity>
-          )}
-        </View>
-      </Animated.View>
-    </GestureDetector>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onClose} style={styles.icon}>
+          <Icon name={'close'} size={28} color={Colors.secondary} />
+        </TouchableOpacity>
+      </View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
-    height: 50,
+    height: PropDimensions.tabHight,
     alignSelf: 'center',
     width: PropDimensions.fullWidth,
     position: 'absolute',
-    bottom: 60,
-    left: 0,
     zIndex: 100,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
+    paddingHorizontal: '5%',
+    backgroundColor: '#040404bd',
+    bottom: PropDimensions.tabHight,
+    left: 0,
   },
   side: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '50%',
+    height: '100%',
+    width: '75%',
     overflow: 'hidden',
   },
+  controller: {
+    height: '100%',
+    width: '25%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   details: {
-    marginHorizontal: 16,
+    width: '80%',
+    marginHorizontal: '4%',
+    alignItems: 'flex-start',
   },
   image: {
     width: 35,
     height: 35,
+    borderRadius: 6,
+  },
+  icon: {
+    width: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

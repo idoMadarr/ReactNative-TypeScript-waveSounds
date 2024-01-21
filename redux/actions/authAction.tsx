@@ -1,6 +1,6 @@
 import {Dispatch} from '@reduxjs/toolkit';
 import axios from '../../utils/axiosInstance';
-import {saveToStorage} from '../../utils/asyncStorage';
+import {getFromStorage, saveToStorage} from '../../utils/asyncStorage';
 import {TrackType, UserType} from '../../types/Types';
 import {
   setAuthentication,
@@ -14,6 +14,7 @@ interface AuthCredentialsType {
   email: string;
   username?: string;
   password?: string;
+  fcmToken?: string;
 }
 
 export const signIn =
@@ -77,3 +78,13 @@ export const deleteFavorite =
     dispatch(updateFavorites(favoriteId));
     await axios.delete(`/ws-api/remove-favorite/${favoriteId}`);
   };
+
+export const sendPushDetails = async () => {
+  const fcmToken = await getFromStorage('fcm');
+  await axios.post('/ws-api/push-notifications-device', {fcmToken});
+};
+
+export const userLogout = async () => {
+  const fcmToken = await getFromStorage('fcm');
+  await axios.post('/ws-api/signout', {fcmToken});
+};
