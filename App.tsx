@@ -1,4 +1,5 @@
 import React from 'react';
+import CodePush from 'react-native-code-push';
 import {I18nManager, LogBox} from 'react-native';
 import AppNavigation from './navigation-layout/AppNavigation';
 import {Provider} from 'react-redux';
@@ -23,4 +24,9 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+// Check for update from code push
+const codePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+};
+
+export default CodePush(codePushOptions)(App);

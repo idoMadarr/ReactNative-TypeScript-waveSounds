@@ -2,4 +2,5 @@
     <string name="app_name">WaveSounds</string>
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">1ZktJA3d49AUOZ2yFG59TGITaWLiukI--fcmE</string>
 </resources>

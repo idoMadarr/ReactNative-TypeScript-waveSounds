@@ -179,7 +179,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
                 <TextElement cStyle={{color: Colors.greyish}}>OR</TextElement>
                 <View style={styles.line} />
               </View>
-              <TextElement>New to waveSounds?</TextElement>
+              <TextElement>*New to waveSounds?</TextElement>
               <ButtonElement
                 title={'Create an account'}
                 titleColor={Colors.active}

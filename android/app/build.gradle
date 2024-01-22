@@ -4,6 +4,7 @@ apply from: project(":react-native-config").projectDir.getPath() + "/dotenv.grad
 apply plugin: 'kotlin-android' 
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
