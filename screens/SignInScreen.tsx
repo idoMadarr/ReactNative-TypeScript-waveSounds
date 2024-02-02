@@ -134,7 +134,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
             <View style={styles.formContainer}>
               <FaviconVector height={100} width={100} />
               <TextElement fontSize={'xl'} fontWeight={'bold'}>
-                Any song, Anywhere
+                Any song, Anywhere!
               </TextElement>
               <View>
                 <TouchableOpacity

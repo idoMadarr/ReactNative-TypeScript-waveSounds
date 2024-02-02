@@ -30,7 +30,7 @@
     "lottie-react-native": "^6.0.0-rc.3",
     "react": "18.1.0",
     "react-native": "0.70.6",
-    "react-native-code-push": "^8.2.0",
+    "react-native-code-push": "^7.0.4",
     "react-native-config": "^1.5.0",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.10.1",
