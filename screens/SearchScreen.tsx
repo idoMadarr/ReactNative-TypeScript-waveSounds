@@ -1,6 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {FlatList, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
-import Analytics from 'appcenter-analytics';
 import {fetchSerchResults} from '../redux/actions/deezerActions';
 import {setSearchResults} from '../redux/slices/deezerSlice';
 import LinearGradient from 'react-native-linear-gradient';
@@ -45,8 +44,6 @@ const SearchScreen = () => {
   const updateSearch = async (value: string) => {
     if (value === '') return;
     const results = await dispatch(fetchSerchResults(value));
-    // Tracking event through appcenter about user search value
-    Analytics.trackEvent(`serach-${username}`, {key: value});
     if (results) {
       dispatch(setSearchResults(results));
     }

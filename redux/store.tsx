@@ -2,6 +2,7 @@ import {configureStore} from '@reduxjs/toolkit';
 import {combineReducers} from 'redux';
 import deezerSlice from './slices/deezerSlice';
 import authSlice from './slices/authSlice';
+import { apiQuery } from '../services/apiQuery';
 
 // Flipper Debug Configuration
 // const createDebugger = require('redux-flipper').default;
@@ -9,6 +10,7 @@ import authSlice from './slices/authSlice';
 const rootReducer = combineReducers({
   deezerSlice,
   authSlice,
+  [apiQuery.reducerPath]: apiQuery.reducer
 });
 
 const store = configureStore({
@@ -16,7 +18,7 @@ const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }) /* .concat(createDebugger()), */,
+    }).concat(apiQuery.middleware) /* .concat(createDebugger()), */,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
