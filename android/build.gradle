@@ -2,10 +2,10 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "33.0.0"
+        buildToolsVersion = "34.0.0"
         minSdkVersion = 21
-        compileSdkVersion = 33
-        targetSdkVersion = 33
+        compileSdkVersion = 34
+        targetSdkVersion = 34
         googlePlayServicesAuthVersion = "18.0.0" // Add this line
         kotlinVersion = '1.6.20'
 

@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   Keyboard,
 } from 'react-native';
-// import Crashes from 'appcenter-crashes';
 import Animated, {FadeInDown} from 'react-native-reanimated';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useAppDispatch} from '../redux/hooks';
@@ -98,8 +97,6 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
   };
 
   const onPress = async () => {
-    // Testing integration for crashes in appcenter
-    // Crashes.generateTestCrash();
     Keyboard.dismiss();
     const isValidForm = formValidator();
     if (isValidForm) {
@@ -134,7 +131,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
             <View style={styles.formContainer}>
               <FaviconVector height={100} width={100} />
               <TextElement fontSize={'xl'} fontWeight={'bold'}>
-                Any Song -- Anywhere!
+                Any Song - Anywhere!
               </TextElement>
               <View>
                 <TouchableOpacity
@@ -171,9 +168,7 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
               </View>
             </View>
             <View style={styles.mainContainer}>
-              <LinkElement url={'forgot-password'}>
-                {/* Recover Password */}
-              </LinkElement>
+              <LinkElement url={'forgot-password'}>''</LinkElement>
               <View style={styles.orContainer}>
                 <View style={styles.line} />
                 <TextElement cStyle={{color: Colors.greyish}}>OR</TextElement>
