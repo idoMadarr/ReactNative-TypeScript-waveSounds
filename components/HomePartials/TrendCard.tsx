@@ -4,62 +4,117 @@ import {
   TouchableOpacity,
   StyleSheet,
   ImageBackground,
+  Dimensions,
+  useWindowDimensions,
 } from 'react-native';
-import Animated, {FadeInLeft} from 'react-native-reanimated';
+import Animated, {
+  Extrapolate,
+  interpolate,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import {PropDimensions} from '../../dimensions/dimensions';
 import Colors from '../../assets/design/palette.json';
 import PlayIcon from '../../assets/vectors/play.svg';
 
 // Components
 import TextElement from '../resuable/TextElement';
-import LinearGradient from 'react-native-linear-gradient';
+
+const SIZE = Dimensions.get('window').width * 0.7;
 
 interface TrendCardType {
   artist: string;
   title: string;
-  release: string;
   image: string;
+  index: number;
   onPlay(): void;
+  translateX: Animated.SharedValue<number>;
 }
 
 const TrendCard: React.FC<TrendCardType> = ({
   artist,
   title,
-  release,
   image,
+  index,
   onPlay,
+  translateX,
 }) => {
+  const {width} = useWindowDimensions();
+  const inputRage = [(index - 1) * width, index * width, (index + 1) * width];
+
+  const rStyle = useAnimatedStyle(() => {
+    const scale = interpolate(
+      translateX.value,
+      inputRage,
+      [0, 1, 0],
+      Extrapolate.CLAMP,
+    );
+
+    const borderRadius = interpolate(
+      translateX.value,
+      inputRage,
+      [0, SIZE / 2, 0],
+      Extrapolate.CLAMP,
+    );
+    return {
+      borderRadius,
+      transform: [{scale}],
+    };
+  });
+
+  const rTextStyle = useAnimatedStyle(() => {
+    const translate = interpolate(
+      translateX.value,
+      inputRage,
+      [width, 0, -width],
+      Extrapolate.CLAMP,
+    );
+
+    const opacity = interpolate(
+      translateX.value,
+      inputRage,
+      [-2, 1, -2],
+      Extrapolate.CLAMP,
+    );
+
+    return {
+      opacity,
+      transform: [{translateX: translate}],
+    };
+  });
+
   return (
-    <View style={styles.item}>
-      <Animated.View entering={FadeInLeft} style={styles.card}>
-        <ImageBackground style={styles.bgCard} source={{uri: image}}>
-          <LinearGradient
-            colors={[Colors.transparent, '#000000be', Colors.black]}
-            style={styles.flex}>
-            <View style={styles.contentContainer}>
-              <View style={{alignItems: 'center'}}>
-                <TextElement
-                  numberOfLines={2}
-                  fontSize={'xl'}
-                  fontWeight={'bold'}
-                  cStyle={styles.center}>
-                  {title}
-                </TextElement>
-                <TextElement
-                  fontWeight={'bold'}
-                  cStyle={{color: Colors.greyish}}>
-                  {`* ${artist} *`}
-                </TextElement>
-              </View>
-              <TouchableOpacity onPress={onPlay} style={styles.playButton}>
-                <PlayIcon />
-              </TouchableOpacity>
-              <TextElement
-                cStyle={styles.center}
-                fontSize={'sm'}>{`Realese on ${release}`}</TextElement>
-            </View>
-          </LinearGradient>
-        </ImageBackground>
+    <View
+      style={[
+        styles.item,
+        {backgroundColor: index % 2 === 0 ? Colors.primary : Colors.dark},
+      ]}>
+      <Animated.View style={[styles.card, rStyle]}>
+        <ImageBackground
+          resizeMode={'contain'}
+          style={styles.flex}
+          source={{uri: image}}></ImageBackground>
+      </Animated.View>
+      <Animated.View style={[styles.header, rTextStyle]}>
+        <TextElement
+          numberOfLines={2}
+          fontSize={'xl'}
+          fontWeight={'bold'}
+          cStyle={styles.center}>
+          {title}
+        </TextElement>
+        <TextElement fontWeight={'bold'} cStyle={{color: Colors.greyish}}>
+          {`* ${artist} *`}
+        </TextElement>
+        <TouchableOpacity
+          onPress={onPlay}
+          style={[
+            styles.playButton,
+            {
+              backgroundColor: index % 2 !== 0 ? Colors.primary : Colors.dark,
+            },
+          ]}>
+          <PlayIcon />
+        </TouchableOpacity>
       </Animated.View>
     </View>
   );
@@ -71,40 +126,29 @@ const styles = StyleSheet.create({
   },
   item: {
     alignItems: 'center',
+    justifyContent: 'center',
     width: PropDimensions.fullWidth,
+    height: PropDimensions.trendsHeight,
   },
   card: {
-    width: PropDimensions.cardWidth,
-    height: PropDimensions.cardHeight,
-    borderRadius: 15,
-    elevation: 3,
-    backgroundColor: Colors.black,
+    width: SIZE,
+    height: SIZE,
+    borderRadius: 250,
     overflow: 'hidden',
+    marginBottom: '25%',
   },
-  bgCard: {
-    width: '100%',
-    height: '90%',
-  },
-  contentContainer: {
-    width: '85%',
-    height: '65%',
-    justifyContent: 'space-around',
+  header: {
+    bottom: 0,
     position: 'absolute',
-    bottom: '-12%',
-    alignSelf: 'center',
-  },
-  controller: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   playButton: {
     alignSelf: 'center',
     marginHorizontal: 24,
-    backgroundColor: Colors.dark,
-    width: 65,
-    height: 65,
+    width: 90,
+    height: 90,
     borderRadius: 50,
+    marginVertical: '5%',
     justifyContent: 'center',
     alignItems: 'center',
   },
