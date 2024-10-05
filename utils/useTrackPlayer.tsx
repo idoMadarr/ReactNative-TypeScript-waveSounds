@@ -41,7 +41,6 @@ const useTrackPlayer = () => {
     try {
       await TrackPlayer.setupPlayer({maxCacheSize: 1024 * 10});
       await TrackPlayer.setVolume(0.8);
-      //   await TrackPlayer.setRepeatMode(RepeatMode.Off);
       playerInitialized.current = true;
     } catch (error) {
       console.log('Track Player Error:', error);
@@ -87,6 +86,10 @@ export const trackController = async (action: string, value?: number) => {
 
   if (action === 'stop') {
     return await TrackPlayer.stop();
+  }
+
+  if (action === 'reset') {
+    return await TrackPlayer.reset();
   }
 
   const queue = await TrackPlayer.getQueue();

@@ -1,5 +1,12 @@
 import React, {Fragment, useContext, useEffect} from 'react';
-import {ScrollView, StyleSheet, SafeAreaView, Alert, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {SocketContext} from '../utils/socketIO';
 import Animated, {
@@ -8,6 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {
+  setModalMessage,
   setUpdate,
   updateChainChat,
   updateOnline,
@@ -24,6 +32,7 @@ import {
 import {askPermissions} from '../utils/permissions';
 import useTrackPlayer, {initContextTrack} from '../utils/useTrackPlayer';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
@@ -93,6 +102,14 @@ const HomeScreen = () => {
     initContextTrack(PlayerContext.TRENDS, trends, createFloatingTrack);
   };
 
+  const logoutUser = () => {
+    dispatch(
+      setModalMessage([
+        {message: 'Are you sure you want to exit?', field: 'logout'},
+      ]),
+    );
+  };
+
   return (
     <Fragment>
       <SafeAreaView style={styles.screen}>
@@ -112,10 +129,13 @@ const HomeScreen = () => {
               <TextElement fontSize={'lg'} fontWeight={'bold'}>
                 Top Hits
               </TextElement>
-              <TextElement cStyle={{color: Colors.greyish}}>
+              <TextElement cStyle={{color: Colors.greyish, marginTop: 8}}>
                 Stay updated with fresh music and explore new releases, rising
                 hits, and popular tracks that are making waves globally.
               </TextElement>
+              <TouchableOpacity onPress={logoutUser} style={styles.logout}>
+                <Icon name={'logout'} size={28} color={Colors.secondary} />
+              </TouchableOpacity>
             </View>
             <Animated.ScrollView
               horizontal
@@ -169,6 +189,12 @@ const styles = StyleSheet.create({
     left: '5%',
     width: PropDimensions.inputWidth,
     alignSelf: 'center',
+  },
+  logout: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    padding: 6,
   },
 });
 
