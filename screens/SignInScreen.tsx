@@ -134,14 +134,14 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
                 Any Song - Anywhere!
               </TextElement>
               <View>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={onGoogleOAuth}
                   style={styles.googleIcon}>
                   <GoogleVector />
                   <TextElement fontWeight={'bold'} cStyle={styles.socialLogin}>
                     Continue with Google
                   </TextElement>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <InputElement
                   inputRef={inputEmailRef}
                   value={email}
