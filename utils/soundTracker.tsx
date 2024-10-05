@@ -1,43 +1,29 @@
-import Sound from 'react-native-sound';
-import {OptionsTrackType, TrackType} from '../types/Types';
+import {PlayerContext, TrackType} from '../types/Types';
 import store from '../redux/store';
-import {
-  setCurrentTrack,
-  setCurrentIndexTrack,
-  setFloatingPlayer,
-  setModalPlayerContext,
-} from '../redux/slices/deezerSlice';
-
-Sound.setCategory('Playback', true);
-
-const soundTracker = (track: OptionsTrackType) => {
-  if (track?.play) {
-    track.play();
-  }
-};
+import {updatePlayerContext} from '../redux/slices/deezerSlice';
+import TrackPlayer from 'react-native-track-player';
 
 export const initSoundTrack = async (
-  preview: string,
-  tracks?: TrackType[],
-  playTrack?: TrackType,
+  contextType: PlayerContext,
+  tracks: TrackType[],
+  playTrack: TrackType,
 ) => {
-  const trackIndex = tracks?.findIndex(item => item.preview === preview);
-  await store.dispatch(setCurrentIndexTrack(trackIndex));
-  const currentTrack = store.getState().deezerSlice.currentTrack;
-  const loadTrack = new Sound(preview, '', () => {
-    if (currentTrack) {
-      currentTrack.stop(async () => {
-        await currentTrack.release();
-        store.dispatch(setModalPlayerContext(tracks));
-        store.dispatch(setFloatingPlayer(playTrack));
-        store.dispatch(setCurrentTrack(loadTrack));
-      });
-    } else {
-      store.dispatch(setModalPlayerContext(tracks));
-      store.dispatch(setFloatingPlayer(playTrack));
-      store.dispatch(setCurrentTrack(loadTrack));
-    }
-  });
+  await handleContextChanges(contextType, tracks);
+  const trackIndex = tracks.findIndex(item => item.url === playTrack.url);
+  await TrackPlayer.skip(trackIndex);
+  await TrackPlayer.play();
 };
 
-export default soundTracker;
+const handleContextChanges = async (
+  contextType: PlayerContext,
+  tracks: TrackType[],
+) => {
+  const currentContext = store.getState().deezerSlice.playerContext;
+  const isContextChange = currentContext === contextType;
+
+  if (!isContextChange) {
+    await TrackPlayer.reset();
+    await store.dispatch(updatePlayerContext(contextType));
+    await TrackPlayer.add(tracks);
+  }
+};

@@ -8,9 +8,10 @@ import {
   Easing,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {useAppSelector, useAppDispatch} from '../redux/hooks';
-import {cleanFloatingPlayer} from '../redux/slices/deezerSlice';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
+import {State} from 'react-native-track-player';
 import {PropDimensions} from '../dimensions/dimensions';
+import {cleanFloatingPlayer} from '../redux/slices/deezerSlice';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../assets/design/palette.json';
 
@@ -18,25 +19,21 @@ import Colors from '../assets/design/palette.json';
 import TextElement from './resuable/TextElement';
 
 interface FloatingPlayerType {
-  playerStatus: boolean;
-  setPlayerStatus: Function;
-  setTimeLeft: Function;
   openModal(): void;
+  onTrackNavigate(action: string): void;
 }
 
 const INIT_PLAYER_POSITION = Dimensions.get('window').height * 0.2;
 const BOTTOM_PLAYER_POSITION = Dimensions.get('window').height * 0.09;
 
 const FloatingPlayer: React.FC<FloatingPlayerType> = ({
-  playerStatus,
-  setPlayerStatus,
-  setTimeLeft,
   openModal,
+  onTrackNavigate,
 }) => {
   const dispatch = useAppDispatch();
 
-  const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
   const currentAlbum = useAppSelector(state => state.deezerSlice.currentAlbum);
+  const playerState = useAppSelector(state => state.deezerSlice.playerState);
   const currentRecipient = useAppSelector(
     state => state.authSlice.currentRecipient,
   );
@@ -50,7 +47,6 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
   const floatingPlayerOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    setPlayerStatus(true);
     verticalAnimatedPlayer(true);
   }, []);
 
@@ -81,22 +77,16 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
     }).start();
   };
 
-  const onPause = () => {
-    setPlayerStatus(false);
-    currentTrack?.pause();
-  };
+  const onPause = async () => onTrackNavigate('pause');
 
-  const onPlay = () => {
-    setPlayerStatus(true);
-    currentTrack?.play();
-  };
+  const onPlay = () => onTrackNavigate('play');
+
+  const onNext = () => onTrackNavigate('next');
 
   const onClose = () => {
     verticalAnimatedPlayer(false);
-    setTimeLeft(0);
-    setPlayerStatus(false);
+    onTrackNavigate('stop');
     setTimeout(() => {
-      currentTrack?.stop();
       dispatch(cleanFloatingPlayer());
     }, 300);
   };
@@ -133,13 +123,16 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
       </TouchableOpacity>
       <View style={styles.controller}>
         <TouchableOpacity
-          onPress={playerStatus ? onPause : onPlay}
+          onPress={playerState === State.Playing ? onPause : onPlay}
           style={styles.icon}>
           <Icon
-            name={playerStatus ? 'pause' : 'play'}
+            name={playerState === State.Playing ? 'pause' : 'play'}
             size={28}
             color={Colors.secondary}
           />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onNext} style={styles.icon}>
+          <Icon name={'forward'} size={28} color={Colors.secondary} />
         </TouchableOpacity>
         <TouchableOpacity onPress={onClose} style={styles.icon}>
           <Icon name={'close'} size={28} color={Colors.secondary} />
@@ -159,7 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: '5%',
+    paddingHorizontal: '2%',
     backgroundColor: '#040404bd',
     bottom: PropDimensions.tabHight,
     left: 0,
@@ -168,12 +161,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: '100%',
-    width: '75%',
+    width: '65%',
     overflow: 'hidden',
   },
   controller: {
     height: '100%',
-    width: '25%',
+    width: '35%',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -188,7 +181,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   icon: {
-    width: '50%',
+    width: '33.3%',
     justifyContent: 'center',
     alignItems: 'center',
   },

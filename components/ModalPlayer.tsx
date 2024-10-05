@@ -8,74 +8,60 @@ import {
 } from 'react-native';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {addFavorite, deleteFavorite} from '../redux/actions/authAction';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Colors from '../assets/design/palette.json';
-import {PropDimensions} from '../dimensions/dimensions';
-import {TrackType} from '../types/Types';
-import LinearGradient from 'react-native-linear-gradient';
-import {setShareMode} from '../redux/slices/authSlice';
-import Slider from '@react-native-community/slider';
-import Lottie from 'lottie-react-native';
-
-// Components
-import TextElement from './resuable/TextElement';
 import Animated, {
   FadeInLeft,
   FadeOutRight,
   SlideInDown,
 } from 'react-native-reanimated';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Colors from '../assets/design/palette.json';
+import {PropDimensions} from '../dimensions/dimensions';
+import {TrackType} from '../types/Types';
+import LinearGradient from 'react-native-linear-gradient';
+import {State, useProgress} from 'react-native-track-player';
+import Slider from '@react-native-community/slider';
+import Lottie from 'lottie-react-native';
+
+// Components
+import TextElement from './resuable/TextElement';
 
 interface ModalPlayerType {
-  playerStatus: boolean;
-  setPlayerStatus: Function;
-  timeLeft: number;
-  setTimeLeft: Function;
-  onTrackNavigate(action: number): void;
   closeModal(): void;
+  onTrackNavigate(action: string, value?: number): void;
 }
 
 const ModalPlayer: React.FC<ModalPlayerType> = ({
-  playerStatus,
-  timeLeft,
-  setTimeLeft,
-  onTrackNavigate,
-  setPlayerStatus,
   closeModal,
+  onTrackNavigate,
 }) => {
-  const currentTrack = useAppSelector(state => state.deezerSlice.currentTrack);
+  const progress = useProgress();
+  const dispatch = useAppDispatch();
+
   const floatingPlayer = useAppSelector(
     state => state.deezerSlice.floatingPlayer,
   )!;
+  const playerState = useAppSelector(state => state.deezerSlice.playerState)!;
   const favoritesObj = useAppSelector(state => state.authSlice.favoritesObj);
-  const onlines = useAppSelector(state => state.authSlice.onlines);
+
   const [isFavorite, setFavorite] = useState(false);
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     // @ts-ignore:
     setFavorite(favoritesObj[floatingPlayer.id] ? true : false);
-  }, [currentTrack, floatingPlayer]);
+  }, [floatingPlayer]);
 
-  const onPlay = () => {
-    setPlayerStatus(true);
-    currentTrack?.play();
-  };
+  const onPlay = () => onTrackNavigate('play');
 
-  const onPause = () => {
-    setPlayerStatus(false);
-    currentTrack?.pause();
-  };
+  const onPause = () => onTrackNavigate('pause');
 
-  const onShare = async () => {
-    closeModal();
-    dispatch(setShareMode(floatingPlayer));
-  };
+  const onNext = () => onTrackNavigate('next');
 
-  const onSlidingComplete = (current: any) => {
-    setTimeLeft(parseInt(current));
-    currentTrack?.setCurrentTime(current);
-    onPlay();
-  };
+  const onPrevious = () => onTrackNavigate('previous');
+
+  const onTime = (value: number) => onTrackNavigate('time', value);
+
+  const onVolume = (value: number) =>
+    onTrackNavigate('volume', Number(value.toFixed(2)));
 
   const handleFavorite = async (track: TrackType) => {
     setFavorite(prevState => !prevState);
@@ -121,14 +107,10 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
           </View>
         </View>
         <View style={styles.progressContainer}>
-          <TouchableOpacity style={styles.share} onPress={onShare}>
-            <Icon
-              name={'share'}
-              size={28}
-              color={onlines.length > 0 ? Colors.secondary : Colors.greyish}
-            />
+          <TouchableOpacity style={styles.share} onPress={closeModal}>
+            <Icon name={'minus'} size={28} color={Colors.secondary} />
           </TouchableOpacity>
-          {playerStatus && (
+          {playerState === State.Playing && (
             <Animated.View
               entering={FadeInLeft}
               exiting={FadeOutRight}
@@ -142,13 +124,13 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
             </Animated.View>
           )}
           <Slider
-            value={timeLeft}
-            style={{width: 240, height: 40, zIndex: 100}}
+            onSlidingComplete={onTime}
+            value={progress.position}
             minimumValue={0}
-            maximumValue={parseInt(currentTrack?._duration || 29)}
+            maximumValue={progress.duration}
             minimumTrackTintColor={Colors.white}
             maximumTrackTintColor={Colors.light}
-            onSlidingComplete={onSlidingComplete}
+            style={{width: 240, height: 40, zIndex: 50}}
           />
           <TextElement fontWeight={'bold'} cStyle={styles.text}>
             {floatingPlayer.title}
@@ -156,6 +138,15 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
           <TextElement fontSize={'sm'} cStyle={styles.text}>
             {floatingPlayer.artist}
           </TextElement>
+          <Slider
+            onSlidingComplete={onVolume}
+            value={0.8}
+            minimumValue={0}
+            maximumValue={1}
+            minimumTrackTintColor={Colors.white}
+            maximumTrackTintColor={Colors.light}
+            style={{width: 240, height: 40, zIndex: 50}}
+          />
           <TouchableOpacity
             style={styles.liked}
             onPress={optimizeFavoriteFunc.bind(this, floatingPlayer)}>
@@ -167,19 +158,18 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
           </TouchableOpacity>
         </View>
         <View style={styles.controllerContainer}>
-          <TouchableOpacity onPress={onTrackNavigate.bind(this, -1)}>
+          <TouchableOpacity onPress={onPrevious}>
             <Icon name={'backward'} size={28} color={Colors.secondary} />
           </TouchableOpacity>
-          {playerStatus ? (
-            <TouchableOpacity onPress={onPause}>
-              <Icon name={'pause'} size={28} color={Colors.secondary} />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={onPlay}>
-              <Icon name={'play'} size={28} color={Colors.active} />
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity onPress={onTrackNavigate.bind(this, 1)}>
+          <TouchableOpacity
+            onPress={playerState === State.Playing ? onPause : onPlay}>
+            <Icon
+              name={playerState === State.Playing ? 'pause' : 'play'}
+              size={28}
+              color={Colors.secondary}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onNext}>
             <Icon name={'forward'} size={28} color={Colors.secondary} />
           </TouchableOpacity>
         </View>
@@ -226,13 +216,13 @@ const styles = StyleSheet.create({
   },
   liked: {
     position: 'absolute',
-    bottom: '10%',
+    bottom: '20%',
     right: '5%',
     padding: 16,
   },
   share: {
     position: 'absolute',
-    bottom: '10%',
+    bottom: '20%',
     left: '5%',
     padding: 16,
     zIndex: 100,

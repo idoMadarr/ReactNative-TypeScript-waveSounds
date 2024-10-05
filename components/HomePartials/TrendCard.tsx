@@ -83,11 +83,7 @@ const TrendCard: React.FC<TrendCardType> = ({
   });
 
   return (
-    <View
-      style={[
-        styles.item,
-        {backgroundColor: index % 2 === 0 ? Colors.primary : Colors.dark},
-      ]}>
+    <View style={[styles.item, {backgroundColor: Colors.primary}]}>
       <Animated.View style={[styles.card, rStyle]}>
         <ImageBackground
           resizeMode={'contain'}
@@ -105,14 +101,7 @@ const TrendCard: React.FC<TrendCardType> = ({
         <TextElement fontWeight={'bold'} cStyle={{color: Colors.greyish}}>
           {`* ${artist} *`}
         </TextElement>
-        <TouchableOpacity
-          onPress={onPlay}
-          style={[
-            styles.playButton,
-            {
-              backgroundColor: index % 2 !== 0 ? Colors.primary : Colors.dark,
-            },
-          ]}>
+        <TouchableOpacity onPress={onPlay} style={styles.playButton}>
           <PlayIcon />
         </TouchableOpacity>
       </Animated.View>
@@ -153,6 +142,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   center: {
+    width: PropDimensions.buttonWidth,
     textAlign: 'center',
   },
 });

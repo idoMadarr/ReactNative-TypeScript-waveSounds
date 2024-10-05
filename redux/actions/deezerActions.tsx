@@ -12,6 +12,7 @@ import {navigate} from '../../utils/rootNavigation';
 
 export const fetchDeezerChart = () => async (dispatch: Dispatch) => {
   const {data} = await axios.get(`${Config.deezer_api}chart`);
+
   const trends = data.tracks.data.map((trend: any) => ({
     id: trend.id,
     artist: trend.artist.name,
@@ -19,7 +20,7 @@ export const fetchDeezerChart = () => async (dispatch: Dispatch) => {
     rank: trend.rank,
     image: trend.album.cover_medium,
     album: trend.album.title,
-    preview: trend.preview,
+    url: trend.preview,
   }));
 
   const artists = data.artists.data.map((artist: any) => ({
@@ -62,7 +63,7 @@ export const fetchAlbum = (albumId: string) => async (dispatch: Dispatch) => {
       title: track.title,
       artist: track.artist.name,
       image: data.cover_medium,
-      preview: track.preview,
+      url: track.preview,
     })),
   };
   dispatch(toggleSpinner());
@@ -80,7 +81,7 @@ export const fetchSerchResults =
         artist: result.artist.name,
         rank: result.rank,
         image: result.album.cover_medium,
-        preview: result.preview,
+        url: result.preview,
       }));
       return formattedResults.slice(0, 15);
     }

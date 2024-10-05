@@ -1,7 +1,6 @@
 import React, {Fragment} from 'react';
 import {useEffect, useState} from 'react';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
-import {ParamListBase} from '@react-navigation/native';
 import {navigate} from '../utils/rootNavigation';
 import Animated, {
   useAnimatedStyle,
@@ -32,36 +31,40 @@ interface TabType {
 
 const TabBar: React.FC = () => {
   const [focus, setFocus] = useState(DEFAULT_TAB);
-  const offset = useSharedValue(DEFAULT_OFFSET);
+  // const offset = useSharedValue(DEFAULT_OFFSET);
 
   const translateXAnimate = (route: string, index: number) => {
     setFocus(route);
-    offset.value = setTranslateX(index);
+    // offset.value = setTranslateX(index);
     navigate(route as never);
   };
 
-  const setTranslateX = (index: number) => {
-    return (PropDimensions.fullWidth / 5) * index;
-  };
+  // const setTranslateX = (index: number) => {
+  //   return (PropDimensions.fullWidth / 3) * index;
+  // };
 
-  const offsetAnimation = useAnimatedStyle(() => {
-    return {
-      transform: [{translateX: withTiming(offset.value)}],
-    };
-  });
+  // const offsetAnimation = useAnimatedStyle(() => {
+  //   return {
+  //     transform: [{translateX: withTiming(offset.value)}],
+  //   };
+  // });
 
   return (
     <View style={styles.tabContainer}>
-      {tabs.map(({id, route}) => (
-        <Tab
-          key={id}
-          id={id}
-          route={route}
-          focus={focus}
-          setFocus={translateXAnimate}
-        />
-      ))}
-      <Animated.View style={[offsetAnimation, styles.indicator]} />
+      {tabs.map(({id, route, available}) => {
+        if (!available) return;
+
+        return (
+          <Tab
+            key={id}
+            id={id}
+            route={route}
+            focus={focus}
+            setFocus={translateXAnimate}
+          />
+        );
+      })}
+      {/* <Animated.View style={[offsetAnimation, styles.indicator]} /> */}
     </View>
   );
 };

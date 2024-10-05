@@ -101,7 +101,7 @@ const ChatScreen = ({}) => {
       floatingPlayer.title,
       floatingPlayer.artist,
       floatingPlayer.image,
-      floatingPlayer.preview!,
+      floatingPlayer.url,
     );
     dispatch(updateChainChat(shareTrack));
     await socket.emit('message', shareTrack);

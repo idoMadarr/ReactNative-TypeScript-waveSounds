@@ -1,9 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {
   TrackType,
-  OptionsTrackType,
   SequenceType,
   AlbumType,
+  PlayerContext,
 } from '../../types/Types';
 
 interface RootStateApp {
@@ -12,10 +12,10 @@ interface RootStateApp {
   sequenceTree: SequenceType[];
   floatingPlayer: TrackType | null;
   currentAlbum: AlbumType | null;
-  currentTrack: OptionsTrackType | null;
   currentIndexTrack: number;
   searchResults: TrackType[];
-  modalContext: TrackType[];
+  playerContext: PlayerContext | null;
+  playerState: string | null;
 }
 
 const initialState: RootStateApp = {
@@ -24,10 +24,10 @@ const initialState: RootStateApp = {
   sequenceTree: [],
   floatingPlayer: null,
   currentAlbum: null,
-  currentTrack: null,
   currentIndexTrack: 0,
   searchResults: [],
-  modalContext: [],
+  playerContext: null,
+  playerState: null,
 };
 
 export const deezerSlice = createSlice({
@@ -41,27 +41,23 @@ export const deezerSlice = createSlice({
     setSequence: (state, action) => {
       state.sequenceTree.push(action.payload);
     },
+    setPlayerState: (state, action) => {
+      state.playerState = action.payload;
+    },
     setCurrentAlbum: (state, action) => {
       state.currentAlbum = action.payload;
     },
     setFloatingPlayer: (state, action) => {
       state.floatingPlayer = action.payload;
     },
-    setCurrentTrack: (state, action) => {
-      state.currentTrack = action.payload;
-    },
     setCurrentIndexTrack: (state, action) => {
       state.currentIndexTrack = action.payload;
     },
-    updateCurrentIndexTrack: (state, action) => {
-      state.currentIndexTrack = state.currentIndexTrack + action.payload;
-    },
     cleanFloatingPlayer: state => {
-      state.currentTrack?.stop();
       state.floatingPlayer = null;
     },
-    setModalPlayerContext: (state, action) => {
-      state.modalContext = action.payload;
+    updatePlayerContext: (state, action) => {
+      state.playerContext = action.payload;
     },
     setSearchResults: (state, action) => {
       state.searchResults = action.payload;
@@ -71,9 +67,7 @@ export const deezerSlice = createSlice({
       state.artists = [];
       state.sequenceTree = [];
       state.floatingPlayer = null;
-      state.currentTrack = null;
       state.searchResults = [];
-      state.modalContext = [];
     },
   },
 });
@@ -81,13 +75,12 @@ export const deezerSlice = createSlice({
 export const {
   setDeezerChart,
   setSequence,
+  setPlayerState,
   setFloatingPlayer,
   setCurrentAlbum,
-  setCurrentTrack,
   setCurrentIndexTrack,
-  updateCurrentIndexTrack,
   cleanFloatingPlayer,
-  setModalPlayerContext,
+  updatePlayerContext,
   setSearchResults,
   resetDezeerSlice,
 } = deezerSlice.actions;

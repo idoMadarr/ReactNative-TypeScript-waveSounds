@@ -10,7 +10,6 @@ export const onLogout = async () => {
   oauthSignout();
   await socket.emit('logout', store.getState().authSlice.user);
   await userLogout();
-  store.getState().deezerSlice.currentTrack?.stop();
   store.dispatch(resetAuthSlice());
   store.dispatch(resetDezeerSlice());
   clearStorage();

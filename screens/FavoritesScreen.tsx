@@ -5,7 +5,7 @@ import Colors from '../assets/design/palette.json';
 import LinearGradient from 'react-native-linear-gradient';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {initSoundTrack} from '../utils/soundTracker';
-import {TrackType} from '../types/Types';
+import {PlayerContext, TrackType} from '../types/Types';
 
 // Components
 import FavoriteHeader from '../components/FavoritesPartials/FavoriteHeader';
@@ -21,9 +21,9 @@ const FavoritesScreen = () => {
       item.title,
       item.artist,
       item.image,
-      item.preview!,
+      item.url,
     );
-    initSoundTrack(item.preview!, favorites, createFloatingTrack);
+    initSoundTrack(PlayerContext.FAVORITES, favorites, createFloatingTrack);
   };
 
   return (
@@ -34,7 +34,7 @@ const FavoritesScreen = () => {
       />
       <LinearGradient
         style={styles.main}
-        colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
+        colors={[Colors.primary, Colors.dark, Colors.primary]}>
         <FavoriteHeader counter={favorites.length} />
         <FavoritesList favorites={favorites} onPlay={onPlay} />
       </LinearGradient>

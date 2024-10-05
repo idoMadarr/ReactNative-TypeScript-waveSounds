@@ -13,8 +13,7 @@ const SectionList = () => {
   const sequenceTree = useAppSelector(state => state.deezerSlice.sequenceTree);
 
   return (
-    <LinearGradient
-      colors={[Colors.primary, Colors['primary-shadow'], Colors.primary]}>
+    <LinearGradient colors={[Colors.primary, Colors.dark, Colors.primary]}>
       {sequenceTree.map(({name, albums}) => (
         <View key={name} style={styles.sequenceContainer}>
           <View style={styles.sectionContainer}>
@@ -39,7 +38,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: Colors.dark,
   },
   categoryTitle: {
     padding: 8,

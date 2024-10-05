@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {I18nManager, LogBox} from 'react-native';
 import AppNavigation from './navigation-layout/AppNavigation';
 import {Provider} from 'react-redux';
@@ -14,6 +14,10 @@ try {
 }
 
 const App: React.FC = () => {
+  useEffect(() => {
+    console.log('Hide splash screen');
+  }, []);
+
   return (
     <Provider store={store}>
       <SocketContext.Provider value={socket}>

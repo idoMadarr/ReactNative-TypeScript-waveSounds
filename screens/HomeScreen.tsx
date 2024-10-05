@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {Fragment, useContext, useEffect} from 'react';
 import {ScrollView, StyleSheet, SafeAreaView, Alert, View} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {SocketContext} from '../utils/socketIO';
@@ -16,7 +16,12 @@ import SectionList from '../components/HomePartials/SectionList';
 import {PropDimensions} from '../dimensions/dimensions';
 import {onLogout} from '../utils/onLogout';
 import Colors from '../assets/design/palette.json';
-import {ConnectedOnlineType, ChatMessageType} from '../types/Types';
+import {
+  ConnectedOnlineType,
+  ChatMessageType,
+  PlayerContext,
+} from '../types/Types';
+import useTrackPlayer from '../utils/useTrackPlayer';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
@@ -28,6 +33,7 @@ import {initSoundTrack} from '../utils/soundTracker';
 
 const HomeScreen = () => {
   const trends = useAppSelector(state => state.deezerSlice.trends!);
+  useTrackPlayer();
 
   const translateX = useSharedValue(0);
   const dispatch = useAppDispatch();
@@ -75,67 +81,75 @@ const HomeScreen = () => {
     image: string,
     title: string,
     artist: string,
-    preview: string,
+    url: string,
   ) => {
     const createFloatingTrack = new FloatingPlayerInstance(
       id,
       title,
       artist,
       image,
-      preview,
+      url,
     );
 
-    initSoundTrack(preview, trends, createFloatingTrack);
+    initSoundTrack(PlayerContext.TRENDS, trends, createFloatingTrack);
   };
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <StatusBarElement
-        barStyle={'light-content'}
-        backgroundColor={Colors.primary}
-      />
-      <ScrollView
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        snapToOffsets={[0, PropDimensions.trendsHeight]}
-        contentContainerStyle={styles.center}
-        snapToEnd={false}
-        decelerationRate={'fast'}>
-        <View style={styles.trendsContainer}>
-          <View style={styles.recommendedContainer}>
-            <TextElement fontSize={'lg'}>Recommended for you</TextElement>
+    <Fragment>
+      <SafeAreaView style={styles.screen}>
+        <StatusBarElement
+          barStyle={'light-content'}
+          backgroundColor={Colors.primary}
+        />
+        <ScrollView
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          snapToOffsets={[0, PropDimensions.trendsHeight]}
+          contentContainerStyle={styles.center}
+          snapToEnd={false}
+          decelerationRate={'fast'}>
+          <View style={styles.trendsContainer}>
+            <View style={styles.recommendedContainer}>
+              <TextElement fontSize={'lg'} fontWeight={'bold'}>
+                Top Hits
+              </TextElement>
+              <TextElement cStyle={{color: Colors.greyish}}>
+                Stay updated with fresh music and explore new releases, rising
+                hits, and popular tracks that are making waves globally.
+              </TextElement>
+            </View>
+            <Animated.ScrollView
+              horizontal
+              onScroll={onHorizontalScroll}
+              showsHorizontalScrollIndicator={false}
+              scrollEventThrottle={16}
+              contentContainerStyle={styles.center}
+              snapToInterval={PropDimensions.fullWidth}
+              decelerationRate={'fast'}>
+              {trends.map(({id, artist, title, image, url}, index) => (
+                <TrendCard
+                  key={id}
+                  artist={artist}
+                  title={title}
+                  image={image}
+                  index={index}
+                  translateX={translateX}
+                  onPlay={onPlay.bind(
+                    this,
+                    id.toString(),
+                    image,
+                    title,
+                    artist,
+                    url!,
+                  )}
+                />
+              ))}
+            </Animated.ScrollView>
           </View>
-          <Animated.ScrollView
-            horizontal
-            onScroll={onHorizontalScroll}
-            showsHorizontalScrollIndicator={false}
-            scrollEventThrottle={16}
-            contentContainerStyle={styles.center}
-            snapToInterval={PropDimensions.fullWidth}
-            decelerationRate={'fast'}>
-            {trends.map(({id, artist, title, image, preview}, index) => (
-              <TrendCard
-                key={id}
-                artist={artist}
-                title={title}
-                image={image}
-                index={index}
-                translateX={translateX}
-                onPlay={onPlay.bind(
-                  this,
-                  id.toString(),
-                  image,
-                  title,
-                  artist,
-                  preview!,
-                )}
-              />
-            ))}
-          </Animated.ScrollView>
-        </View>
-        <SectionList />
-      </ScrollView>
-    </SafeAreaView>
+          <SectionList />
+        </ScrollView>
+      </SafeAreaView>
+    </Fragment>
   );
 };
 
