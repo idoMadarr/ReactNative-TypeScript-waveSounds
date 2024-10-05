@@ -9,7 +9,7 @@ import {PropDimensions} from '../../dimensions/dimensions';
 interface AlbumTrackType {
   id: string;
   title: string;
-  initSoundTrack(): void;
+  onPlay(): void;
   indexIndicator: number;
   onFavorite(): void;
   index: number;
@@ -18,7 +18,7 @@ interface AlbumTrackType {
 const AlbumTrack: React.FC<AlbumTrackType> = ({
   id,
   title,
-  initSoundTrack,
+  onPlay,
   indexIndicator,
   onFavorite,
   index,
@@ -37,7 +37,7 @@ const AlbumTrack: React.FC<AlbumTrackType> = ({
 
   return (
     <TouchableOpacity
-      onPress={initSoundTrack}
+      onPress={onPlay}
       style={[
         styles.trackContainer,
         {

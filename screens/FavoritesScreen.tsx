@@ -4,7 +4,7 @@ import {useAppSelector} from '../redux/hooks';
 import Colors from '../assets/design/palette.json';
 import LinearGradient from 'react-native-linear-gradient';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
-import {initSoundTrack} from '../utils/soundTracker';
+import {initContextTrack} from '../utils/useTrackPlayer';
 import {PlayerContext, TrackType} from '../types/Types';
 
 // Components
@@ -23,7 +23,7 @@ const FavoritesScreen = () => {
       item.image,
       item.url,
     );
-    initSoundTrack(PlayerContext.FAVORITES, favorites, createFloatingTrack);
+    initContextTrack(PlayerContext.FAVORITES, favorites, createFloatingTrack);
   };
 
   return (

@@ -20,7 +20,7 @@ import TextElement from './resuable/TextElement';
 
 interface FloatingPlayerType {
   openModal(): void;
-  onTrackNavigate(action: string): void;
+  trackController(action: string): void;
 }
 
 const INIT_PLAYER_POSITION = Dimensions.get('window').height * 0.2;
@@ -28,7 +28,7 @@ const BOTTOM_PLAYER_POSITION = Dimensions.get('window').height * 0.09;
 
 const FloatingPlayer: React.FC<FloatingPlayerType> = ({
   openModal,
-  onTrackNavigate,
+  trackController,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -77,15 +77,15 @@ const FloatingPlayer: React.FC<FloatingPlayerType> = ({
     }).start();
   };
 
-  const onPause = async () => onTrackNavigate('pause');
+  const onPause = async () => trackController('pause');
 
-  const onPlay = () => onTrackNavigate('play');
+  const onPlay = () => trackController('play');
 
-  const onNext = () => onTrackNavigate('next');
+  const onNext = () => trackController('next');
 
   const onClose = () => {
     verticalAnimatedPlayer(false);
-    onTrackNavigate('stop');
+    trackController('stop');
     setTimeout(() => {
       dispatch(cleanFloatingPlayer());
     }, 300);

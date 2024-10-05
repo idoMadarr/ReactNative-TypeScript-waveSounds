@@ -21,15 +21,14 @@ import {
   ChatMessageType,
   PlayerContext,
 } from '../types/Types';
-import useTrackPlayer from '../utils/useTrackPlayer';
+import {askPermissions} from '../utils/permissions';
+import useTrackPlayer, {initContextTrack} from '../utils/useTrackPlayer';
+import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import TextElement from '../components/resuable/TextElement';
-import {askPermissions} from '../utils/permissions';
 import TrendCard from '../components/HomePartials/TrendCard';
-import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
-import {initSoundTrack} from '../utils/soundTracker';
 
 const HomeScreen = () => {
   const trends = useAppSelector(state => state.deezerSlice.trends!);
@@ -91,7 +90,7 @@ const HomeScreen = () => {
       url,
     );
 
-    initSoundTrack(PlayerContext.TRENDS, trends, createFloatingTrack);
+    initContextTrack(PlayerContext.TRENDS, trends, createFloatingTrack);
   };
 
   return (

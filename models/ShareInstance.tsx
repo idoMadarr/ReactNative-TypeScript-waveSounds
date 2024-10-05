@@ -4,7 +4,7 @@ export class ShareInstance extends MessageInstance {
   title;
   artist;
   image;
-  preview;
+  url;
 
   constructor(
     messageId: string,
@@ -17,12 +17,12 @@ export class ShareInstance extends MessageInstance {
     title: string,
     artist: string,
     image: string,
-    preview: string,
+    url: string,
   ) {
     super(messageId, message, sender, recipient, timestamp, userA, userB);
     this.title = title;
     this.artist = artist;
     this.image = image;
-    this.preview = preview;
+    this.url = url;
   }
 }

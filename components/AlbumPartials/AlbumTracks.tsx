@@ -36,7 +36,7 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({tracks, onPlay}) => {
           title={item.title}
           onFavorite={onStarFavorite.bind(this, item)}
           index={index}
-          initSoundTrack={onPlay.bind(this, item, index)}
+          onPlay={onPlay.bind(this, item, index)}
           indexIndicator={currentIndexTrack}
         />
       )}

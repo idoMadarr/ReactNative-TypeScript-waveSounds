@@ -6,7 +6,7 @@ import Colors from '../assets/design/palette.json';
 import {setCurrentAlbum} from '../redux/slices/deezerSlice';
 import {PlayerContext, TrackType} from '../types/Types';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
-import {initSoundTrack} from '../utils/soundTracker';
+import {initContextTrack} from '../utils/useTrackPlayer';
 import {goBack} from '../utils/rootNavigation';
 
 // Components
@@ -33,7 +33,11 @@ const AlbumScreen = () => {
       item.image,
       item.url,
     );
-    initSoundTrack(PlayerContext.ALBUM, albumData?.tracks, createFloatingTrack);
+    initContextTrack(
+      PlayerContext.ALBUM,
+      albumData?.tracks,
+      createFloatingTrack,
+    );
   };
 
   return (

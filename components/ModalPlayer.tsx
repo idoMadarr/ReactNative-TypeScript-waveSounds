@@ -27,12 +27,12 @@ import TextElement from './resuable/TextElement';
 
 interface ModalPlayerType {
   closeModal(): void;
-  onTrackNavigate(action: string, value?: number): void;
+  trackController(action: string, value?: number): void;
 }
 
 const ModalPlayer: React.FC<ModalPlayerType> = ({
   closeModal,
-  onTrackNavigate,
+  trackController,
 }) => {
   const progress = useProgress();
   const dispatch = useAppDispatch();
@@ -50,18 +50,18 @@ const ModalPlayer: React.FC<ModalPlayerType> = ({
     setFavorite(favoritesObj[floatingPlayer.id] ? true : false);
   }, [floatingPlayer]);
 
-  const onPlay = () => onTrackNavigate('play');
+  const onPlay = () => trackController('play');
 
-  const onPause = () => onTrackNavigate('pause');
+  const onPause = () => trackController('pause');
 
-  const onNext = () => onTrackNavigate('next');
+  const onNext = () => trackController('next');
 
-  const onPrevious = () => onTrackNavigate('previous');
+  const onPrevious = () => trackController('previous');
 
-  const onTime = (value: number) => onTrackNavigate('time', value);
+  const onTime = (value: number) => trackController('time', value);
 
   const onVolume = (value: number) =>
-    onTrackNavigate('volume', Number(value.toFixed(2)));
+    trackController('volume', Number(value.toFixed(2)));
 
   const handleFavorite = async (track: TrackType) => {
     setFavorite(prevState => !prevState);

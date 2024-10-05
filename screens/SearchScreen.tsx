@@ -9,7 +9,7 @@ import {PlayerContext, TrackType} from '../types/Types';
 import Lottie from 'lottie-react-native';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {PropDimensions} from '../dimensions/dimensions';
-import {initSoundTrack} from '../utils/soundTracker';
+import {initContextTrack} from '../utils/useTrackPlayer';
 import {useVoiceRecognition} from '../utils/useVoiceRecognition';
 
 // Components
@@ -74,7 +74,11 @@ const SearchScreen = () => {
         url,
       );
 
-      initSoundTrack(PlayerContext.SEARCH, searchResults, createFloatingTrack);
+      initContextTrack(
+        PlayerContext.SEARCH,
+        searchResults,
+        createFloatingTrack,
+      );
     },
     [searchResults],
   );

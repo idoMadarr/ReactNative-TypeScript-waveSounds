@@ -52,7 +52,7 @@ export interface ChatMessageType {
   title?: string;
   artist?: string;
   image?: string;
-  preview?: string;
+  url?: string;
 }
 
 export interface ChatDictType {

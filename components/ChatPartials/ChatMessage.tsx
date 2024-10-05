@@ -23,7 +23,7 @@ const ChatMessage: React.FC<ChatMessagePropsType> = ({
   index,
   onPlay,
 }) => {
-  const isShare = item.preview;
+  const isShare = item.url;
   const isSender = userSocketId === item.sender;
 
   if (isShare) {

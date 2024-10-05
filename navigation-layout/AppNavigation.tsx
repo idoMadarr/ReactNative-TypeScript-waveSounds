@@ -1,12 +1,10 @@
 import React, {useEffect, useRef} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {setFloatingPlayer} from '../redux/slices/deezerSlice';
+import {useAppSelector} from '../redux/hooks';
 import {AuthStack, MainStack} from './StackNavigation';
 import {Modalize} from 'react-native-modalize';
 import {PropDimensions} from '../dimensions/dimensions';
-import TrackPlayer from 'react-native-track-player';
 import {navigationRef} from '../utils/rootNavigation';
 
 // Screens
@@ -17,10 +15,10 @@ import ModalElement from '../components/resuable/ModalElement';
 import ModalPlayer from '../components/ModalPlayer';
 import OverlaySpinner from '../components/OverlaySpinner';
 import ModalMessage from '../components/ModalMessage/ModalMessage';
+import {trackController} from '../utils/useTrackPlayer';
 
 const AppNavigation: React.FC = () => {
   const AppNavigator = createNativeStackNavigator();
-  const dispatch = useAppDispatch();
 
   const modalizePlayerRef = useRef<Modalize>();
   const modalizeMessageRef = useRef<Modalize>();
@@ -37,51 +35,6 @@ const AppNavigation: React.FC = () => {
       openMessageModal();
     }
   }, [modalMessage]);
-
-  const onTrackNavigate = async (action: string, value?: number) => {
-    if (action === 'time') {
-      return await TrackPlayer.seekTo(value!);
-    }
-
-    if (action === 'volume') {
-      return await TrackPlayer.setVolume(value!);
-    }
-
-    if (action === 'play') {
-      return await TrackPlayer.play();
-    }
-
-    if (action === 'pause') {
-      return await TrackPlayer.pause();
-    }
-
-    if (action === 'stop') {
-      return await TrackPlayer.stop();
-    }
-
-    const queue = await TrackPlayer.getQueue();
-    const currentIndexTrack = await TrackPlayer.getActiveTrackIndex();
-
-    if (action === 'next') {
-      const nextIndexTrack = currentIndexTrack! + 1;
-
-      if (queue.length > nextIndexTrack) {
-        await TrackPlayer.skipToNext();
-        return dispatch(setFloatingPlayer(queue[nextIndexTrack]));
-      }
-      TrackPlayer.skip(0);
-    }
-
-    if (action === 'previous') {
-      const backIndexTrack = currentIndexTrack! - 1;
-
-      if (backIndexTrack > 0) {
-        await TrackPlayer.skipToPrevious();
-        return dispatch(setFloatingPlayer(queue[backIndexTrack]));
-      }
-      TrackPlayer.skip(queue.length - 1);
-    }
-  };
 
   const openModal = () => modalizePlayerRef.current?.open();
 
@@ -110,14 +63,14 @@ const AppNavigation: React.FC = () => {
       {floatingPlayer && (
         <FloatingPlayer
           openModal={openModal}
-          onTrackNavigate={onTrackNavigate}
+          trackController={trackController}
         />
       )}
       <ModalElement
         modalizeRef={modalizePlayerRef}
         modalHeight={PropDimensions.maxModalHeight}>
         <ModalPlayer
-          onTrackNavigate={onTrackNavigate}
+          trackController={trackController}
           closeModal={closeModal}
         />
       </ModalElement>

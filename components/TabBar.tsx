@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: PropDimensions.fullWidth,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.tabs,
   },
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     height: '100%',
     paddingTop: '2%',
     width: '20%',
+    marginHorizontal: '3%',
   },
   indicator: {
     width: 50,
