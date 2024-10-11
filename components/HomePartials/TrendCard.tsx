@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     height: SIZE,
     borderRadius: 250,
     overflow: 'hidden',
-    marginBottom: '25%',
+    marginBottom: '6%',
   },
   header: {
     bottom: 0,
@@ -134,10 +134,9 @@ const styles = StyleSheet.create({
   playButton: {
     alignSelf: 'center',
     marginHorizontal: 24,
-    width: 90,
-    height: 90,
+    width: 40,
+    height: 40,
     borderRadius: 50,
-    marginVertical: '5%',
     justifyContent: 'center',
     alignItems: 'center',
   },

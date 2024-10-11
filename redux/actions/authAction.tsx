@@ -36,7 +36,17 @@ export const signUp =
   };
 
 export const googleOAuth =
-  (state: AuthCredentialsType) => async (dispatch: Dispatch) => {
+  (googleToken: string) => async (dispatch: Dispatch) => {
+    const userInfo: any = await axios.get(
+      'https://www.googleapis.com/oauth2/v3/userinfo',
+      {
+        headers: {
+          Authorization: `Bearer ${googleToken}`,
+        },
+      },
+    );
+
+    const state = {email: userInfo.email, username: userInfo.name};
     const data: {user: UserType} = await axios.post(
       '/ws-api/google-oauth',
       state,

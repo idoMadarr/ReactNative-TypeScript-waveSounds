@@ -41,6 +41,7 @@ import TrendCard from '../components/HomePartials/TrendCard';
 
 const HomeScreen = () => {
   const trends = useAppSelector(state => state.deezerSlice.trends!);
+  const user = useAppSelector(state => state.authSlice.user!);
   useTrackPlayer();
 
   const translateX = useSharedValue(0);
@@ -126,6 +127,7 @@ const HomeScreen = () => {
           decelerationRate={'fast'}>
           <View style={styles.trendsContainer}>
             <View style={styles.recommendedContainer}>
+              <TextElement>{`Hi ${user.username || 'User'}`}</TextElement>
               <TextElement fontSize={'lg'} fontWeight={'bold'}>
                 Top Hits
               </TextElement>

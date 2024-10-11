@@ -244,13 +244,14 @@ const styles = StyleSheet.create({
   },
   lottieContainer: {
     position: 'absolute',
-    bottom: -20,
+    bottom: 10,
     zIndex: 0,
     width: PropDimensions.fullWidth,
   },
   lottie: {
     width: PropDimensions.fullWidth,
     height: Dimensions.get('window').height * 0.42,
+    opacity: 0.1,
   },
 });
 
