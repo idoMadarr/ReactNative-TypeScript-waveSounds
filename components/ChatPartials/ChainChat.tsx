@@ -2,7 +2,7 @@ import React from 'react';
 import {ScrollView} from 'react-native';
 import {FloatingPlayerInstance} from '../../models/FloatingPlayerInstance';
 import {ChatMessageType} from '../../types/Types';
-import {initSoundTrack} from '../../utils/soundTracker';
+import {initContextTrack} from '../../utils/useTrackPlayer';
 
 // Components
 import ChatMessage from './ChatMessage';
@@ -22,9 +22,9 @@ const ChainChat: React.FC<ChainChatPropsType> = ({
       item.title!,
       item.artist!,
       item.image!,
-      item.preview!,
+      item.url!,
     );
-    initSoundTrack(item.preview!, [createFloatingTrack], createFloatingTrack);
+    initContextTrack(item.url, [createFloatingTrack], createFloatingTrack);
   };
 
   return (

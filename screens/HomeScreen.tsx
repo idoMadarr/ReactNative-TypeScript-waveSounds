@@ -1,37 +1,50 @@
-import React, {useContext, useEffect} from 'react';
-import {ScrollView, StyleSheet, SafeAreaView, Alert, View} from 'react-native';
-import {useIsFocused} from '@react-navigation/native';
+import React, {Fragment, useContext, useEffect} from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {SocketContext} from '../utils/socketIO';
 import Animated, {
-  interpolateColor,
   useAnimatedScrollHandler,
-  useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import {
+  setModalMessage,
   setUpdate,
   updateChainChat,
   updateOnline,
 } from '../redux/slices/authSlice';
-import TrendsList from '../components/HomePartials/TrendsList';
 import SectionList from '../components/HomePartials/SectionList';
 import {PropDimensions} from '../dimensions/dimensions';
 import {onLogout} from '../utils/onLogout';
 import Colors from '../assets/design/palette.json';
-import {ConnectedOnlineType, ChatMessageType} from '../types/Types';
+import {
+  ConnectedOnlineType,
+  ChatMessageType,
+  PlayerContext,
+} from '../types/Types';
+import {askPermissions} from '../utils/permissions';
+import useTrackPlayer, {initContextTrack} from '../utils/useTrackPlayer';
+import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 // Components
 import StatusBarElement from '../components/resuable/StatusBarElement';
 import TextElement from '../components/resuable/TextElement';
-import {askPermissions} from '../utils/permissions';
+import TrendCard from '../components/HomePartials/TrendCard';
 
 const HomeScreen = () => {
   const trends = useAppSelector(state => state.deezerSlice.trends!);
+  const user = useAppSelector(state => state.authSlice.user!);
+  useTrackPlayer();
 
   const translateX = useSharedValue(0);
-  const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext) as any;
 
@@ -66,65 +79,98 @@ const HomeScreen = () => {
     return unsubscribe;
   }, []);
 
-  // Creating an 'array mock length' cuase we cant interpolate directly from redux state
-  const InterpolationMock = trends.map(() => ({}));
-
   const onHorizontalScroll = useAnimatedScrollHandler({
     onScroll: event => {
       translateX.value = event.contentOffset.x;
     },
   });
 
-  const style = useAnimatedStyle(() => {
-    const backgroundColor = interpolateColor(
-      translateX.value,
-      InterpolationMock.map((_, i) => PropDimensions.fullWidth * i),
-      InterpolationMock.map((_, i) =>
-        i % 2 === 0 ? Colors.dark : Colors.primary,
-      ),
-    ) as string;
-    return {backgroundColor};
-  });
+  const onPlay = (
+    id: string,
+    image: string,
+    title: string,
+    artist: string,
+    url: string,
+  ) => {
+    const createFloatingTrack = new FloatingPlayerInstance(
+      id,
+      title,
+      artist,
+      image,
+      url,
+    );
+
+    initContextTrack(PlayerContext.TRENDS, trends, createFloatingTrack);
+  };
+
+  const logoutUser = () => {
+    dispatch(
+      setModalMessage([
+        {message: 'Are you sure you want to exit?', field: 'logout'},
+      ]),
+    );
+  };
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <StatusBarElement
-        barStyle={'light-content'}
-        backgroundColor={Colors.primary}
-      />
-      <ScrollView
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        snapToOffsets={[0, PropDimensions.trendsHeight]}
-        contentContainerStyle={styles.center}
-        snapToEnd={false}
-        decelerationRate={'fast'}>
-        <Animated.View style={[style, styles.trendsContainer]}>
-          <View style={styles.recommendedContainer}>
-            <TextElement fontSize={'lg'}>Recommended for you</TextElement>
+    <Fragment>
+      <SafeAreaView style={styles.screen}>
+        <StatusBarElement
+          barStyle={'light-content'}
+          backgroundColor={Colors.primary}
+        />
+        <ScrollView
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          snapToOffsets={[0, PropDimensions.trendsHeight]}
+          contentContainerStyle={styles.center}
+          snapToEnd={false}
+          decelerationRate={'fast'}>
+          <View style={styles.trendsContainer}>
+            <View style={styles.recommendedContainer}>
+              <TextElement>{`Hi ${user.username || 'User'}`}</TextElement>
+              <TextElement fontSize={'lg'} fontWeight={'bold'}>
+                Top Hits
+              </TextElement>
+              <TextElement cStyle={{color: Colors.greyish, marginTop: 8}}>
+                Stay updated with fresh music and explore new releases, rising
+                hits, and popular tracks that are making waves globally.
+              </TextElement>
+              <TouchableOpacity onPress={logoutUser} style={styles.logout}>
+                <Icon name={'logout'} size={28} color={Colors.secondary} />
+              </TouchableOpacity>
+            </View>
+            <Animated.ScrollView
+              horizontal
+              onScroll={onHorizontalScroll}
+              showsHorizontalScrollIndicator={false}
+              scrollEventThrottle={16}
+              contentContainerStyle={styles.center}
+              snapToInterval={PropDimensions.fullWidth}
+              decelerationRate={'fast'}>
+              {trends.map(({id, artist, title, image, url}, index) => (
+                <TrendCard
+                  key={id}
+                  artist={artist}
+                  title={title}
+                  image={image}
+                  index={index}
+                  translateX={translateX}
+                  onPlay={onPlay.bind(
+                    this,
+                    id.toString(),
+                    image,
+                    title,
+                    artist,
+                    url!,
+                  )}
+                />
+              ))}
+            </Animated.ScrollView>
           </View>
-          <Animated.ScrollView
-            horizontal
-            onScroll={onHorizontalScroll}
-            showsHorizontalScrollIndicator={false}
-            scrollEventThrottle={16}
-            contentContainerStyle={styles.center}
-            snapToInterval={PropDimensions.fullWidth}
-            decelerationRate={'fast'}>
-            {isFocused && <TrendsList trends={trends} />}
-          </Animated.ScrollView>
-          {/* <View style={styles.trackerContainer}>
-            {trends.map(item => (
-              <View
-                key={item.id}
-                style={[styles.tracker, {backgroundColor: Colors.placeholder}]}
-              />
-            ))}
-          </View> */}
-        </Animated.View>
-        <SectionList />
-      </ScrollView>
-    </SafeAreaView>
+          <SectionList />
+        </ScrollView>
+      </SafeAreaView>
+    </Fragment>
   );
 };
 
@@ -136,25 +182,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   trendsContainer: {
-    paddingTop: '15%',
     height: PropDimensions.trendsHeight,
   },
   recommendedContainer: {
     position: 'absolute',
-    top: '6%',
+    top: '5%',
+    zIndex: 2000,
+    left: '5%',
     width: PropDimensions.inputWidth,
     alignSelf: 'center',
   },
-  trackerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingBottom: '4%',
-  },
-  tracker: {
-    width: 14,
-    height: 14,
-    borderRadius: 50,
-    marginHorizontal: 6,
+  logout: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    padding: 6,
   },
 });
 

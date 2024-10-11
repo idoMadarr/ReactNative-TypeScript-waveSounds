@@ -23,6 +23,14 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+        <!-- Google OAuth -->
+        <intent-filter>
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <data android:scheme="com.googleusercontent.apps.506194767202-dkn0mtpno1ccd86e2bcg2tpo9io3lpq9" />
+        </intent-filter>
+        <!-- Google OAuth -->
       </activity>
     </application>
 </manifest>

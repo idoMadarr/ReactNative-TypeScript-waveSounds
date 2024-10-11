@@ -1,7 +1,7 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import TabNavigation from './TabNavigation';
-// import MenuDrawerScreen from '../screens/MenuDrawerScreen';
 import Colors from '../assets/design/palette.json';
+// import MenuDrawerScreen from '../screens/MenuDrawerScreen';
 
 const DrawerNavigation = () => {
   const DrawerNavigator = createDrawerNavigator();

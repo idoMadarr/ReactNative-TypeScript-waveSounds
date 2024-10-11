@@ -2,23 +2,28 @@
   "tabs": [
     {
       "id": 0,
-      "route": "search"
+      "route": "search",
+      "available": true
     },
     {
       "id": 1,
-      "route": "profile"
+      "route": "profile",
+      "available": false
     },
     {
       "id": 2,
-      "route": "home"
+      "route": "home",
+      "available": true
     },
     {
       "id": 3,
-      "route": "favorites"
+      "route": "favorites",
+      "available": true
     },
     {
       "id": 4,
-      "route": "community"
+      "route": "community",
+      "available": false
     }
   ]
 }

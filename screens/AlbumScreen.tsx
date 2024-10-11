@@ -4,9 +4,9 @@ import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
 import {setCurrentAlbum} from '../redux/slices/deezerSlice';
-import {TrackType} from '../types/Types';
+import {PlayerContext, TrackType} from '../types/Types';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
-import {initSoundTrack} from '../utils/soundTracker';
+import {initContextTrack} from '../utils/useTrackPlayer';
 import {goBack} from '../utils/rootNavigation';
 
 // Components
@@ -17,9 +17,6 @@ import StatusBarElement from '../components/resuable/StatusBarElement';
 const AlbumScreen = () => {
   const dispatch = useAppDispatch();
 
-  const currentIndexTrack = useAppSelector(
-    state => state.deezerSlice.currentIndexTrack,
-  );
   const albumData = useAppSelector(state => state.deezerSlice.currentAlbum!);
 
   useEffect(() => {
@@ -34,12 +31,14 @@ const AlbumScreen = () => {
       item.title,
       item.artist,
       item.image,
-      item.preview!,
+      item.url,
     );
-    initSoundTrack(item.preview!, albumData?.tracks, createFloatingTrack);
+    initContextTrack(
+      PlayerContext.ALBUM,
+      albumData?.tracks,
+      createFloatingTrack,
+    );
   };
-
-  const pressBack = () => goBack();
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -57,13 +56,9 @@ const AlbumScreen = () => {
             imageCover={albumData.image}
             name={albumData.artist}
             releaseDate={albumData.releaseDate}
-            pressBack={pressBack}
+            pressBack={goBack}
           />
-          <AlbumTracks
-            tracks={albumData?.tracks}
-            onPlay={onPlay}
-            indexIndicator={currentIndexTrack}
-          />
+          <AlbumTracks tracks={albumData?.tracks} onPlay={onPlay} />
         </LinearGradient>
       </ImageBackground>
     </SafeAreaView>

@@ -1,3 +1,10 @@
+export enum PlayerContext {
+  TRENDS = 'TRENDS',
+  ALBUM = 'ALBUM',
+  SEARCH = 'SEARCH',
+  FAVORITES = 'FAVORITES',
+}
+
 export interface AlbumType {
   title: string;
   artist: string;
@@ -11,25 +18,13 @@ export interface TrackType {
   id: string;
   title: string;
   image: string;
-  preview?: string;
+  url: string;
   artist: string;
 }
 
 export interface SequenceType {
   name?: string;
   albums: TrackType[];
-}
-
-export interface OptionsTrackType {
-  play(): void;
-  release(): void;
-  stop(cb?: Function): void;
-  pause(): void;
-  _duration: any;
-  setCurrentTime(val: number): void;
-  getVolume(): void;
-  getPan(): void;
-  getCurrentTime(): void;
 }
 
 export interface UserType {
@@ -57,7 +52,7 @@ export interface ChatMessageType {
   title?: string;
   artist?: string;
   image?: string;
-  preview?: string;
+  url?: string;
 }
 
 export interface ChatDictType {

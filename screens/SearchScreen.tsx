@@ -5,11 +5,11 @@ import {setSearchResults} from '../redux/slices/deezerSlice';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppSelector, useAppDispatch} from '../redux/hooks';
 import Colors from '../assets/design/palette.json';
-import {TrackType} from '../types/Types';
+import {PlayerContext, TrackType} from '../types/Types';
 import Lottie from 'lottie-react-native';
 import {FloatingPlayerInstance} from '../models/FloatingPlayerInstance';
 import {PropDimensions} from '../dimensions/dimensions';
-import {initSoundTrack} from '../utils/soundTracker';
+import {initContextTrack} from '../utils/useTrackPlayer';
 import {useVoiceRecognition} from '../utils/useVoiceRecognition';
 
 // Components
@@ -22,14 +22,13 @@ const DEFAULT_SEARCH = 'Post malone';
 const SearchScreen = () => {
   const {state, startRecognizing, stopRecognizing} = useVoiceRecognition();
 
+  const dispatch = useAppDispatch();
+
   const searchResults = useAppSelector(
     state => state.deezerSlice.searchResults,
   );
-  const username = useAppSelector(state => state.authSlice.user.username);
 
   const [searchState, setSearchState] = useState('');
-
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     updateSearch(DEFAULT_SEARCH);
@@ -65,17 +64,21 @@ const SearchScreen = () => {
 
   const playSoundTrack = useCallback(
     (item: TrackType) => {
-      const {id, title, artist, preview, image} = item;
+      const {id, title, artist, url, image} = item;
 
       const createFloatingTrack = new FloatingPlayerInstance(
         id,
         title,
         artist,
         image,
-        preview!,
+        url,
       );
 
-      initSoundTrack(preview!, searchResults, createFloatingTrack);
+      initContextTrack(
+        PlayerContext.SEARCH,
+        searchResults,
+        createFloatingTrack,
+      );
     },
     [searchResults],
   );

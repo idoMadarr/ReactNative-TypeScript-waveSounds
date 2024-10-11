@@ -1,15 +1,15 @@
 import React from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import TextElement from '../resuable/TextElement';
 import {useAppSelector} from '../../redux/hooks';
-import PlayIcon from '../../assets/vectors/play.svg';
 import StarIcon from '../../assets/vectors/star.svg';
 import Colors from '../../assets/design/palette.json';
+import {PropDimensions} from '../../dimensions/dimensions';
 
 interface AlbumTrackType {
   id: string;
   title: string;
-  initSoundTrack(): void;
+  onPlay(): void;
   indexIndicator: number;
   onFavorite(): void;
   index: number;
@@ -18,7 +18,7 @@ interface AlbumTrackType {
 const AlbumTrack: React.FC<AlbumTrackType> = ({
   id,
   title,
-  initSoundTrack,
+  onPlay,
   indexIndicator,
   onFavorite,
   index,
@@ -37,16 +37,20 @@ const AlbumTrack: React.FC<AlbumTrackType> = ({
 
   return (
     <TouchableOpacity
-      onPress={initSoundTrack}
+      onPress={onPlay}
       style={[
-        styles.TrackContainer,
+        styles.trackContainer,
         {
           backgroundColor:
             indexIndicator == index ? Colors.selected_dark : Colors.transparent,
         },
       ]}>
       <View style={styles.titleSection}>
-        <PlayIcon />
+        <Image
+          source={require('../../assets/images/generic_track.png')}
+          resizeMode={'cover'}
+          style={styles.generalImage}
+        />
         <TextElement numberOfLines={1} cStyle={styles.title}>
           {title}
         </TextElement>
@@ -59,12 +63,16 @@ const AlbumTrack: React.FC<AlbumTrackType> = ({
 };
 
 const styles = StyleSheet.create({
-  TrackContainer: {
+  trackContainer: {
+    height: PropDimensions.trackHeight,
+    width: PropDimensions.trackWidth,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 8,
     paddingVertical: 12,
     borderRadius: 8,
+    marginVertical: 1,
   },
   titleSection: {
     overflow: 'hidden',
@@ -73,7 +81,13 @@ const styles = StyleSheet.create({
   },
   title: {
     width: '80%',
+    paddingLeft: 8,
     color: Colors.placeholder,
+  },
+  generalImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 6,
   },
 });
 

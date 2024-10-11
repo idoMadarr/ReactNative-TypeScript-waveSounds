@@ -9,6 +9,7 @@ import {
   Keyboard,
 } from 'react-native';
 import Animated, {FadeInDown} from 'react-native-reanimated';
+import {authorize} from 'react-native-app-auth';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useAppDispatch} from '../redux/hooks';
 import {googleOAuth, signIn} from '../redux/actions/authAction';
@@ -19,9 +20,9 @@ import Colors from '../assets/design/palette.json';
 import GoogleVector from '../assets/vectors/google-auth.svg';
 import {getFromStorage} from '../utils/asyncStorage';
 import FaviconVector from '../assets/vectors/waveSounds-favicon.svg';
-import {getOAuthCredentials} from '../utils/OAuth';
 import {PropDimensions} from '../dimensions/dimensions';
 import {navigate} from '../utils/rootNavigation';
+import Config from 'react-native-config';
 
 // Cpmponents
 import LinkElement from '../components/resuable/LinkElement';
@@ -29,6 +30,16 @@ import TextElement from '../components/resuable/TextElement';
 import InputElement from '../components/resuable/InputElement';
 import ButtonElement from '../components/resuable/ButtonElement';
 import StatusBarElement from '../components/resuable/StatusBarElement';
+
+// Google OAuth key
+const GOOGLE_OAUTH_APP_GUID = Config.google_oauth_key;
+
+const config = {
+  issuer: 'https://accounts.google.com',
+  clientId: `${GOOGLE_OAUTH_APP_GUID}.apps.googleusercontent.com`,
+  redirectUrl: `com.googleusercontent.apps.${GOOGLE_OAUTH_APP_GUID}:/oauth2redirect/google`,
+  scopes: ['openid', 'profile', 'email'],
+};
 
 const defaultState = {
   email: '',
@@ -107,10 +118,14 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
   };
 
   const onGoogleOAuth = async () => {
-    const credentials = (await getOAuthCredentials()) as any;
-    if (!credentials) return;
     dispatch(toggleSpinner());
-    dispatch(googleOAuth(credentials));
+    try {
+      const googleAuthCredentials = await authorize(config);
+      const accessToken = googleAuthCredentials.accessToken;
+      dispatch(googleOAuth(accessToken));
+    } catch (error) {
+      dispatch(toggleSpinner());
+    }
   };
 
   const signupNavigate = () => {

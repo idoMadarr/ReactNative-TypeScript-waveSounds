@@ -9,7 +9,7 @@ import {
 
 interface RootStateApp {
   isAuth: boolean;
-  user: UserType | any;
+  user: UserType | null;
   onlines: ConnectedOnlineType[];
   currentRecipient: ConnectedOnlineType | null;
   chatDict: ChatDictType;

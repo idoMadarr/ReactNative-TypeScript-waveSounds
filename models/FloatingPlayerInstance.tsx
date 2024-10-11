@@ -3,19 +3,19 @@ export class FloatingPlayerInstance {
   title;
   artist;
   image;
-  preview;
+  url;
 
   constructor(
     id: string,
     title: string,
     artist: string,
     image: string,
-    preview: string,
+    url: string,
   ) {
     this.id = id;
     this.title = title;
     this.artist = artist;
     this.image = image;
-    this.preview = preview;
+    this.url = url;
   }
 }

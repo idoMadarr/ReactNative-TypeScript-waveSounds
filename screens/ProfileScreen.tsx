@@ -3,7 +3,6 @@ import {View, StyleSheet, SafeAreaView, TouchableOpacity} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../assets/design/palette.json';
-import {sendPushDetails} from '../redux/actions/authAction';
 import {PropDimensions} from '../dimensions/dimensions';
 import Lottie from 'lottie-react-native';
 import LogoutIcon from '../assets/vectors/logout.svg';
@@ -11,7 +10,6 @@ import {setModalMessage} from '../redux/slices/authSlice';
 
 // Components
 import TextElement from '../components/resuable/TextElement';
-import ButtonElement from '../components/resuable/ButtonElement';
 import StatusBarElement from '../components/resuable/StatusBarElement';
 
 const ProfileScreen = () => {
@@ -28,12 +26,11 @@ const ProfileScreen = () => {
   };
 
   const techList = [
-    'Full Authentication Process',
-    'Social login with Google API',
-    'Push Notification via Firebase',
-    'Complex Navigation architecture',
-    'Reanimated animations & Gestures handlers',
-    'Reanimated animations',
+    'Real-Time Music Streaming: Access a vast library of music with high-quality audio streaming',
+    'Voice Recognition Search: Use voice commands to search for songs, artists, and playlists easily',
+    'Community Chat: Engage with other users in free chat rooms to discuss music and share recommendations',
+    'Content Sharing: Share favorite tracks and playlists with friends and the community',
+    'Currently in the Beta phase, Wavesounds invites users to explore its features and provide feedback to help shape the final product.',
   ];
 
   return (
@@ -53,18 +50,12 @@ const ProfileScreen = () => {
               cStyle={{color: Colors.active}}>
               {`Hi ${user.username.toUpperCase()}`}
             </TextElement>
-            <TouchableOpacity
-              onPress={logoutUser}
-              style={{alignItems: 'center'}}>
-              <LogoutIcon style={{color: Colors.white}} />
-              <TextElement fontSize={'sm'}>Logout</TextElement>
-            </TouchableOpacity>
           </View>
           <TextElement>
-            The project was built from the ground up with TypeScript on all
-            levels. NodeJS as a backend, combined with Redis and MongoDB for
-            storing user's data & React Native (CLI) for building beautiful user
-            interface.
+            Wavesounds is an innovative music streaming app that lets users
+            enjoy music and soundtracks in real-time. Designed to elevate the
+            listening experience, Wavesounds offers intuitive features for
+            discovering, sharing, and enjoying music.
           </TextElement>
           <View style={{marginVertical: '2%'}}>
             {techList.map(item => (
@@ -76,13 +67,22 @@ const ProfileScreen = () => {
               </View>
             ))}
           </View>
-          <ButtonElement
-            title={'Click For Push Details'}
-            backgroundColor={Colors.transparent}
-            titleColor={Colors.active}
-            customStyle={styles.details}
-            onPress={sendPushDetails}
-          />
+          <TouchableOpacity
+            onPress={logoutUser}
+            style={{
+              marginTop: '5%',
+              alignItems: 'center',
+              backgroundColor: Colors.primary,
+              elevation: 3,
+              justifyContent: 'center',
+              alignSelf: 'center',
+              width: PropDimensions.fullWidth / 4,
+              height: PropDimensions.fullWidth / 4,
+              borderRadius: 150,
+            }}>
+            <LogoutIcon style={{color: Colors.white}} />
+            <TextElement fontSize={'sm'}>Logout</TextElement>
+          </TouchableOpacity>
         </View>
         <View style={styles.lottieContainer}>
           <Lottie
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
   },
   drawerWrapper: {
     height: '100%',
+    width: PropDimensions.fullWidth,
     paddingHorizontal: '15%',
     alignSelf: 'center',
     justifyContent: 'space-between',
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   headerContainer: {
-    width: '100%',
+    width: PropDimensions.inputWidth,
     justifyContent: 'space-evenly',
   },
   header: {
@@ -118,11 +119,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '4%',
-  },
-  details: {
-    borderRadius: 50,
-    borderWidth: 0,
-    elevation: 0,
   },
   lottieContainer: {
     width: PropDimensions.fullWidth,

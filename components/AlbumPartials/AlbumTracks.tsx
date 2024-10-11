@@ -1,7 +1,7 @@
 import React from 'react';
-import {FlatList, StyleSheet, Dimensions, View} from 'react-native';
+import {FlatList, StyleSheet, Dimensions} from 'react-native';
 import {TrackType} from '../../types/Types';
-import {useAppDispatch} from '../../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import {addFavorite} from '../../redux/actions/authAction';
 import {toggleSpinner} from '../../redux/slices/authSlice';
 import Track from './Track';
@@ -10,15 +10,14 @@ import {PropDimensions} from '../../dimensions/dimensions';
 interface AlbumTrackType {
   tracks: TrackType[];
   onPlay(item: TrackType, index: number): void;
-  indexIndicator: number;
 }
 
-const AlbumTracks: React.FC<AlbumTrackType> = ({
-  tracks,
-  onPlay,
-  indexIndicator,
-}) => {
+const AlbumTracks: React.FC<AlbumTrackType> = ({tracks, onPlay}) => {
   const dispatch = useAppDispatch();
+
+  const currentIndexTrack = useAppSelector(
+    state => state.deezerSlice.currentIndexTrack,
+  );
 
   const onStarFavorite = (item: TrackType) => {
     dispatch(toggleSpinner());
@@ -37,8 +36,8 @@ const AlbumTracks: React.FC<AlbumTrackType> = ({
           title={item.title}
           onFavorite={onStarFavorite.bind(this, item)}
           index={index}
-          initSoundTrack={onPlay.bind(this, item, index)}
-          indexIndicator={indexIndicator}
+          onPlay={onPlay.bind(this, item, index)}
+          indexIndicator={currentIndexTrack}
         />
       )}
     />
