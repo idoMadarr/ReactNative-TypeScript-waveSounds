@@ -119,9 +119,13 @@ const SignInScreen: React.FC<SignInScreenType> = () => {
 
   const onGoogleOAuth = async () => {
     dispatch(toggleSpinner());
-    const googleAuthCredentials = await authorize(config);
-    const accessToken = googleAuthCredentials.accessToken;
-    dispatch(googleOAuth(accessToken));
+    try {
+      const googleAuthCredentials = await authorize(config);
+      const accessToken = googleAuthCredentials.accessToken;
+      dispatch(googleOAuth(accessToken));
+    } catch (error) {
+      dispatch(toggleSpinner());
+    }
   };
 
   const signupNavigate = () => {
